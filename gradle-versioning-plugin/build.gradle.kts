@@ -25,9 +25,9 @@ pluginBundle {
 gradlePlugin {
     plugins {
         create("versioningPlugin") {
-            id = "de.menkalian.vela"
+            id = "de.menkalian.vela.versioning"
             displayName = "Versioning Plugin"
-            description = "A plugin that enables Versioning per build for Android projects."
+            description = "A plugin that enables versioning by build for Android projects."
             implementationClass = "de.menkalian.vela.VersioningGradlePlugin"
         }
     }
