@@ -21,7 +21,7 @@ build:
   artifacts:
     paths:
       - gradle-versioning-plugin/build
-      expire_in: 1 week
+    expire_in: 1 week
 
 test:
   stage: test
