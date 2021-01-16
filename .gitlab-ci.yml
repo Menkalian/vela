@@ -1,0 +1,42 @@
+stages:
+  - build
+  - test
+  - deploy
+
+default:
+  image: gradle:6.8.0
+  tags:
+    - docker
+
+cache:
+  key: ${CI_PROJECT_ID}
+  paths:
+    - /root/.gradle/
+    - .gradle
+
+build:
+  stage: build
+  script:
+    - gradle publishToMavenLocal
+  artifacts:
+    paths:
+      - gradle-versioning-plugin/build
+      expire_in: 1 week
+
+test:
+  stage: test
+  image: gradle:6.8.0
+  script:
+    - cd auriga-kotlin-plugin
+    - gradle test
+
+publish:
+  stage: deploy
+  only:
+    - main
+  script:
+    - gradle publish
+  artifacts:
+    paths:
+      - gradle-versioning-plugin/build/libs/*.jar
+    expire_in: 1 month
