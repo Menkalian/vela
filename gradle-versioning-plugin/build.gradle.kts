@@ -17,18 +17,18 @@ java {
 }
 
 pluginBundle {
-    website = "https://gitlab.com/kiliankra/auriga"
-    vcsUrl = "https://gitlab.com/kiliankra/auriga.git"
-    tags = listOf("auriga", "logging", "debug", "tool", "kotlin", "java")
+    website = "https://gitlab.com/kiliankra/vela"
+    vcsUrl = "https://gitlab.com/kiliankra/vela.git"
+    tags = listOf("tool", "kotlin", "java", "android", "versioning")
 }
 
 gradlePlugin {
     plugins {
-        create("aurigaPlugin") {
-            id = "de.menkalian.auriga"
-            displayName = "Auriga Plugin"
-            description = "A plugin that applies the Auriga tools to your projects."
-            implementationClass = "de.menkalian.auriga.AurigaGradlePlugin"
+        create("versioningPlugin") {
+            id = "de.menkalian.vela"
+            displayName = "Versioning Plugin"
+            description = "A plugin that enables Versioning per build for Android projects."
+            implementationClass = "de.menkalian.vela.VersioningGradlePlugin"
         }
     }
 }
@@ -36,7 +36,7 @@ gradlePlugin {
 publishing {
     repositories {
         maven {
-            url = uri("http://server.menkalian.de:8081/artifactory/auriga")
+            url = uri("http://server.menkalian.de:8081/artifactory/vela")
             name = "artifactory-menkalian"
             credentials {
                 username = System.getenv("MAVEN_REPO_USER")
