@@ -2,6 +2,7 @@ package de.menkalian.vela
 
 import com.android.build.api.dsl.ApplicationBaseFlavor
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.LibraryBaseFlavor
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -35,15 +36,14 @@ class VersioningGradlePlugin : Plugin<Project> {
         }
 
         target.pluginManager.withPlugin("com.android.application") {
-            val androidFlavour = target.androidFlavour()
-            if (androidFlavour.versionCode == 0) {
+            target.afterEvaluate {
+                val androidFlavour = target.applicationFlavour()
                 androidFlavour.versionCode = versionBuild
+                androidFlavour.versionName = androidFlavour.versionName?.replace("{{BUILD_NO}}", versionBuild.toString()) ?: versionBuild.toString()
             }
-
-            androidFlavour.versionName = androidFlavour.versionName?.replace("{{BUILD_NO}}", versionBuild.toString()) ?: versionBuild.toString()
         }
     }
 }
 
-internal fun Project.androidFlavour(): ApplicationBaseFlavor<*> =
+internal fun Project.applicationFlavour(): ApplicationBaseFlavor<*> =
     ((extensions.getByName("android") as? CommonExtension<*, *, *, *, *, *, *, *>)!!.defaultConfig as ApplicationBaseFlavor<*>)
