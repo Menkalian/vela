@@ -25,9 +25,7 @@ build:
 
 test:
   stage: test
-  image: gradle:6.8.0
   script:
-    - cd auriga-kotlin-plugin
     - gradle test
 
 publish:
