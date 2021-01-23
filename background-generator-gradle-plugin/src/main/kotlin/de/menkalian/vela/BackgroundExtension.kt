@@ -25,7 +25,7 @@ open class BackgroundConfig(val name: String, val project: Project) {
     var foregroundObjectsAmount: Int = 50
     var foregroundObjectsShape: String = "star"
     var foregroundObjectSizeRange: IntRange = 1..5
-    var foregroundObjectColor: String = "#FFFFFF"
+    var foregroundObjectsColor: String = "#FFFFFF"
 
     var verticalMovementAnimation: MovementAnimationConfig = MovementAnimationConfig()
     var horizontalMovementAnimation: MovementAnimationConfig = MovementAnimationConfig()
