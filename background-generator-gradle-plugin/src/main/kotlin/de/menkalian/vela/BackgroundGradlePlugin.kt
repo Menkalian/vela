@@ -8,16 +8,18 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import kotlin.random.Random
 
-class VersioningGradlePlugin : Plugin<Project> {
+class BackgroundGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        target.pluginManager.withPlugin("com.android.base") {
+        target.pluginManager.withPlugin("com.android.application") {
             val backgroundGenerator = target.tasks.create("generateBackgroundResources", BackgroundGenerator::class.java)
 
-            target.buildTypeNames().forEach {
-                target.task("generate${it.capitalize()}Resources").dependsOn.add(backgroundGenerator)
+            target.afterEvaluate {
+                target.buildTypeNames().forEach {
+                    target.tasks.getByName("generate${it.capitalize()}Resources").dependsOn.add(backgroundGenerator)
+                }
             }
 
-            val generationBaseDir = File(target.buildDir, "generated/background_res/")
+            val generationBaseDir = File(target.buildDir, "generated/res/")
             generationBaseDir.mkdirs()
             backgroundGenerator.generationDir = generationBaseDir
 
@@ -30,7 +32,7 @@ internal fun Project.buildTypeNames(): Set<String> =
     ((extensions.getByName("android") as? CommonExtension<*, *, *, *, *, *, *, *>)!!.buildTypes.names)
 
 
-class BackgroundGenerator : DefaultTask() {
+open class BackgroundGenerator : DefaultTask() {
     lateinit var generationDir: File
 
     @TaskAction
@@ -48,6 +50,7 @@ class BackgroundGenerator : DefaultTask() {
         }
 
         val bgFile = File(generationDir, "drawable/aquila_star_bg.xml")
+        bgFile.parentFile.mkdirs()
         bgFile.createNewFile()
         bgFile.writeText(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -130,7 +133,7 @@ class BackgroundGenerator : DefaultTask() {
 
         logger.info("Generating Animators...")
         val animatorDir = File(generationDir, "animator")
-        animatorDir.mkdir()
+        animatorDir.mkdirs()
         listValues.forEachIndexed { index, values ->
             val animatorFile = File(animatorDir, "star_animator_${String.format("%02d", index)}.xml")
             animatorFile.createNewFile()
@@ -148,5 +151,17 @@ class BackgroundGenerator : DefaultTask() {
             )
             animatorFile.appendText("</set>")
         }
+
+        logger.info("Generating Colors...")
+        val colorFile = File(generationDir, "values/velaBackgroundColors.xml")
+        colorFile.parentFile.mkdirs()
+        colorFile.createNewFile()
+        colorFile.writeText(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "<resources>\n" +
+                    "    <color name=\"menu_base_background\">#131353</color>\n" +
+                    "    <color name=\"menu_base_stars\">#FFFFC8</color>\n" +
+                    "</resources>"
+        )
     }
 }
