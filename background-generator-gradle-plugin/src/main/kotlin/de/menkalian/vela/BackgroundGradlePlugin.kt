@@ -137,7 +137,7 @@ open class BackgroundGenerator : DefaultTask() {
             bgFile.appendText(
                 "        <path\n" +
                         "        android:name=\"foreground_${backgroundConfig.name}_${String.format("%02d", index)}\"\n" +
-                        "        android:strokeColor=\"${backgroundConfig.foregroundObjectColor}\"\n" +
+                        "        android:strokeColor=\"${backgroundConfig.foregroundObjectsColor}\"\n" +
                         "        android:strokeWidth=\"${values[2]}\"\n" +
                         "        android:pathData=\"$pathData\"/>\n"
             )
