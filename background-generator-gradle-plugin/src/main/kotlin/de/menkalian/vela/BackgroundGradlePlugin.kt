@@ -73,8 +73,8 @@ open class BackgroundGenerator : DefaultTask() {
                 val posY = rng.nextInt(0, heigth * 10)
 
                 val radius = rng.nextInt(
-                    backgroundConfig.foregroundObjectSizeRange.first,
-                    backgroundConfig.foregroundObjectSizeRange.last
+                    backgroundConfig.foregroundObjectsSizeRange.first,
+                    backgroundConfig.foregroundObjectsSizeRange.last
                 )
 
                 listValues.add(intArrayOf(posX, posY, radius))
