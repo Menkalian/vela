@@ -49,6 +49,67 @@ open class BackgroundGenerator : DefaultTask() {
             listValues.add(intArrayOf(posX, posY, radius))
         }
 
+        generateStaticVectorDrawable(listValues)
+        generateAnimatedVectorDrawable(listValues)
+        generateAnimators(listValues, rng)
+
+        logger.info("Generating Colors...")
+        val colorFile = File(generationDir, "values/velaBackgroundColors.xml")
+        colorFile.parentFile.mkdirs()
+        colorFile.createNewFile()
+        colorFile.writeText(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "<resources>\n" +
+                    "    <color name=\"menu_base_background\">#131353</color>\n" +
+                    "    <color name=\"menu_base_stars\">#FFFFC8</color>\n" +
+                    "</resources>"
+        )
+    }
+
+    private fun generateAnimators(listValues: MutableList<IntArray>, rng: Random.Default) {
+        logger.info("Generating Animators...")
+        val animatorDir = File(generationDir, "animator")
+        animatorDir.mkdirs()
+        listValues.forEachIndexed { index, values ->
+            val animatorFile = File(animatorDir, "star_animator_${String.format("%02d", index)}.xml")
+            animatorFile.createNewFile()
+            animatorFile.writeText(
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                        "<set xmlns:android=\"http://schemas.android.com/apk/res/android\">\n"
+            )
+            animatorFile.appendText(
+                "        <objectAnimator\n" +
+                        "        android:duration=\"${rng.nextInt(20) * 100}\"\n" +
+                        "        android:propertyName=\"strokeWidth\"\n" +
+                        "        android:valueFrom=\"${values[2]}\"\n" +
+                        "        android:valueTo=\"${rng.nextInt(4, 7) * values[2]}\"\n" +
+                        "        android:repeatCount=\"infinite\"\n" +
+                        "        android:repeatMode=\"reverse\" />\n"
+            )
+            animatorFile.appendText("</set>")
+        }
+    }
+
+    private fun generateAnimatedVectorDrawable(listValues: MutableList<IntArray>) {
+        logger.info("Generating AnimatedVectorGraphic...")
+        val animatedBgFile = File(generationDir, "drawable/aquila_star_bg_animated.xml")
+        animatedBgFile.createNewFile()
+        animatedBgFile.writeText(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "<animated-vector xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
+                    "  android:drawable=\"@drawable/aquila_star_bg\" >\n"
+        )
+        listValues.forEachIndexed { index, values ->
+            animatedBgFile.appendText(
+                "<target\n" +
+                        "        android:name=\"star${String.format("%02d", index)}\"\n" +
+                        "        android:animation=\"@animator/star_animator_${String.format("%02d", index)}\" />\n"
+            )
+        }
+        animatedBgFile.appendText("</animated-vector>")
+    }
+
+    private fun generateStaticVectorDrawable(listValues: MutableList<IntArray>) {
         val bgFile = File(generationDir, "drawable/aquila_star_bg.xml")
         bgFile.parentFile.mkdirs()
         bgFile.createNewFile()
@@ -112,56 +173,5 @@ open class BackgroundGenerator : DefaultTask() {
         }
 
         bgFile.appendText("</vector>")
-
-        logger.info("Generating AnimatedVectorGraphic...")
-        val animatedBgFile = File(generationDir, "drawable/aquila_star_bg_animated.xml")
-        animatedBgFile.createNewFile()
-        animatedBgFile.writeText(
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                    "<animated-vector xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
-                    "  android:drawable=\"@drawable/aquila_star_bg\" >\n"
-        )
-        listValues.forEachIndexed { index, values ->
-            animatedBgFile.appendText(
-                "<target\n" +
-                        "        android:name=\"star${String.format("%02d", index)}\"\n" +
-                        "        android:animation=\"@animator/star_animator_${String.format("%02d", index)}\" />\n"
-            )
-        }
-        animatedBgFile.appendText("</animated-vector>")
-
-
-        logger.info("Generating Animators...")
-        val animatorDir = File(generationDir, "animator")
-        animatorDir.mkdirs()
-        listValues.forEachIndexed { index, values ->
-            val animatorFile = File(animatorDir, "star_animator_${String.format("%02d", index)}.xml")
-            animatorFile.createNewFile()
-            animatorFile.writeText(
-                "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                        "<set xmlns:android=\"http://schemas.android.com/apk/res/android\">\n"
-            )
-            animatorFile.appendText(
-                "        <objectAnimator\n" +
-                        "        android:duration=\"${rng.nextInt(20) * 100}\"\n" +
-                        "        android:propertyName=\"strokeWidth\"\n" +
-                        "        android:valueFrom=\"${values[2]}\"\n" +
-                        "        android:valueTo=\"${rng.nextInt(4, 7) * values[2]}\"\n" +
-                        "        android:repeatMode=\"reverse\" />\n"
-            )
-            animatorFile.appendText("</set>")
-        }
-
-        logger.info("Generating Colors...")
-        val colorFile = File(generationDir, "values/velaBackgroundColors.xml")
-        colorFile.parentFile.mkdirs()
-        colorFile.createNewFile()
-        colorFile.writeText(
-            "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                    "<resources>\n" +
-                    "    <color name=\"menu_base_background\">#131353</color>\n" +
-                    "    <color name=\"menu_base_stars\">#FFFFC8</color>\n" +
-                    "</resources>"
-        )
     }
 }
