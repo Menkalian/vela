@@ -48,13 +48,13 @@ internal fun Project.backgrounds(): BackgroundExtension =
 
 
 open class BackgroundGenerator : DefaultTask() {
-    lateinit var generationDir: File
-
-    @Input
-    fun getExtensionConfiguration(): BackgroundExtension = project.backgrounds()
+    private fun getExtensionConfiguration(): BackgroundExtension = project.backgrounds()
 
     @Input
     fun getSeed(): Long = project.backgrounds().seed ?: project.buildCodeNumber()
+
+    @Input
+    fun getConfigurationHashCode(): Int = project.backgrounds().hashCode()
 
     @OutputDirectory
     fun getOutputDir(): File = project.backgrounds().generationTarget
@@ -242,7 +242,6 @@ open class BackgroundGenerator : DefaultTask() {
                         "        android:repeatCount=\"${if (sizeConfig.repeat) "infinite" else "0"}\"\n" +
                         "        android:repeatMode=\"${sizeConfig.repeatMode}\" />\n"
             )
-
             animatorFile.appendText("</set>")
         }
     }
