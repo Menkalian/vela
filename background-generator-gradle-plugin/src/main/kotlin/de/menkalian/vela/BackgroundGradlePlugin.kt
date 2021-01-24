@@ -15,10 +15,10 @@ import kotlin.random.Random
 class BackgroundGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.create("backgrounds", BackgroundExtension::class.java, target)
+        val backgroundGenerator = target.tasks.create("generateBackgroundResources", BackgroundGenerator::class.java)
+        target.logger.info("Created Background Extension and Task")
 
         target.pluginManager.withPlugin("com.android.base") {
-            val backgroundGenerator = target.tasks.create("generateBackgroundResources", BackgroundGenerator::class.java)
-
             target.afterEvaluate {
                 target.buildTypeNames().forEach {
                     target.tasks.getByName("generate${it.capitalize()}Resources").dependsOn.add(backgroundGenerator)
@@ -36,6 +36,7 @@ internal fun Project.buildTypeNames(): Set<String> =
 
 
 internal fun Project.buildCodeNumber(): Long {
+    logger.debug("Getting BuildCodeNumber")
     return try {
         ((extensions.getByName("android") as? CommonExtension<*, *, *, *, *, *, *, *>)!!.defaultConfig as ApplicationBaseFlavor<*>).versionCode!!.toLong()
     } catch (ex: Exception) {
@@ -61,14 +62,17 @@ open class BackgroundGenerator : DefaultTask() {
 
     @TaskAction
     fun generateBackgrounds() {
+        logger.info("Generation of Backgrounds started")
         val rng = Random(getSeed())
 
         getExtensionConfiguration().backgrounds.forEach { backgroundConfig ->
+            logger.debug("Generating Background ${backgroundConfig.name}")
             val listValues = mutableListOf<IntArray>()
-
             val (width: Int, heigth: Int) = getWidthAndHeight(backgroundConfig)
+            logger.debug("Width: $width ; Height: $heigth")
 
             for (i in 1..backgroundConfig.foregroundObjectsAmount) {
+                logger.debug("ForegroundObject #$i")
                 val posX = rng.nextInt(0, width * 10)
                 val posY = rng.nextInt(0, heigth * 10)
 
@@ -77,8 +81,9 @@ open class BackgroundGenerator : DefaultTask() {
                     backgroundConfig.foregroundObjectsSizeRange.last
                 )
 
-                listValues.add(intArrayOf(posX, posY, radius))
-
+                val values = intArrayOf(posX, posY, radius)
+                logger.debug("Generated values: ${values.contentToString()}")
+                listValues.add(values)
             }
 
             generateStaticVectorDrawable(listValues, backgroundConfig)
@@ -103,7 +108,8 @@ open class BackgroundGenerator : DefaultTask() {
     private fun generateStaticVectorDrawable(listValues: MutableList<IntArray>, backgroundConfig: BackgroundConfig) {
         val (width: Int, heigth: Int) = getWidthAndHeight(backgroundConfig)
 
-        val bgFile = File(generationDir, "drawable/${backgroundConfig.name}.xml")
+        logger.debug("Generating VectorGraphic...")
+        val bgFile = File(getExtensionConfiguration().generationTarget, "drawable/${backgroundConfig.name}.xml")
         bgFile.parentFile.mkdirs()
         bgFile.createNewFile()
         bgFile.writeText(
@@ -118,7 +124,6 @@ open class BackgroundGenerator : DefaultTask() {
                     "            android:strokeWidth=\"0\"\n" +
                     "            android:pathData=\"M0,0 ${width * 10},0 ${width * 10},${heigth * 10} 0,${heigth * 10}\" />\n"
         )
-        logger.info("Generating VectorGraphic...")
         listValues.forEachIndexed { index, values ->
             val xCenter = values[0].toDouble()
             val yCenter = values[1].toDouble()
@@ -198,8 +203,8 @@ open class BackgroundGenerator : DefaultTask() {
     }
 
     private fun generateAnimatedVectorDrawable(listValues: MutableList<IntArray>, backgroundConfig: BackgroundConfig) {
-        logger.info("Generating AnimatedVectorGraphic...")
-        val animatedBgFile = File(generationDir, "drawable/${backgroundConfig.name}_animated.xml")
+        logger.debug("Generating AnimatedVectorGraphic...")
+        val animatedBgFile = File(getExtensionConfiguration().generationTarget, "drawable/${backgroundConfig.name}_animated.xml")
         animatedBgFile.createNewFile()
         animatedBgFile.writeText(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -217,8 +222,8 @@ open class BackgroundGenerator : DefaultTask() {
     }
 
     private fun generateAnimators(listValues: MutableList<IntArray>, rng: Random, backgroundConfig: BackgroundConfig) {
-        logger.info("Generating Animators...")
-        val animatorDir = File(generationDir, "animator")
+        logger.debug("Generating Animators...")
+        val animatorDir = File(getExtensionConfiguration().generationTarget, "animator")
         animatorDir.mkdirs()
 
         listValues.forEachIndexed { index, values ->
