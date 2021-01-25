@@ -46,12 +46,6 @@ publishing {
     }
 }
 
-repositories {
-    mavenCentral()
-    jcenter()
-    google()
-}
-
 dependencies {
     implementation(kotlin("stdlib"))
 

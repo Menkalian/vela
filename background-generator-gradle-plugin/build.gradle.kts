@@ -46,12 +46,6 @@ publishing {
     }
 }
 
-repositories {
-    mavenCentral()
-    jcenter()
-    google()
-}
-
 dependencies {
     implementation(kotlin("stdlib"))
     compileOnly("com.android.tools.build:gradle:4.1.1")
