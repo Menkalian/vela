@@ -211,7 +211,7 @@ open class BackgroundGenerator : DefaultTask() {
                     "<animated-vector xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
                     "  android:drawable=\"@drawable/${backgroundConfig.name}\" >\n"
         )
-        listValues.forEachIndexed { index, values ->
+        listValues.forEachIndexed { index, _ ->
             animatedBgFile.appendText(
                 "<target\n" +
                         "        android:name=\"foreground_${backgroundConfig.name}_${String.format("%02d", index)}\"\n" +

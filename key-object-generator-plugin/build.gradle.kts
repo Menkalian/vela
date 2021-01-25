@@ -48,6 +48,10 @@ publishing {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("stdlib-jdk7"))
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
 
     implementation(jackson("core"))
     implementation(jackson("databind"))

@@ -5,11 +5,10 @@ package de.menkalian.vela
 import groovy.lang.Closure
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
-import org.gradle.api.model.ObjectFactory
 import java.io.File
 import javax.inject.Inject
 
-open class BackgroundExtension @Inject constructor(val project: Project, objectFactory: ObjectFactory) {
+open class BackgroundExtension @Inject constructor(val project: Project) {
     var seed: Long? = null
     var generationTarget: File = File(project.buildDir, "generated/res/backgrounds/")
     val backgrounds: NamedDomainObjectContainer<BackgroundConfig> =
