@@ -17,7 +17,7 @@ cache:
 build:
   stage: build
   script:
-    - gradle publishToMavenLocal --info --stacktrace
+    - gradle publishToMavenLocal
   artifacts:
     paths:
       - gradle-versioning-plugin/build

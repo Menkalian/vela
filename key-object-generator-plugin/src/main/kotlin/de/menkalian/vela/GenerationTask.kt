@@ -146,7 +146,7 @@ open class GenerationTask : DefaultTask() {
     }
 
     private fun loadTemplate(resourceName: String, replacements: Map<String, String> = mapOf(), indentation: Int = 0): String {
-        var toReturn = String(javaClass.getResource(resourceName).openStream().readAllBytes())
+        var toReturn = String(javaClass.getResource(resourceName).openStream().readBytes())
 
         replacements.forEach {
             toReturn = toReturn.replace(it.key, it.value)
