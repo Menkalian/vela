@@ -102,7 +102,19 @@ open class GenerationTask : DefaultTask() {
             if (it.isDirectory && project.keyobjectgen().scanRecursive) {
                 generateForFile(it)
             } else {
-                val keyTree = YAMLMapper().readTree(it)
+                val lines = it.readLines()
+                val transformed = File.createTempFile("vela", ".yml")
+                transformed.deleteOnExit()
+
+                lines.forEach { line ->
+                    if (!line.contains(':') && line.isNotBlank())
+                        transformed.appendText("$line:\n")
+                    else
+                        transformed.appendText("$line\n")
+                }
+                println(transformed.readText())
+
+                val keyTree = YAMLMapper().readTree(transformed)
                 keyTree.fields().forEach {
                     val keyGenerationFile = File(project.keyobjectgen().targetDir, "de/menkalian/vela/generated/${it.key}Key.java")
                     keyGenerationFile.createNewFile()
