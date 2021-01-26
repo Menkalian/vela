@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.menkalian.vela"
-version = "1.0.1"
+version = "1.1.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
