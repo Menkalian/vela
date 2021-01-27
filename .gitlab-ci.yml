@@ -10,7 +10,7 @@ default:
     - mv .gradlecache /root/.gradle
     - chmod +x gradlew
   after_script:
-    - cp /root/.gradle .gradlecache
+    - cp -r /root/.gradle .gradlecache
   tags:
     - docker
 
@@ -24,8 +24,6 @@ build:
   stage: build
   script:
     - ./gradlew publishToMavenLocal
-    - ls -la /root/.gradle
-    - ls -lRa /root
   artifacts:
     paths:
       - gradle-versioning-plugin/build
