@@ -4,20 +4,23 @@ stages:
   - deploy
 
 default:
-  image: gradle:6.8.0
+  image: openjdk:15
+  before_script:
+    - whoami
+    - chmod +x gradlew
   tags:
     - docker
 
 cache:
   key: ${CI_PROJECT_ID}
   paths:
-    - /root/.gradle/
+    - /root/.gradle/**
     - .gradle
 
 build:
   stage: build
   script:
-    - gradle publishToMavenLocal
+    - gradlew publishToMavenLocal
   artifacts:
     paths:
       - gradle-versioning-plugin/build
@@ -26,14 +29,14 @@ build:
 test:
   stage: test
   script:
-    - gradle test
+    - gradlew test
 
 publish:
   stage: deploy
   only:
     - main
   script:
-    - gradle publish
+    - gradlew publish
   artifacts:
     paths:
       - gradle-versioning-plugin/build/libs/*.jar
