@@ -1,0 +1,7 @@
+public {{KEY_NAME}}Key {{KEY_NAME}} = new {{KEY_NAME}}Key();
+public static class {{KEY_NAME}}Key extends GeneratedKey {
+    private {{KEY_NAME}}Key () {
+        super("{{KEY_NAME}}", {{PARENT}}.toString());
+    }
+{{CHILDREN}}
+}
