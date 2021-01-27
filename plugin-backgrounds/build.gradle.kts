@@ -10,7 +10,7 @@ version = "1.0.0"
 gradlePlugin {
     plugins {
         create("backgroundPlugin") {
-            id = "de.menkalian.vela.background"
+            id = "de.menkalian.vela.backgrounds"
             implementationClass = "de.menkalian.vela.BackgroundGradlePlugin"
             displayName = "Background Generator Plugin"
             description = ""

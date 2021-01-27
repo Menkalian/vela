@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`

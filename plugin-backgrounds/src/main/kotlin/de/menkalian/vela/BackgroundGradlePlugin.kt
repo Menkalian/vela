@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package de.menkalian.vela
 
 import com.android.build.api.dsl.ApplicationBaseFlavor
@@ -12,6 +14,7 @@ import java.io.File
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+@Suppress("unused")
 class BackgroundGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.create("backgrounds", BackgroundExtension::class.java, target)
@@ -68,13 +71,13 @@ open class BackgroundGenerator : DefaultTask() {
         getExtensionConfiguration().backgrounds.forEach { backgroundConfig ->
             logger.debug("Generating Background ${backgroundConfig.name}")
             val listValues = mutableListOf<IntArray>()
-            val (width: Int, heigth: Int) = getWidthAndHeight(backgroundConfig)
-            logger.debug("Width: $width ; Height: $heigth")
+            val (width: Int, height: Int) = getWidthAndHeight(backgroundConfig)
+            logger.debug("Width: $width ; Height: $height")
 
             for (i in 1..backgroundConfig.foregroundObjectsAmount) {
                 logger.debug("ForegroundObject #$i")
                 val posX = rng.nextInt(0, width * 10)
-                val posY = rng.nextInt(0, heigth * 10)
+                val posY = rng.nextInt(0, height * 10)
 
                 val radius = rng.nextInt(
                     backgroundConfig.foregroundObjectsSizeRange.first,
@@ -94,19 +97,19 @@ open class BackgroundGenerator : DefaultTask() {
 
     private fun getWidthAndHeight(backgroundConfig: BackgroundConfig): Pair<Int, Int> {
         val width: Int
-        val heigth: Int
+        val height: Int
         if (backgroundConfig.widthToHeightRatio > 1) {
             width = 200
-            heigth = (200 / backgroundConfig.widthToHeightRatio).roundToInt()
+            height = (200 / backgroundConfig.widthToHeightRatio).roundToInt()
         } else {
-            heigth = 200
+            height = 200
             width = (200 * backgroundConfig.widthToHeightRatio).roundToInt()
         }
-        return Pair(width, heigth)
+        return Pair(width, height)
     }
 
     private fun generateStaticVectorDrawable(listValues: MutableList<IntArray>, backgroundConfig: BackgroundConfig) {
-        val (width: Int, heigth: Int) = getWidthAndHeight(backgroundConfig)
+        val (width: Int, height: Int) = getWidthAndHeight(backgroundConfig)
 
         logger.debug("Generating VectorGraphic...")
         val bgFile = File(getExtensionConfiguration().generationTarget, "drawable/${backgroundConfig.name}.xml")
@@ -115,14 +118,14 @@ open class BackgroundGenerator : DefaultTask() {
         bgFile.writeText(
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
                     "<vector xmlns:android=\"http://schemas.android.com/apk/res/android\"\n" +
-                    "        android:height=\"${heigth}dp\"\n" +
+                    "        android:height=\"${height}dp\"\n" +
                     "        android:width=\"${width}dp\"\n" +
-                    "        android:viewportHeight=\"${heigth * 10}\"\n" +
+                    "        android:viewportHeight=\"${height * 10}\"\n" +
                     "        android:viewportWidth=\"${width * 10}\">\n" +
                     "    <path\n" +
                     "            android:fillColor=\"${backgroundConfig.backgroundBaseColor}\"\n" +
                     "            android:strokeWidth=\"0\"\n" +
-                    "            android:pathData=\"M0,0 ${width * 10},0 ${width * 10},${heigth * 10} 0,${heigth * 10}\" />\n"
+                    "            android:pathData=\"M0,0 ${width * 10},0 ${width * 10},${height * 10} 0,${height * 10}\" />\n"
         )
         listValues.forEachIndexed { index, values ->
             val xCenter = values[0].toDouble()

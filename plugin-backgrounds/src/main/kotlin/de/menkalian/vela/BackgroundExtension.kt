@@ -1,4 +1,4 @@
-@file:Suppress("EqualsOrHashCode")
+@file:Suppress("EqualsOrHashCode", "MemberVisibilityCanBePrivate")
 
 package de.menkalian.vela
 
@@ -8,14 +8,14 @@ import org.gradle.api.Project
 import java.io.File
 import javax.inject.Inject
 
-open class BackgroundExtension @Inject constructor(val project: Project) {
+open class BackgroundExtension @Inject constructor(private val project: Project) {
     var seed: Long? = null
     var generationTarget: File = File(project.buildDir, "generated/res/backgrounds/")
     val backgrounds: NamedDomainObjectContainer<BackgroundConfig> =
         project.container(BackgroundConfig::class.java) { name -> BackgroundConfig(name, project) }
 
     fun backgrounds(config: NamedDomainObjectContainer<BackgroundConfig>.() -> Unit) = backgrounds.config()
-    fun backgrounds(config: Closure<*>) = project.configure(backgrounds, config)
+    fun backgrounds(config: Closure<*>): MutableIterable<*> = project.configure(backgrounds, config)
 
     override fun hashCode(): Int {
         var result = project.hashCode()
@@ -26,7 +26,7 @@ open class BackgroundExtension @Inject constructor(val project: Project) {
     }
 }
 
-open class BackgroundConfig(val name: String, val project: Project) {
+open class BackgroundConfig(val name: String, private val project: Project) {
     var widthToHeightRatio: Double = 9.0 / 16.0
     var backgroundBaseColor: String = "#000000"
 

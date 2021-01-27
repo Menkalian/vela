@@ -2,10 +2,10 @@ package de.menkalian.vela
 
 import com.android.build.api.dsl.ApplicationBaseFlavor
 import com.android.build.api.dsl.CommonExtension
-import com.android.build.api.dsl.LibraryBaseFlavor
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
+@Suppress("unused")
 class VersioningGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val versionPropsFile = target.file("version.properties")
