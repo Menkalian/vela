@@ -6,7 +6,6 @@ stages:
 default:
   image: openjdk:15
   before_script:
-    - whoami
     - chmod +x gradlew
   tags:
     - docker
@@ -21,6 +20,8 @@ build:
   stage: build
   script:
     - ./gradlew publishToMavenLocal
+    - ls -la /root/.gradle
+    - ls -lRa /root
   artifacts:
     paths:
       - gradle-versioning-plugin/build
