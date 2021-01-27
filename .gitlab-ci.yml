@@ -20,7 +20,7 @@ cache:
 build:
   stage: build
   script:
-    - gradlew publishToMavenLocal
+    - ./gradlew publishToMavenLocal
   artifacts:
     paths:
       - gradle-versioning-plugin/build
@@ -29,14 +29,14 @@ build:
 test:
   stage: test
   script:
-    - gradlew test
+    - ./gradlew test
 
 publish:
   stage: deploy
   only:
     - main
   script:
-    - gradlew publish
+    - ./gradlew publish
   artifacts:
     paths:
       - gradle-versioning-plugin/build/libs/*.jar
