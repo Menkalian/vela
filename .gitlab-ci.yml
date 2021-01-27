@@ -14,7 +14,7 @@ default:
 cache:
   key: ${CI_PROJECT_ID}
   paths:
-    - /root/.gradle/**
+    - /root/.gradle/*/*
     - .gradle
 
 build:
