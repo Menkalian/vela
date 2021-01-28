@@ -5,6 +5,7 @@ plugins {
     `java-gradle-plugin`
     id("com.gradle.plugin-publish")
     `maven-publish`
+    jacoco
 }
 
 version = "1.1.0"
@@ -61,6 +62,12 @@ val functionalTestTask = tasks.register<Test>("functionalTest") {
     }
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test, integrationTestTask, functionalTestTask)
+    reports {
+        xml.isEnabled = true
+    }
+}
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
     kotlinOptions {
@@ -71,4 +78,5 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
 tasks.check {
     dependsOn(integrationTestTask)
     dependsOn(functionalTestTask)
+    dependsOn(tasks.jacocoTestReport)
 }

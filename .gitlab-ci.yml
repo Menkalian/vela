@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - visualize
   - deploy
 
 default:
@@ -34,9 +35,24 @@ test:
   script:
     - ./gradlew check
   artifacts:
+    paths:
+      - plugin-keygen/build/reports/jacoco/test/jacocoTestReport.xml
     reports:
       junit:
         - plugin-keygen/build/test-results/test/**/TEST-*.xml
+
+coverage-plugin-keygen:
+  stage: visualize
+  image: haynes/jacoco2cobertura:1.0.4
+  script:
+    - 'python /opt/cover2cover.py plugin-keygen/build/test-results/test/**/TEST-*.xml src/main/java > plugin-keygen/build/cobertura.xml'
+    - 'python /opt/source2filename.py plugin-keygen/build/cobertura.xml'
+  needs: ["test-jdk11"]
+  dependencies:
+    - test-jdk11
+  artifacts:
+    reports:
+      cobertura: plugin-keygen/build/cobertura.xml
 
 publish:
   stage: deploy
