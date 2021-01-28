@@ -32,7 +32,11 @@ build:
 test:
   stage: test
   script:
-    - ./gradlew test
+    - ./gradlew check
+  artifacts:
+    reports:
+      junit:
+        - plugin-keygen/build/test-results/test/**/TEST-*.xml
 
 publish:
   stage: deploy
