@@ -66,6 +66,7 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test, integrationTestTask, functionalTestTask)
     reports {
         xml.isEnabled = true
+        csv.isEnabled = true
     }
 }
 
