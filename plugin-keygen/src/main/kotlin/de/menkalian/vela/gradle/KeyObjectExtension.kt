@@ -1,6 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
-package de.menkalian.vela
+package de.menkalian.vela.gradle
 
 import org.gradle.api.Project
 import java.io.File

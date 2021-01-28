@@ -1,4 +1,6 @@
-package de.menkalian.vela
+@file:Suppress("UnstableApiUsage")
+
+package de.menkalian.vela.gradle
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.NamedDomainObjectContainer
@@ -14,7 +16,7 @@ const val EXTENSION_NAME = "keygen"
 class KeyObjectGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         target.extensions.create(EXTENSION_NAME, KeyObjectExtension::class.java, target)
-        val generationTask = target.tasks.create("generateKeyObjects", GenerationTask::class.java)
+        val generationTask = target.tasks.create("generateKeyObjects", KeyObjectGenerationTask::class.java)
 
         target.pluginManager.withPlugin("java") {
             target.sourceSets().getByName("main").java.srcDir(target.keygenConfig().targetDir)
