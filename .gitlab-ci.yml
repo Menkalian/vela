@@ -47,9 +47,9 @@ coverage-plugin-keygen:
   script:
     - 'python /opt/cover2cover.py plugin-keygen/build/test-results/test/**/TEST-*.xml src/main/java > plugin-keygen/build/cobertura.xml'
     - 'python /opt/source2filename.py plugin-keygen/build/cobertura.xml'
-  needs: ["test-jdk11"]
+  needs: ["test"]
   dependencies:
-    - test-jdk11
+    - test
   artifacts:
     reports:
       cobertura: plugin-keygen/build/cobertura.xml
