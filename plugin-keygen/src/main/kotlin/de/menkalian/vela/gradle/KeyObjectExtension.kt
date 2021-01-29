@@ -6,9 +6,11 @@ import org.gradle.api.Project
 import java.io.File
 import java.net.URI
 
-open class KeyObjectExtension(project: Project) {
-    var targetDir: URI = File(project.buildDir, "generated/vela/keyobject/java").toURI()
-    var sourceDir: URI = File(project.projectDir, "src/main/ckf").toURI()
+open class KeyObjectExtension internal constructor(buildDir: File, projectDir: File) {
+    constructor(project: Project) : this(project.buildDir, project.projectDir)
+
+    var targetDir: URI = File(buildDir, "generated/vela/keyobject/java").toURI()
+    var sourceDir: URI = File(projectDir, "src/main/ckf").toURI()
 
     var separator = "."
     var targetPackage = "de.menkalian.vela.generated"

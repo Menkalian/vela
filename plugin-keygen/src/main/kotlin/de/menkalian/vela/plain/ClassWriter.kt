@@ -8,7 +8,7 @@ class ClassWriter(clazz: String, pckg: String, config: KeyObjectExtension) {
 
     init {
         // Make Parent directory
-        val parent = File("${config.targetDir}/${pckg.replace('.', '/')}")
+        val parent = File(File(config.targetDir), pckg.replace('.', '/'))
         parent.mkdirs()
 
         target = File(parent, "$clazz.java")
