@@ -1,13 +1,12 @@
 package de.menkalian.vela.plain
 
-import java.io.File
 
-fun transformToYaml(input: File): String {
+fun transformToYaml(input: String): String {
     val transformed = StringBuilder()
 
-    val lines = input.readLines()
+    val lines = input.lines()
     lines.forEach { line ->
-        if (!line.contains(':') && line.isNotBlank())
+        if (!line.contains(':') && line.isNotBlank() && !line.startsWith("---"))
             transformed.append("$line:\n")
         else
             transformed.append("$line\n")

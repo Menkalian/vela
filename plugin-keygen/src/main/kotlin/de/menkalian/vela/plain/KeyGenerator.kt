@@ -31,7 +31,7 @@ class KeyGenerator(private val config: KeyObjectExtension) {
             if (it.isDirectory && config.scanRecursive) {
                 generateForFile(it)
             } else {
-                val keyTree = YAMLMapper().readTree(transformToYaml(it))
+                val keyTree = YAMLMapper().readTree(transformToYaml(it.readText()))
                 val parent =
                     if (config.prefixRecursive && it.parentFile.toURI() != config.sourceDir) {
                         it.parentFile
