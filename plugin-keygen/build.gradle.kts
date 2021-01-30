@@ -14,7 +14,7 @@ gradlePlugin {
     plugins {
         create("keygenPlugin") {
             id = "de.menkalian.vela.keygen"
-            implementationClass = "de.menkalian.vela.KeyObjectGradlePlugin"
+            implementationClass = "de.menkalian.vela.gradle.KeyObjectGradlePlugin"
             displayName = "Key Object Generator Plugin"
             description = ""
         }
@@ -65,6 +65,10 @@ val functionalTestTask = tasks.register<Test>("functionalTest") {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test, integrationTestTask, functionalTestTask)
+
+    executionData(integrationTestTask.get())
+    executionData(functionalTestTask.get())
+
     reports {
         xml.isEnabled = true
         csv.isEnabled = true
