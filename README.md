@@ -39,5 +39,5 @@ pluginManagement {
 - **type**: Gradle plugin (ID: `de.menkalian.vela.keygen`)
 - **version**: `1.1.0`
 - **description**:
-  If you Identify some values by a string-key like `Vela.Example.Key`, `Menkalian/Repositories/Vela` or `Staged~Variable~Access`, you may want to generate classes/objects to represent these, to have autocomplete in your IDE and minimalize typos. Vela generates those objects for you, while you only have to supply a file in a simple, yaml-like format.
-- **details**: [specific README](key-object-generator-plugin/README.md)
+  If you Identify some values by a string-key like `Vela.Example.Key`, `Menkalian/Repositories/Vela` or `Staged~Variable~Access`, you may want to generate classes/objects to represent these, to have autocomplete in your IDE and minimize typos. Vela generates those objects for you, while you only have to supply a file in a simple, yaml-like format.
+- **details**: [specific README](plugin-keygen/README.md)

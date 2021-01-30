@@ -1,0 +1,16 @@
+public class GeneratedKey {
+    protected final String BASE;
+
+    GeneratedKey(String key, String parent) {
+        if(parent.isBlank()){
+            BASE = key;
+        } else {
+            BASE = parent + "{{PLACEHOLDER}}" + key;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return BASE;
+    }
+}
