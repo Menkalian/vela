@@ -26,6 +26,9 @@ class KeyObjectGradlePlugin : Plugin<Project> {
             target.pluginManager.withPlugin("java") {
                 target.tasks.getByName("compileJava").dependsOn(generationTask)
             }
+            target.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+                target.tasks.getByName("compileKotlin").dependsOn(generationTask)
+            }
             target.pluginManager.withPlugin("com.android.base") {
                 target.buildTypeNames().forEach {
                     target.tasks.getByName("compile${it.capitalize()}Java").dependsOn.add(generationTask)
