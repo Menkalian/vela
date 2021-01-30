@@ -58,7 +58,7 @@ class KeyGenerator(private val config: KeyObjectExtension) {
         }
 
         keyNames.forEachIndexed { pos, keyName ->
-            val cw = classWriter ?: ClassWriter(keyName, config.targetPackage, config)
+            val cw = classWriter ?: ClassWriter("${keyName}Key", config.targetPackage, config)
             loader.setReplacement("{{PARENT}}" to parentKeyPath)
             loader.setReplacement("{{KEY_NAME}}" to keyName)
 
@@ -77,7 +77,10 @@ class KeyGenerator(private val config: KeyObjectExtension) {
             if (outputSplit.size >= 2) {
                 if (recourse && !valueNode.get(keyName).isEmpty) {
                     cw.writeText("\n\n")
-                    generateObjects(valueNode.get(keyName), cw, "$parentKeyPath.$keyName", indentationLevel + 1)
+                    if (parentKeyPath.isBlank())
+                        generateObjects(valueNode.get(keyName), cw, keyName, indentationLevel + 1)
+                    else
+                        generateObjects(valueNode.get(keyName), cw, "$parentKeyPath.$keyName", indentationLevel + 1)
                 }
 
                 cw.writeText(outputSplit[1].trimEnd())
