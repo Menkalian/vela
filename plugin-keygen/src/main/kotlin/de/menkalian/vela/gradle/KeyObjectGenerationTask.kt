@@ -43,5 +43,9 @@ open class KeyObjectGenerationTask : DefaultTask() {
     @TaskAction
     fun generateKeySources() {
         KeyGenerator(getConfig()).runGeneration()
+
+        getConfig().furtherConfigs?.forEach {
+            KeyGenerator(it).runGeneration()
+        }
     }
 }

@@ -76,3 +76,18 @@ This table contains an explanation for all configurable parameters:
 | scanRecursive      | `Boolean`         | Whether subdirectories of `sourceDir` should be scanned |
 | prefixRecursive    | `Boolean`         | If source-files are placed in a subdirectory and this is true, then the generated values will be prefixed according to their location relative to `sourceDir` |
 | finalLayerAsString | `Boolean`         | Whether the lowest Elements should be Strings or objects (so `GeneratedValue#toString` needs to be called) |
+
+### Generating more than one set
+
+If you want to generate more than one set of keys (that might be for various reasons, like different separators or reusability of repositories), you may specify a second set of generation targets, by creating a new container in `furtherConfigs`.
+The way you do this (in a Kotlin-Script) looks like this:
+```kotlin
+keygen {
+    /*... configs for primary set*/
+    furtherConfigs {
+        create("secondaryKeys") {
+            /*... same configs as above are possible here*/
+        }
+    }
+}
+```
