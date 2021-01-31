@@ -9,7 +9,7 @@ import java.io.File
 import java.net.URI
 
 open class KeyObjectExtension internal constructor(buildDir: File, projectDir: File, val project: Project? = null, val name: String = "keygen") {
-    constructor(project: Project) : this(project.buildDir, project.projectDir)
+    constructor(project: Project) : this(project.buildDir, project.projectDir, project)
     constructor(name: String, project: Project) : this(project.buildDir, project.projectDir, project, name)
 
     var targetDir: URI = File(buildDir, "generated/vela/keyobject/java").toURI()
