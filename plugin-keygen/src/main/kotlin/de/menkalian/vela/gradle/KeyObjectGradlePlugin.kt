@@ -18,15 +18,13 @@ class KeyObjectGradlePlugin : Plugin<Project> {
         target.extensions.create(EXTENSION_NAME, KeyObjectExtension::class.java, target)
         val generationTask = target.tasks.create("generateKeyObjects", KeyObjectGenerationTask::class.java)
 
-        target.pluginManager.withPlugin("java") {
-            target.sourceSets().getByName("main").java.srcDir(target.keygenConfig().targetDir)
-            target.keygenConfig().furtherConfigs?.forEach {
-                target.sourceSets().getByName("main").java.srcDir(it.targetDir)
-            }
-        }
-
         target.afterEvaluate {
             target.pluginManager.withPlugin("java") {
+                target.sourceSets().getByName("main").java.srcDir(target.keygenConfig().targetDir)
+                target.keygenConfig().furtherConfigs?.forEach {
+                    target.sourceSets().getByName("main").java.srcDir(it.targetDir)
+                }
+
                 target.tasks.getByName("compileJava").dependsOn(generationTask)
             }
             target.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
