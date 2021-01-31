@@ -73,8 +73,6 @@ open class BackgroundConfig(val name: String, private val project: Project) {
         result = 31 * result + opacityAnimation.hashCode()
         return result
     }
-
-
 }
 
 open class MovementAnimationConfig : AnimationConfig() {
