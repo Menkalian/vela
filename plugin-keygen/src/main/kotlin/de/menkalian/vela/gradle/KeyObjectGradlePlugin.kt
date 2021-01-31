@@ -20,6 +20,9 @@ class KeyObjectGradlePlugin : Plugin<Project> {
 
         target.pluginManager.withPlugin("java") {
             target.sourceSets().getByName("main").java.srcDir(target.keygenConfig().targetDir)
+            target.keygenConfig().furtherConfigs?.forEach {
+                target.sourceSets().getByName("main").java.srcDir(it.targetDir)
+            }
         }
 
         target.afterEvaluate {
@@ -38,6 +41,13 @@ class KeyObjectGradlePlugin : Plugin<Project> {
                 (target.extensions.getByName("android") as? CommonExtension<*, *, *, *, *, *, *, *>)!!.sourceSets.getByName("main").java.srcDir(
                     generationBaseDir
                 )
+                target.keygenConfig().furtherConfigs?.forEach {
+                    val baseDir = File(it.targetDir)
+                    baseDir.mkdirs()
+                    (target.extensions.getByName("android") as? CommonExtension<*, *, *, *, *, *, *, *>)!!.sourceSets.getByName("main").java.srcDir(
+                        baseDir
+                    )
+                }
             }
         }
     }
