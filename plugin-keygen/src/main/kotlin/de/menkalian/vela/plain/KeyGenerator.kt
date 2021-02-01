@@ -59,7 +59,7 @@ class KeyGenerator(private val config: KeyObjectExtension) {
 
         keyNames.forEachIndexed { pos, keyName ->
             val cw = classWriter ?: ClassWriter("${keyName}Key", config.targetPackage, config)
-            loader.setReplacement("{{PARENT}}" to parentKeyPath)
+            loader.setReplacement("{{PARENT}}" to parentKeyPath.replace(".", config.separator))
             loader.setReplacement("{{KEY_NAME}}" to keyName)
 
             val toOutput = if (classWriter == null) {
