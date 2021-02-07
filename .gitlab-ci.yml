@@ -22,9 +22,7 @@ build:
     - ./gradlew publishToMavenLocal
   artifacts:
     paths:
-      - plugin-backgrounds/build
-      - plugin-keygen/build
-      - plugin-versioning/build
+      - ./*/build
     expire_in: 1 week
 
 test:
@@ -45,7 +43,7 @@ coverage-plugin-keygen:
   script:
     - 'python /opt/cover2cover.py plugin-keygen/build/reports/jacoco/test/jacocoTestReport.xml src/main/java > plugin-keygen/build/cobertura.xml'
     - 'python /opt/source2filename.py plugin-keygen/build/cobertura.xml'
-  needs: ["test"]
+  needs: [ "test" ]
   dependencies:
     - test
   artifacts:
@@ -60,5 +58,5 @@ publish:
     - ./gradlew publish
   artifacts:
     paths:
-      - gradle-versioning-plugin/build/libs/*.jar
+      - ./*/build/libs/*.jar
     expire_in: 1 month
