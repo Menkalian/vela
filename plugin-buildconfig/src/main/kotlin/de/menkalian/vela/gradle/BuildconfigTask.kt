@@ -10,30 +10,29 @@ import java.io.File
 
 open class BuildconfigTask : DefaultTask() {
     @Input
-    fun version() = project.version.toString()
+    val version = project.version.toString()
 
     @Input
-    fun group() = project.group.toString()
+    val projectGroup = project.group.toString()
 
     @Input
-    fun module() = project.name.toString()
+    val module = project.name.toString()
 
     @OutputDirectory
-    fun outputDir() =
-        File(project.buildDir, "generated/vela/buildconfig/java")
+    val outputDir = File(project.buildDir, "generated/vela/buildconfig/java")
 
     @OutputFile
-    fun outputFile() = File(outputDir(), "BuildConfig.java")
+    val outputFile = File(outputDir, "BuildConfig.java")
 
     @TaskAction
     fun generateBuildConfig() {
         SourceGenerator(
-            outputFile(),
+            outputFile,
             "BuildConfig",
             mapOf(
-                "group" to group(),
-                "module" to module(),
-                "version" to version()
+                "group" to projectGroup,
+                "module" to module,
+                "version" to version
             )
         )
     }

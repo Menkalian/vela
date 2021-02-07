@@ -12,7 +12,7 @@ open class BuildconfigGradlePlugin : Plugin<Project> {
 
         target.afterEvaluate {
             target.pluginManager.withPlugin("java") {
-                target.sourceSets().getByName("main").java.srcDir(generationTask.outputDir())
+                target.sourceSets().getByName("main").java.srcDir(generationTask.outputDir)
 
                 target.tasks.getByName("compileJava").dependsOn(generationTask)
             }
