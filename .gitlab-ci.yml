@@ -7,18 +7,13 @@ stages:
 default:
   image: openjdk:15
   before_script:
-    - mkdir .gradlecache
-    - mv .gradlecache /root/.gradle
     - chmod +x gradlew
-  after_script:
-    - cp -r /root/.gradle .gradlecache
   tags:
     - docker
 
 cache:
   key: ${CI_PROJECT_ID}
   paths:
-    - .gradlecache
     - .gradle
 
 build:
