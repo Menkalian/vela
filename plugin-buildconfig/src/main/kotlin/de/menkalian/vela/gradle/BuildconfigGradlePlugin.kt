@@ -8,9 +8,9 @@ import org.gradle.api.tasks.SourceSetContainer
 
 open class BuildconfigGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        val generationTask = target.tasks.create("generateBuildConfig", BuildconfigTask::class.java)
-
         target.afterEvaluate {
+            val generationTask = target.tasks.create("generateBuildConfig", BuildconfigTask::class.java)
+
             target.pluginManager.withPlugin("java") {
                 target.sourceSets().getByName("main").java.srcDir(generationTask.outputDir)
 
