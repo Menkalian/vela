@@ -1,7 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    kotlin("jvm") version "1.4.21" apply false
+    kotlin("jvm") version "1.4.30" apply false
     id("com.gradle.plugin-publish") version "0.12.0" apply false
 }
 
