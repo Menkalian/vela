@@ -1,0 +1,15 @@
+path=HelloWorld.java
+type=TEXT
+content=
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello Java!");
+    }
+}
+---
+path=HelloWorld.kt
+type=TEXT
+content=
+fun main() {
+    println("Hello Kotlin!")
+}
