@@ -17,10 +17,10 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
 
         files.forEachIndexed { index, epcFile ->
             if (index == 0) {
-                target.writeText(epcFile.toString())
+                target.writeText(epcFile.toString(), Charsets.UTF_8)
             } else {
-                target.appendText("---\n")
-                target.appendText(epcFile.toString())
+                target.appendText("---\n", Charsets.UTF_8)
+                target.appendText(epcFile.toString(), Charsets.UTF_8)
             }
         }
 
@@ -28,7 +28,7 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
     }
 
     fun decompress(source: File, target: File) {
-        val text = source.readText()
+        val text = source.readText(Charsets.UTF_8)
         text.split("---").forEach {
             decompress(target, it.trim().parseEpcFile())
         }
@@ -47,10 +47,14 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
 
             val epcFile = when {
                 binFileExtensions.contains(current.extension.toLowerCase())  -> EpcFile(relativePath, StoreType.BINARY, current.readBytes().toHexString())
-                textFileExtensions.contains(current.extension.toLowerCase()) -> EpcFile(relativePath, StoreType.TEXT, current.readText().replace("-", "\\-"))
+                textFileExtensions.contains(current.extension.toLowerCase()) -> EpcFile(
+                    relativePath,
+                    StoreType.TEXT,
+                    current.readText(Charsets.UTF_8).replace("-", "\\-")
+                )
                 else                                                         -> {
                     when (defaultStoreType) {
-                        StoreType.TEXT   -> EpcFile(relativePath, StoreType.TEXT, current.readText().replace("-", "\\-"))
+                        StoreType.TEXT   -> EpcFile(relativePath, StoreType.TEXT, current.readText(Charsets.UTF_8).replace("-", "\\-"))
                         StoreType.BINARY -> EpcFile(relativePath, StoreType.BINARY, current.readBytes().toHexString())
                     }
                 }
@@ -68,7 +72,7 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
         targetFile.createNewFile()
 
         when (epcData.type) {
-            StoreType.TEXT   -> targetFile.writeText(epcData.content.replace("\\-", "-"))
+            StoreType.TEXT   -> targetFile.writeText(epcData.content.replace("\\-", "-"), Charsets.UTF_8)
             StoreType.BINARY -> targetFile.writeBytes(epcData.content.parseHexBytes())
         }
     }

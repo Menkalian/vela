@@ -21,7 +21,7 @@ internal class EpcTest {
                         System.out.println("Hello Java!");
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(), Charsets.UTF_8
         )
         val kotlinFile = File(sourceDir, "HelloWorld.kt")
         kotlinFile.createNewFile()
@@ -30,14 +30,14 @@ internal class EpcTest {
                 fun main() {
                     println("Hello Kotlin!")
                 }
-            """.trimIndent()
+            """.trimIndent(), Charsets.UTF_8
         )
 
         val testFile = File.createTempFile("epcTest", "epc")
         Epc().compress(sourceDir, testFile)
         assertEquals(
-            String(EpcTest::class.java.classLoader.getResourceAsStream("test.epc")!!.readAllBytes()),
-            testFile.readText()
+            String(EpcTest::class.java.classLoader.getResourceAsStream("test.epc")!!.readAllBytes(), Charsets.UTF_8),
+            testFile.readText(Charsets.UTF_8)
         )
     }
 
@@ -57,7 +57,7 @@ internal class EpcTest {
                         System.out.println("Hello Java!");
                     }
                 }
-            """.trimIndent()
+            """.trimIndent(), Charsets.UTF_8
         )
         val kotlinFile = File(expextedDir, "HelloWorld.kt")
         kotlinFile.createNewFile()
@@ -66,7 +66,7 @@ internal class EpcTest {
                 fun main() {
                     println("Hello Kotlin!")
                 }
-            """.trimIndent()
+            """.trimIndent(), Charsets.UTF_8
         )
 
         val targetDir = createTempDir("epcTest")
