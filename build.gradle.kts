@@ -48,10 +48,45 @@ allprojects {
         }
 
         dependencies {
+            add("testImplementation", "org.junit.jupiter:junit-jupiter-api:5.7.0")
+            add("testImplementation", "org.junit.jupiter:junit-jupiter-params:5.7.0")
+            add("testRuntimeOnly", "org.junit.jupiter:junit-jupiter-engine:5.7.0")
+        }
+
+        tasks {
+            withType(Test::class.java) {
+                useJUnitPlatform()
+            }
+        }
+    }
+
+    pluginManager.withPlugin("jacoco") {
+        tasks.withType(JacocoReport::class.java) {
+            dependsOn(tasks.getByName("test"))
+
+            reports {
+                xml.isEnabled = true
+                csv.isEnabled = true
+            }
+        }
+
+        tasks.getByName("check") {
+            dependsOn(tasks.withType(JacocoReport::class.java))
+        }
+    }
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        dependencies {
             add("implementation", kotlin("stdlib"))
             add("implementation", kotlin("stdlib-jdk8"))
             add("implementation", kotlin("stdlib-jdk7"))
             add("implementation", kotlin("reflect"))
+        }
+
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8.toString()
+            }
         }
     }
 }
