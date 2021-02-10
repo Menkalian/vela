@@ -2,16 +2,15 @@
 
 package de.menkalian.vela.epc
 
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
 internal class EpcTest {
 
     @Test
-    fun compress() {
-        val sourceDir = createTempDir("epcTestExpected")
+    fun compress(@TempDir sourceDir: File, @TempDir targetDir: File, @TempDir checkTargetDir: File) {
         val javaFile = File(sourceDir, "HelloWorld.java")
         javaFile.createNewFile()
         javaFile.writeText(
@@ -33,22 +32,44 @@ internal class EpcTest {
             """.trimIndent(), Charsets.UTF_8
         )
 
-        val testFile = File.createTempFile("epcTest", "epc")
+        val testFile = File(targetDir, "epcTest.epc")
         Epc().compress(sourceDir, testFile)
-        assertEquals(
-            String(EpcTest::class.java.classLoader.getResourceAsStream("test.epc")!!.readAllBytes(), Charsets.UTF_8),
-            testFile.readText(Charsets.UTF_8)
+
+        val compressedText = testFile.readText(Charsets.UTF_8)
+
+        assertTrue(
+            compressedText.contains(
+                """
+                fun main() {
+                    println("Hello Kotlin!")
+                }
+            """.trimIndent()
+            )
         )
+        assertTrue(
+            compressedText.contains(
+                """
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        System.out.println("Hello Java!");
+                    }
+                }
+            """.trimIndent()
+            )
+        )
+
+        // decompress and check it is still equal
+        Epc().decompress(testFile, checkTargetDir)
+        assertTrue(compareFiles(sourceDir, checkTargetDir))
     }
 
     @Test
-    fun decompress() {
+    fun decompress(@TempDir sourceDir: File, @TempDir targetDir: File) {
         val testFile = File.createTempFile("epcTest", "epc")
         val testInputStream = EpcTest::class.java.classLoader.getResourceAsStream("test.epc")
         testFile.writeBytes(testInputStream!!.readAllBytes())
 
-        val expextedDir = createTempDir("epcTestExpected")
-        val javaFile = File(expextedDir, "HelloWorld.java")
+        val javaFile = File(sourceDir, "HelloWorld.java")
         javaFile.createNewFile()
         javaFile.writeText(
             """
@@ -59,7 +80,7 @@ internal class EpcTest {
                 }
             """.trimIndent(), Charsets.UTF_8
         )
-        val kotlinFile = File(expextedDir, "HelloWorld.kt")
+        val kotlinFile = File(sourceDir, "HelloWorld.kt")
         kotlinFile.createNewFile()
         kotlinFile.writeText(
             """
@@ -69,8 +90,8 @@ internal class EpcTest {
             """.trimIndent(), Charsets.UTF_8
         )
 
-        val targetDir = createTempDir("epcTest")
         Epc().decompress(testFile, targetDir)
-        assertTrue(compareFiles(expextedDir, targetDir))
+        testFile.delete()
+        assertTrue(compareFiles(sourceDir, targetDir))
     }
 }
