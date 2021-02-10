@@ -32,6 +32,36 @@ pluginManagement {
 }
 ```
 
+---
+
+## Using libraries/tools
+
+If you want to use libraries of tools from vela you have to add the repository to your build.gradle[.kts]:
+
+```kotlin
+  repositories {
+      // ... other repos ...
+      maven {
+          url = uri("http://server.menkalian.de:8081/artifactory/vela")
+          name = "artifactory-menkalian"
+      }
+  }
+```
+
+If you want to combine these with any other of my tools (e.g. Auriga) use the combined repository:
+
+```kotlin
+    repositories {
+      // ... other repos ...
+        maven {
+            url = uri("http://server.menkalian.de:8081/artifactory/menkalian")
+            name = "artifactory-menkalian"
+        }
+    }
+```
+
+---
+
 ## Available plugins/tools
 
 ### Android-Background-Generator
