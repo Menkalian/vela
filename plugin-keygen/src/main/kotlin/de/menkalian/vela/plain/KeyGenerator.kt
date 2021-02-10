@@ -18,7 +18,7 @@ class KeyGenerator(private val config: KeyObjectExtension) {
         generateForFile(File(config.sourceDir))
     }
 
-    fun generateBase() {
+    private fun generateBase() {
         // Generate ParentClass
         ClassWriter("GeneratedKey", config.targetPackage, config)
             .writeText(
@@ -26,17 +26,18 @@ class KeyGenerator(private val config: KeyObjectExtension) {
             )
     }
 
-    fun generateForFile(base: File) {
+    private fun generateForFile(base: File) {
         base.listFiles()?.forEach {
-            if (it.isDirectory && config.scanRecursive) {
-                generateForFile(it)
+            if (it.isDirectory) {
+                if (config.scanRecursive)
+                    generateForFile(it)
             } else {
                 val keyTree = YAMLMapper().readTree(transformToYaml(it.readText()))
                 val parent =
                     if (config.prefixRecursive && it.parentFile.toURI() != config.sourceDir) {
                         it.parentFile
                             .toRelativeString(File(config.sourceDir))
-                            .replace(File.pathSeparator, ".")
+                            .replace(File.separator, ".")
                     } else {
                         ""
                     }
@@ -47,7 +48,7 @@ class KeyGenerator(private val config: KeyObjectExtension) {
     }
 
 
-    fun generateObjects(valueNode: JsonNode?, classWriter: ClassWriter?, parentKeyPath: String, indentationLevel: Int) {
+    private fun generateObjects(valueNode: JsonNode?, classWriter: ClassWriter?, parentKeyPath: String, indentationLevel: Int) {
         if (valueNode == null) return
 
         val recourse = !valueNode.isTextual && !valueNode.isArray

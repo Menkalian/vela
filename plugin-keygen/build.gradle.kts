@@ -27,4 +27,6 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0")
 
     compileOnly("com.android.tools.build:gradle:4.1.1")
+
+    testImplementation(project(":tool-epc"))
 }
