@@ -10,7 +10,7 @@ import java.io.File
 internal class EpcTest {
 
     @Test
-    fun compress(@TempDir sourceDir: File, @TempDir targetDir: File, @TempDir checkTargetDir: File) {
+    fun compress(@TempDir sourceDir: File, @TempDir checkTargetDir: File) {
         val javaFile = File(sourceDir, "HelloWorld.java")
         javaFile.createNewFile()
         javaFile.writeText(
@@ -32,8 +32,7 @@ internal class EpcTest {
             """.trimIndent(), Charsets.UTF_8
         )
 
-        val testFile = File(targetDir, "epcTest.epc")
-        Epc().compress(sourceDir, testFile)
+        val testFile = Epc().compress(sourceDir)
 
         val compressedText = testFile.readText(Charsets.UTF_8)
 
@@ -92,6 +91,38 @@ internal class EpcTest {
 
         Epc().decompress(testFile, targetDir)
         testFile.delete()
+        assertTrue(compareFiles(sourceDir, targetDir))
+    }
+
+    @Test
+    fun checkUnrecognizedFiletype(@TempDir sourceDir: File) {
+        val file = File(sourceDir, "file.noKnownExtension")
+        file.createNewFile()
+        file.writeText("TESTTEXT123456")
+
+        val testFile = Epc(defaultStoreType = StoreType.TEXT).compress(sourceDir)
+        assertTrue(testFile.readText().contains("type=TEXT"))
+        testFile.delete()
+
+        val testFile2 = Epc(defaultStoreType = StoreType.BINARY).compress(sourceDir)
+        assertTrue(testFile2.readText().contains("type=BINARY"))
+        testFile2.delete()
+    }
+
+    @Test
+    fun testBinaryDecompression(@TempDir sourceDir: File, @TempDir targetDir: File) {
+        val array = byteArrayOf(
+            15, -10, 81, 125, -128, -1, 17
+        )
+
+        val file = File(sourceDir, "file.bin")
+        file.createNewFile()
+        file.writeBytes(array)
+
+        val epc = Epc()
+        val testFile = epc.compress(sourceDir)
+        epc.decompress(testFile, targetDir)
+
         assertTrue(compareFiles(sourceDir, targetDir))
     }
 }
