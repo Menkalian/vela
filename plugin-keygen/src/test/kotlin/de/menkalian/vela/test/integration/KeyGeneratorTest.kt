@@ -47,7 +47,7 @@ internal class KeyGeneratorTest {
         )
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKey.java")
+        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKeyBase.java")
         val velaKeyFile = File(target, "de/menkalian/vela/generated/VelaKey.java")
 
         assertTrue(baseKeyFile.exists())
@@ -81,7 +81,7 @@ internal class KeyGeneratorTest {
         )
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKey.java")
+        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKeyBase.java")
         val velaKeyFile = File(target, "de/menkalian/vela/generated/VelaKey.java")
         val aquilaKeyFile = File(target, "de/menkalian/vela/generated/AquilaKey.java")
 
@@ -114,7 +114,7 @@ internal class KeyGeneratorTest {
         )
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKey.java")
+        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKeyBase.java")
         val velaKeyFile = File(target, "de/menkalian/vela/generated/VelaKey.java")
         val aquilaKeyFile = File(target, "de/menkalian/vela/generated/AquilaKey.java")
 
@@ -145,7 +145,7 @@ internal class KeyGeneratorTest {
 
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "test/otherdir/nodomain/keyzz/GeneratedKey.java")
+        val baseKeyFile = File(target, "test/otherdir/nodomain/keyzz/GeneratedKeyBase.java")
         val velaKeyFile = File(target, "test/otherdir/nodomain/keyzz/VelaKey.java")
 
         assertTrue(baseKeyFile.exists())
@@ -175,7 +175,7 @@ internal class KeyGeneratorTest {
 
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKey.java")
+        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKeyBase.java")
 
         val generatedCode = baseKeyFile.readText()
         assertTrue(generatedCode.contains("parent + \"~~\" + key"))
@@ -247,7 +247,7 @@ internal class KeyGeneratorTest {
 
         KeyGenerator(extension).runGeneration()
 
-        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKey.java")
+        val baseKeyFile = File(target, "de/menkalian/vela/generated/GeneratedKeyBase.java")
         val velaKeyFile = File(target, "de/menkalian/vela/generated/VelaKey.java")
         val aquilaKeyFile = File(target, "de/menkalian/vela/generated/AquilaKey.java")
         val aurigaKeyFile = File(target, "de/menkalian/vela/generated/AurigaKey.java")

@@ -1,0 +1,44 @@
+path=build.gradle
+type=TEXT
+content=
+plugins {
+    id 'java'
+    id 'de.menkalian.vela.keygen'
+}
+
+group = 'de.menkalian.vela.test'
+
+repositories {
+    mavenCentral()
+}
+
+keygen {
+    targetPackage 'de.menkalian.vela.test'
+}
+---
+path=settings.gradle
+type=TEXT
+content=
+rootProject.name='test'
+
+---
+path=src\main\ckf\Vela.ckf
+type=TEXT
+content=
+Vela
+  Test
+    Key
+    Unit
+---
+path=src\main\java\de\menkalian\vela\test\Main.java
+type=TEXT
+content=
+package de.menkalian.vela.test;
+
+import static de.menkalian.vela.test.VelaKey.Vela;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(Vela.Test.Key.toString());
+    }
+}

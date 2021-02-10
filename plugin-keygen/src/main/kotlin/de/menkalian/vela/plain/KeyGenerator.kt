@@ -20,9 +20,9 @@ class KeyGenerator(private val config: KeyObjectExtension) {
 
     private fun generateBase() {
         // Generate ParentClass
-        ClassWriter("GeneratedKey", config.targetPackage, config)
+        ClassWriter("GeneratedKeyBase", config.targetPackage, config)
             .writeText(
-                loader.loadTemplate("GeneratedKey.java")
+                loader.loadTemplate("GeneratedKeyBase.java")
             )
     }
 
