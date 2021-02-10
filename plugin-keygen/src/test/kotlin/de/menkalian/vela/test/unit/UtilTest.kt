@@ -5,10 +5,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import de.menkalian.vela.plain.transformToYaml
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 
-@Tag("unit")
 internal class UtilTest {
 
     @Test
@@ -21,7 +19,7 @@ internal class UtilTest {
                 auriga:
               anotherOne:
         """.trimIndent()
-        assertEquals(yaml.trim(), transformToYaml(yaml).trim(),"Should not transform valid yaml")
+        assertEquals(yaml.trim(), transformToYaml(yaml).trim(), "Should not transform valid yaml")
     }
 
     @Test

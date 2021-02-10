@@ -12,7 +12,6 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import kotlin.random.Random
 
-@Tag("integration")
 class ClassWriterTest {
     lateinit var target: File
     lateinit var config: KeyObjectExtension

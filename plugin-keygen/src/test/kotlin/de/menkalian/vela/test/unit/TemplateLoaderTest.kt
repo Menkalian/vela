@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-@Tag("unit")
 internal class TemplateLoaderTest {
     class ModifiedTemplateLoader : TemplateLoader() {
         fun currentReplacements() = this.replacements
