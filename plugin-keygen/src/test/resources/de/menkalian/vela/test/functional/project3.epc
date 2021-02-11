@@ -1,25 +1,66 @@
-path=build.gradle
+path=build.gradle.kts
 type=TEXT
 content=
 plugins {
-    id 'java'
-    id 'de.menkalian.vela.keygen'
+    java
+    kotlin("jvm") version "1.4.30"
+    id("de.menkalian.vela.keygen")
 }
 
-group = 'de.menkalian.vela.test'
+group = "de.menkalian.vela.test"
 
 repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation(kotlin("stdlib"))
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+}
+
+tasks.test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+}
+
 keygen {
-    targetPackage 'de.menkalian.vela.test'
+    targetPackage="de.menkalian.vela.test"
+
+    furtherConfigs {
+        create("diffSep") {
+            sourceDir = File(projectDir, "src/main/dfs").toURI()
+            targetPackage = "de.menkalian.vela.test.diffsep"
+            separator = "/"
+        }
+        create("recScan") {
+            sourceDir = File(projectDir, "src/main/rsc").toURI()
+            targetPackage = "de.menkalian.vela.test.recscan"
+
+            scanRecursive = true
+        }
+        create("recInd") {
+            sourceDir = File(projectDir, "src/main/rin").toURI()
+            targetPackage = "de.menkalian.vela.test.recind"
+
+            scanRecursive = true
+            prefixRecursive = true
+        }
+        create("dirString") {
+            sourceDir = File(projectDir, "src/main/dst").toURI()
+            targetPackage = "de.menkalian.vela.test.dirstring"
+
+            separator = ":"
+            finalLayerAsString = true
+        }
+    }
 }
 ---
-path=settings.gradle
+path=settings.gradle.kts
 type=TEXT
 content=
-rootProject.name='test'
+rootProject.name = "test"
 
 ---
 path=src\main\ckf\Vela.ckf
@@ -29,6 +70,38 @@ Vela
   Test
     Key
     Unit
+---
+path=src\main\dfs\paths.ckf
+type=TEXT
+content=
+path
+  to
+    resource
+    articles
+---
+path=src\main\rsc\sub\folder\to\scan\Test.ckf
+type=TEXT
+content=
+Test
+  Vela
+    Past
+    Future
+---
+path=src\main\rin\De\Menkalian\Auriga.ckf
+type=TEXT
+content=
+Auriga
+  Plugin
+    Gradle
+    Maven
+---
+path=src\main\dst/Strings.ckf
+type=TEXT
+content=
+Direct
+  Value
+  Generated
+    String
 ---
 path=src\main\java\de\menkalian\vela\test\Main.java
 type=TEXT
@@ -40,5 +113,56 @@ import static de.menkalian.vela.test.VelaKey.Vela;
 public class Main {
     public static void main(String[] args) {
         System.out.println(Vela.Test.Key.toString());
+    }
+}
+---
+path=src\test\java\de\menkalian\vela\test\MainTest.java
+type=TEXT
+content=
+package de.menkalian.vela.test;
+
+import org.junit.jupiter.api.Test;
+
+import static de.menkalian.vela.test.VelaKey.Vela;
+import static de.menkalian.vela.test.diffsep.pathKey.path;
+import static de.menkalian.vela.test.recscan.TestKey.Test;
+import static de.menkalian.vela.test.recind.AurigaKey.Auriga;
+import static de.menkalian.vela.test.dirstring.DirectKey.Direct;
+
+public class MainTest {
+    @Test
+    public void printVariables() {
+        System.out.println("Output 1: " + Vela.Test.Unit.toString());
+        System.out.println("Output 2: " + path.to.resource.toString());
+        System.out.println("Output 3: " + Test.Vela.Past.toString());
+        System.out.println("Output 4: " + Auriga.Plugin.Gradle.toString());
+        System.out.println("Output 5: " + Direct.Generated.String);
+        System.out.println("Output 6: " + Direct.Generated.String.getClass().getName());
+    }
+}
+
+---
+path=src\test\kotlin\de\menkalian\vela\test\KotlinTest.kt
+type=TEXT
+content=
+package de.menkalian.vela.test
+
+import org.junit.jupiter.api.Test
+
+import de.menkalian.vela.test.VelaKey.Vela
+import de.menkalian.vela.test.diffsep.pathKey.path
+import de.menkalian.vela.test.recscan.TestKey.Test
+import de.menkalian.vela.test.recind.AurigaKey.Auriga
+import de.menkalian.vela.test.dirstring.DirectKey.Direct
+
+class KotlinTest {
+    @Test
+    fun printVariables() {
+        println("Kt-Output 1: ${Vela.Test.Key}")
+        println("Kt-Output 2: ${path.to.articles}")
+        println("Kt-Output 3: ${Test.Vela.Future}")
+        println("Kt-Output 4: ${Auriga.Plugin.Maven}")
+        println("Kt-Output 5: ${Direct.Value}")
+        println("Kt-Output 6: ${Direct.Value::class.java.name}")
     }
 }

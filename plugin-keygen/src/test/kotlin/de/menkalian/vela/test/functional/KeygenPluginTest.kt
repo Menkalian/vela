@@ -10,7 +10,7 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class KeygenTaskTest {
+class KeygenPluginTest {
     @TempDir
     lateinit var targetDir: File
 
@@ -28,7 +28,7 @@ class KeygenTaskTest {
 
     @Test
     fun testSimpleProjectBuildingWithGroovyDSL() {
-        val extractedProject = extractTestProject("project3")
+        val extractedProject = extractTestProject("project2")
         assertDoesNotThrow {
             GradleRunner.create()
                 .withProjectDir(extractedProject)
@@ -40,14 +40,13 @@ class KeygenTaskTest {
 
     @Test
     fun testAdvancedProjectWorking() {
-        val extractedProject = extractTestProject("project2")
+        val extractedProject = extractTestProject("project3")
         val result = GradleRunner.create()
             .withProjectDir(extractedProject)
             .withArguments("check")
             .withPluginClasspath()
             .build()
 
-        println(result.output)
         assertTrue(result.output.contains("Output 1: Vela.Test.Unit"))
         assertTrue(result.output.contains("Output 2: path/to/resource"))
         assertTrue(result.output.contains("Output 3: Test.Vela.Past"))
@@ -66,7 +65,7 @@ class KeygenTaskTest {
         val sourceFile = File(targetDir, "test.epc")
         sourceFile.createNewFile()
         sourceFile.writeBytes(
-            KeygenTaskTest::class.java.classLoader.getResourceAsStream("de/menkalian/vela/test/functional/$name.epc")!!.readAllBytes()
+            KeygenPluginTest::class.java.classLoader.getResourceAsStream("de/menkalian/vela/test/functional/$name.epc")!!.readAllBytes()
         )
 
         val extractionDir = File(targetDir, "test")
