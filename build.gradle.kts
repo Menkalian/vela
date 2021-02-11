@@ -64,6 +64,15 @@ allprojects {
         tasks.withType(JacocoReport::class.java) {
             dependsOn(tasks.getByName("test"))
 
+            classDirectories.setFrom(files(classDirectories.files.map {
+                fileTree(
+                    mapOf(
+                        "dir" to it,
+                        "exclude" to "de/menkalian/vela/gradle"
+                    )
+                )
+            }))
+
             reports {
                 xml.isEnabled = true
                 csv.isEnabled = true
