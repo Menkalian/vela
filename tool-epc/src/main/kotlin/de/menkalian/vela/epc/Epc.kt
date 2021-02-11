@@ -43,7 +43,7 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
                 toReturn.addAll(collectFiles(base, it))
             }
         } else {
-            val relativePath = current.relativeTo(base).toString()
+            val relativePath = current.relativeTo(base).toString().replace(File.separatorChar, '/')
 
             val epcFile = when {
                 binFileExtensions.contains(current.extension.toLowerCase())  -> EpcFile(relativePath, StoreType.BINARY, current.readBytes().toHexString())
@@ -89,7 +89,7 @@ data class EpcFile(val path: String, val type: StoreType, val content: String) {
 
 fun String.parseEpcFile(): EpcFile {
     val pathIndex = indexOf("path=") + 5
-    val path = substring(pathIndex).split("\n")[0].trim()
+    val path = substring(pathIndex).split("\n")[0].trim().replace('/', File.separatorChar)
 
     val typeIndex = indexOf("type=") + 5
     val type = substring(typeIndex).split("\n")[0].trim()
