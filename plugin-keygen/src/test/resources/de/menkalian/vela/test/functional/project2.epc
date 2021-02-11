@@ -22,7 +22,7 @@ content=
 rootProject.name='test'
 
 ---
-path=src\main\ckf\Vela.ckf
+path=src/main/ckf/Vela.ckf
 type=TEXT
 content=
 Vela
@@ -30,7 +30,7 @@ Vela
     Key
     Unit
 ---
-path=src\main\java\de\menkalian\vela\test\Main.java
+path=src/main/java/de/menkalian/vela/test/Main.java
 type=TEXT
 content=
 package de.menkalian.vela.test;

@@ -63,7 +63,7 @@ content=
 rootProject.name = "test"
 
 ---
-path=src\main\ckf\Vela.ckf
+path=src/main/ckf/Vela.ckf
 type=TEXT
 content=
 Vela
@@ -71,7 +71,7 @@ Vela
     Key
     Unit
 ---
-path=src\main\dfs\paths.ckf
+path=src/main/dfs/paths.ckf
 type=TEXT
 content=
 path
@@ -79,7 +79,7 @@ path
     resource
     articles
 ---
-path=src\main\rsc\sub\folder\to\scan\Test.ckf
+path=src/main/rsc/sub/folder/to/scan/Test.ckf
 type=TEXT
 content=
 Test
@@ -87,7 +87,7 @@ Test
     Past
     Future
 ---
-path=src\main\rin\De\Menkalian\Auriga.ckf
+path=src/main/rin/De/Menkalian/Auriga.ckf
 type=TEXT
 content=
 Auriga
@@ -95,7 +95,7 @@ Auriga
     Gradle
     Maven
 ---
-path=src\main\dst/Strings.ckf
+path=src/main/dst/Strings.ckf
 type=TEXT
 content=
 Direct
@@ -103,7 +103,7 @@ Direct
   Generated
     String
 ---
-path=src\main\java\de\menkalian\vela\test\Main.java
+path=src/main/java/de/menkalian/vela/test/Main.java
 type=TEXT
 content=
 package de.menkalian.vela.test;
@@ -116,7 +116,7 @@ public class Main {
     }
 }
 ---
-path=src\test\java\de\menkalian\vela\test\MainTest.java
+path=src/test/java/de/menkalian/vela/test/MainTest.java
 type=TEXT
 content=
 package de.menkalian.vela.test;
@@ -142,7 +142,7 @@ public class MainTest {
 }
 
 ---
-path=src\test\kotlin\de\menkalian\vela\test\KotlinTest.kt
+path=src/test/kotlin/de/menkalian/vela/test/KotlinTest.kt
 type=TEXT
 content=
 package de.menkalian.vela.test
