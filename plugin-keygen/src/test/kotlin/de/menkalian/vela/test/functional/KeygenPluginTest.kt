@@ -18,11 +18,16 @@ class KeygenPluginTest {
     fun testSimpleProjectBuildingWithKotlinDSL() {
         val extractedProject = extractTestProject("project1")
         assertDoesNotThrow {
-            GradleRunner.create()
-                .withProjectDir(extractedProject)
-                .withArguments("build")
-                .withPluginClasspath()
-                .build()
+            try {
+                GradleRunner.create()
+                    .withProjectDir(extractedProject)
+                    .withArguments("build")
+                    .withPluginClasspath()
+                    .build()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                throw ex
+            }
         }
     }
 
@@ -30,35 +35,45 @@ class KeygenPluginTest {
     fun testSimpleProjectBuildingWithGroovyDSL() {
         val extractedProject = extractTestProject("project2")
         assertDoesNotThrow {
-            GradleRunner.create()
-                .withProjectDir(extractedProject)
-                .withArguments("build")
-                .withPluginClasspath()
-                .build()
+            try {
+                GradleRunner.create()
+                    .withProjectDir(extractedProject)
+                    .withArguments("build")
+                    .withPluginClasspath()
+                    .build()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                throw ex
+            }
         }
     }
 
     @Test
     fun testAdvancedProjectWorking() {
-        val extractedProject = extractTestProject("project3")
-        val result = GradleRunner.create()
-            .withProjectDir(extractedProject)
-            .withArguments("check")
-            .withPluginClasspath()
-            .build()
+        try {
+            val extractedProject = extractTestProject("project3")
+            val result = GradleRunner.create()
+                .withProjectDir(extractedProject)
+                .withArguments("check")
+                .withPluginClasspath()
+                .build()
 
-        assertTrue(result.output.contains("Output 1: Vela.Test.Unit"))
-        assertTrue(result.output.contains("Output 2: path/to/resource"))
-        assertTrue(result.output.contains("Output 3: Test.Vela.Past"))
-        assertTrue(result.output.contains("Output 4: De.Menkalian.Auriga.Plugin.Gradle"))
-        assertTrue(result.output.contains("Output 5: Direct:Generated:String"))
-        assertTrue(result.output.contains("Output 6: java.lang.String"))
-        assertTrue(result.output.contains("Kt-Output 1: Vela.Test.Key"))
-        assertTrue(result.output.contains("Kt-Output 2: path/to/articles"))
-        assertTrue(result.output.contains("Kt-Output 3: Test.Vela.Future"))
-        assertTrue(result.output.contains("Kt-Output 4: De.Menkalian.Auriga.Plugin.Maven"))
-        assertTrue(result.output.contains("Kt-Output 5: Direct:Value"))
-        assertTrue(result.output.contains("Kt-Output 6: java.lang.String"))
+            assertTrue(result.output.contains("Output 1: Vela.Test.Unit"))
+            assertTrue(result.output.contains("Output 2: path/to/resource"))
+            assertTrue(result.output.contains("Output 3: Test.Vela.Past"))
+            assertTrue(result.output.contains("Output 4: De.Menkalian.Auriga.Plugin.Gradle"))
+            assertTrue(result.output.contains("Output 5: Direct:Generated:String"))
+            assertTrue(result.output.contains("Output 6: java.lang.String"))
+            assertTrue(result.output.contains("Kt-Output 1: Vela.Test.Key"))
+            assertTrue(result.output.contains("Kt-Output 2: path/to/articles"))
+            assertTrue(result.output.contains("Kt-Output 3: Test.Vela.Future"))
+            assertTrue(result.output.contains("Kt-Output 4: De.Menkalian.Auriga.Plugin.Maven"))
+            assertTrue(result.output.contains("Kt-Output 5: Direct:Value"))
+            assertTrue(result.output.contains("Kt-Output 6: java.lang.String"))
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            throw ex
+        }
     }
 
     private fun extractTestProject(name: String): File {
