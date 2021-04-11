@@ -1,0 +1,40 @@
+path=build.gradle.kts
+type=TEXT
+content=
+plugins {
+    java
+    id("de.menkalian.vela.versioning")
+}
+
+group = "de.menkalian.vela.test"
+
+repositories {
+    mavenCentral()
+}
+
+versioning {
+    upgradeTask=tasks.build.get()
+}
+
+tasks.compileJava.configure {
+    doLast {
+        logger.lifecycle("BuildNo: ${versioning.buildNo}")
+    }
+}
+---
+path=settings.gradle.kts
+type=TEXT
+content=
+rootProject.name = "test"
+
+---
+path=src/main/java/de/menkalian/vela/main/Main.java
+type=TEXT
+content=
+package de.menkalian.vela.test;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("");
+    }
+}
