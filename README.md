@@ -94,10 +94,13 @@ If you want to combine these with any other of my tools (e.g. Auriga) use the co
 ### Versioning Plugin
 
 - **type**: Gradle plugin (ID: `de.menkalian.vela.versioning`)
-- **version**: `not-ready`
+- **version**: `1.1.0`
 - **description**:
-  Exposes a property that contains the amount of times the `assembleRelease`-task was executed.
-- **platforms**: `android`
+  Exposes a variable called `versioning.buildNo` that contains the amount of times this project was built.
+  You may customize the task used to identify a build by setting `versioning.upgradeTask`.
+  If this is not set, the `build`-Task is used.
+  If that does not exist, every gradle invocation increases the buildnumber.
+- **platforms**: `android`, `java`, `kotlin-jvm`
 - **details**: [specific README](plugin-versioning/README.md)
 
 ### Editable-Project-Compactor

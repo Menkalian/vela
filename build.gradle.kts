@@ -1,7 +1,9 @@
 @file:Suppress("UnstableApiUsage")
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    kotlin("jvm") version "1.4.30" apply false
+    kotlin("jvm") version "1.4.31" apply false
     id("com.gradle.plugin-publish") version "0.12.0" apply false
 }
 
@@ -92,7 +94,7 @@ allprojects {
             add("implementation", kotlin("reflect"))
         }
 
-        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
+        tasks.withType(KotlinCompile::class.java) {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
             }
