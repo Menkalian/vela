@@ -40,24 +40,24 @@ If you want to use libraries of tools from vela you have to add the repository t
 
 ```kotlin
   repositories {
-      // ... other repos ...
-      maven {
-          url = uri("http://server.menkalian.de:8081/artifactory/vela")
-          name = "artifactory-menkalian"
-      }
-  }
+    // ... other repos ...
+    maven {
+        url = uri("http://server.menkalian.de:8081/artifactory/vela")
+        name = "artifactory-menkalian"
+    }
+}
 ```
 
 If you want to combine these with any other of my tools (e.g. Auriga) use the combined repository:
 
 ```kotlin
     repositories {
-      // ... other repos ...
-        maven {
-            url = uri("http://server.menkalian.de:8081/artifactory/menkalian")
-            name = "artifactory-menkalian"
-        }
+    // ... other repos ...
+    maven {
+        url = uri("http://server.menkalian.de:8081/artifactory/menkalian")
+        name = "artifactory-menkalian"
     }
+}
 ```
 
 ---
@@ -96,10 +96,7 @@ If you want to combine these with any other of my tools (e.g. Auriga) use the co
 - **type**: Gradle plugin (ID: `de.menkalian.vela.versioning`)
 - **version**: `1.1.0`
 - **description**:
-  Exposes a variable called `versioning.buildNo` that contains the amount of times this project was built.
-  You may customize the task used to identify a build by setting `versioning.upgradeTask`.
-  If this is not set, the `build`-Task is used.
-  If that does not exist, every gradle invocation increases the buildnumber.
+  Exposes a variable called `versioning.buildNo` that contains the amount of times this project was built. You may customize the task used to identify a build by setting `versioning.upgradeTask`. If this is not set, the `build`-Task is used. If that does not exist, every gradle invocation increases the buildnumber.
 - **platforms**: `android`, `java`, `kotlin-jvm`
 - **details**: [specific README](plugin-versioning/README.md)
 

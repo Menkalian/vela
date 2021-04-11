@@ -4,7 +4,6 @@ import de.menkalian.vela.plain.TemplateLoader
 import org.gradle.internal.impldep.org.testng.AssertJUnit.assertEquals
 import org.gradle.internal.impldep.org.testng.AssertJUnit.assertTrue
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
