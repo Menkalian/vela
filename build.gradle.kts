@@ -32,6 +32,7 @@ allprojects {
                 maven {
                     url = uri("http://server.menkalian.de:8081/artifactory/vela")
                     name = "artifactory-menkalian"
+                    isAllowInsecureProtocol = true
                     credentials {
                         username = System.getenv("MAVEN_REPO_USER")
                         password = System.getenv("MAVEN_REPO_PASS")
