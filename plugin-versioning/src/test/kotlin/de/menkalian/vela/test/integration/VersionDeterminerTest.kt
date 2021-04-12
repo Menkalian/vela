@@ -23,12 +23,12 @@ class VersionDeterminerTest {
     @BeforeAll
     internal fun setAllUp() {
         val config = DBConfigurationBuilder.newBuilder()
-            .setPort(3306)
+            .addArg("--user=root")
             .build()
 
         dbInstance = DB.newEmbeddedDB(config)
         dbInstance.start()
-        dbInstance.createDB("VELA_VERSIONING")
+        dbInstance.createDB("vela_versioning")
     }
 
     @Test
@@ -39,6 +39,7 @@ class VersionDeterminerTest {
         assertFalse(File("versioning.properties").exists())
         SystemLambda
             .withEnvironmentVariable("VELA_DB_HOST", "localhost")
+            .and("VELA_DB_PORT", dbInstance.configuration.port.toString())
             .execute {
                 determiner = newVersionDeterminer()
 
@@ -52,6 +53,7 @@ class VersionDeterminerTest {
         setPropFileBuildNo(71)
         SystemLambda
             .withEnvironmentVariable("VELA_DB_HOST", "localhost")
+            .and("VELA_DB_PORT", dbInstance.configuration.port.toString())
             .execute {
                 determiner = newVersionDeterminer()
 
