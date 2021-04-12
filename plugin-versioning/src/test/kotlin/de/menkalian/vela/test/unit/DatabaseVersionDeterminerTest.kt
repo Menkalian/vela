@@ -22,21 +22,22 @@ class DatabaseVersionDeterminerTest {
     @BeforeAll
     internal fun createDb() {
         val config = DBConfigurationBuilder.newBuilder()
-            .setPort(3306)
+            .addArg("--user=root")
             .build()
 
         dbInstance = DB.newEmbeddedDB(config)
         dbInstance.start()
-        dbInstance.createDB("VELA_VERSIONING")
+        dbInstance.createDB("vela_versioning")
     }
 
     @BeforeEach
     internal fun setUp() {
-        dbInstance.run("DROP DATABASE VELA_VERSIONING; CREATE DATABASE VELA_VERSIONING;")
+        dbInstance.run("DROP DATABASE vela_versioning; CREATE DATABASE vela_versioning;")
 
         SystemLambda
             .withEnvironmentVariable("VELA_DB_HOST", "localhost")
             .and("VELA_DB_USER", "root")
+            .and("VELA_DB_PORT", dbInstance.configuration.port.toString())
             .execute {
                 versionDeterminer = DatabaseVersionDeterminer("de.menkalian.vela.test:versioning-test")
             }
@@ -90,7 +91,7 @@ class DatabaseVersionDeterminerTest {
 
     private fun executeSql(sql: String) {
         Class.forName("org.mariadb.jdbc.Driver")
-        val connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/VELA_VERSIONING?user=auser&password=sa")
+        val connection = DriverManager.getConnection("jdbc:mariadb://localhost:${dbInstance.configuration.port}/vela_versioning?user=auser&password=sa")
 
         val updateStatement = connection.createStatement()
         updateStatement.executeUpdate(sql)
@@ -102,7 +103,7 @@ class DatabaseVersionDeterminerTest {
 
     private fun countResults(sql: String): Int {
         Class.forName("org.mariadb.jdbc.Driver")
-        val connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/VELA_VERSIONING?user=auser&password=sa")
+        val connection = DriverManager.getConnection("jdbc:mariadb://localhost:${dbInstance.configuration.port}/vela_versioning?user=auser&password=sa")
 
         val result = connection.createStatement().executeQuery(sql)
         result.beforeFirst()

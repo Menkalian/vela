@@ -7,7 +7,7 @@ class DatabaseVersionDeterminer(val projName: String, successor: VersionDetermin
 
     private val dbHost = System.getenv().getOrDefault("VELA_DB_HOST", "")
     private val dbPort = System.getenv().getOrDefault("VELA_DB_PORT", "3306")
-    private val dbName = System.getenv().getOrDefault("VELA_DB_NAME", "VELA_VERSIONING")
+    private val dbName = System.getenv().getOrDefault("VELA_DB_NAME", "vela_versioning")
     private val dbUser = System.getenv().getOrDefault("VELA_DB_USER", "root")
     private val dbPassword = System.getenv().getOrDefault("VELA_DB_PASS", "")
 

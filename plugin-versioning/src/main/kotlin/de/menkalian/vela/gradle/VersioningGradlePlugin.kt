@@ -12,7 +12,7 @@ class VersioningGradlePlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         val projKey = "${target.group}:${target.name}"
-        val determiner: VersionDeterminer = DatabaseVersionDeterminer("${target.group}:${target.name}", PropFileVersionDeterminer(target.projectDir))
+        val determiner: VersionDeterminer = DatabaseVersionDeterminer(projKey, PropFileVersionDeterminer(target.projectDir))
 
         val extension = target.extensions.create("versioning", VersioningExtension::class.java)
 

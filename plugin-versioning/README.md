@@ -41,7 +41,7 @@ To store your build-number in a database you have to provide 4 environmental var
 |--------------|-----------------------------|-----------|---------
 | VELA_DB_HOST | Host of the MariaDB Server  | localhost |
 | VELA_DB_PORT | Port of the MariaDB Server  |   3306    | `3306`
-| VELA_DB_NAME | Name of the database to use | versions  | `VELA_VERSIONING`
+| VELA_DB_NAME | Name of the database to use | versions  | `vela_versioning`
 | VELA_DB_USER | Username for login          | root      | `root`
 | VELA_DB_PASS | Password for login          | changeIt  |
 

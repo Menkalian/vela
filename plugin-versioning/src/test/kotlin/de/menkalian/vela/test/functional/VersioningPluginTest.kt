@@ -1,6 +1,7 @@
 package de.menkalian.vela.test.functional
 
 import ch.vorburger.mariadb4j.DB
+import ch.vorburger.mariadb4j.DBConfigurationBuilder
 import com.github.stefanbirkner.systemlambda.SystemLambda
 import de.menkalian.vela.epc.Epc
 import org.gradle.testkit.runner.GradleRunner
@@ -19,12 +20,17 @@ class VersioningPluginTest {
     @Test
     fun testProjectWithDatabase() {
         val extractedProject = extractTestProject("project1")
-        val db = DB.newEmbeddedDB(3306)
+        val db = DB.newEmbeddedDB(
+            DBConfigurationBuilder.newBuilder()
+                .addArg("--user=root")
+                .build()
+        )
         db.start()
-        db.createDB("VELA_VERSIONING")
+        db.createDB("vela_versioning")
 
         SystemLambda
             .withEnvironmentVariable("VELA_DB_HOST", "localhost")
+            .and("VELA_DB_PORT", db.configuration.port.toString())
             .execute {
                 assertDoesNotThrow {
                     val result = GradleRunner.create()
