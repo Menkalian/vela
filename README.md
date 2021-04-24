@@ -103,11 +103,20 @@ If you want to combine these with any other of my tools (e.g. Auriga) use the co
 ### Editable-Project-Compactor
 
 - **type**: Tooling-Lib (Artifact: `de.menkalian.vela:tool-epc:$version`)
-- **version**: `1.1.0`
+- **version**: `1.0.0`
 - **description**:
-  Allows to pack a full directory/project to a single, editable text-file. There is no compression and all Files are readable/editable in the resulting packed File. The main-purpose of this is to be able to test gradle-plugins with test-projects efficiently. For most other purposes is a compressed-archive-format like `zip, rar, etc.` probably more suitable
+  Allows to pack a full directory/project to a single, editable text-file. There is no compression and all Files are readable/editable in the resulting packed File. The main-purpose of this is to be able to test gradle-plugins with test-projects efficiently. For most other purposes a compressed archive-format like `zip, rar, etc.` is probably more suitable
 - **platforms**: `java` `kotlin-jvm`<sup>1</sup> `android`
 - **details**: [specific README](tool-epc/README.md)
+
+### Transferable Values
+
+- **type** Common Library (Artifact: `de.menkalian.vela:lib-transfervalue:$version`)
+- **version**: `1.0.0`
+- **description**:
+  Allows to store all kinds of values as a String. This can be useful for storing things in databases, etc. if you don't know the type of value beforehand.
+- **platforms**: `java` `kotlin-jvm` `android`
+- **details**: [specific README](lib-transfervalue/README.md)
 
 ###### Footnotes
 
