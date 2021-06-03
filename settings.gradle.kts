@@ -19,6 +19,12 @@ include(
     "lib-transfervalue"
 )
 
+// featuretoggle
+include(
+    "lib-featuretoggle",
+    "lib-featuretoggle:compiler"
+)
+
 pluginManagement {
     repositories {
         gradlePluginPortal()

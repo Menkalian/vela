@@ -5,6 +5,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.4.31" apply false
     id("com.gradle.plugin-publish") version "0.12.0" apply false
+    id("org.jetbrains.dokka") version "1.4.32"
+}
+
+tasks.dokkaHtmlMultiModule.configure {
+    outputDirectory.set(buildDir.resolve("velaHtmlDocsFull"))
 }
 
 group = "de.menkalian.vela"
@@ -103,5 +108,9 @@ allprojects {
                 this.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
             }
         }
+    }
+
+    pluginManager.withPlugin("org.jetbrains.dokka") {
+        dependencies.add("dokkaHtmlPlugin", "org.jetbrains.dokka:kotlin-as-java-plugin:1.4.32")
     }
 }
