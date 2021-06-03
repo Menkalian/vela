@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified"
+    targetNamespace="https://schemas.menkalian.de/vela/feature"
+xmlns:vela="https://schemas.menkalian.de/vela/feature">
+
+    <!-- attributes -->
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="default" type="xs:boolean" />
+
+    <!-- elements -->
+    <!-- root-->
+    <xs:element name="features">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:set" />
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:feature" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- subelements-->
+    <xs:element name="set">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:dependency" />
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:set" />
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:feature" />
+            </xs:sequence>
+            <xs:attribute ref="vela:name" use="required" />
+            <xs:attribute ref="vela:default" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="feature">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:dependency" />
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:impl" />
+            </xs:sequence>
+            <xs:attribute ref="vela:name" use="required" />
+            <xs:attribute ref="vela:default" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="impl">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="vela:dependency" />
+            </xs:sequence>
+            <xs:attribute ref="vela:name" use="required" />
+            <xs:attribute ref="vela:default" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="dependency">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string" />
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
