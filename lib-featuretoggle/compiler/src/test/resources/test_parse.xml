@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE features>
+<features xmlns:vela="https://schemas.menkalian.de/vela/feature" xmlns="https://schemas.menkalian.de/vela/feature">
+    <set vela:name="de.menkalian.vela">
+        <set vela:name="gradle">
+            <feature vela:name="DatabaseVersionDeterminer">
+                <vela:dependency>de.menkalian.vela.gradle.BuildconfigGradlePlugin</vela:dependency>
+                <vela:dependency>de.menkalian.vela.gradle.BuildconfigImplementation</vela:dependency>
+                <vela:impl vela:name="VERSION_1_0">
+                    <vela:dependency>de.menkalian.vela.gradle.BuildconfigGradlePlugin</vela:dependency>
+                </vela:impl>
+                <vela:impl vela:name="VERSION_2_1" />
+            </feature>
+            <vela:feature vela:name="BuildconfigGradlePlugin" vela:default="true"/>
+            <vela:feature vela:name="BuildconfigImplementation">
+                <vela:dependency>Versioning</vela:dependency>
+            </vela:feature>
+        </set>
+        <feature vela:name="Keygen">
+            <vela:impl vela:default="true" vela:name="JAVA" />
+            <vela:impl vela:name="KOTLIN">
+                <vela:dependency>de.menkalian.vela.gradle.DatabaseVersionDeterminer</vela:dependency>
+            </vela:impl>
+        </feature>
+    </set>
+    <feature vela:name="Versioning" vela:default="true" />
+</features>
