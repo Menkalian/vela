@@ -10,7 +10,8 @@ include(
 
 // Tools
 include(
-    "tool-epc"
+    "tool-epc",
+    "tool-template"
 )
 
 // Libraries
