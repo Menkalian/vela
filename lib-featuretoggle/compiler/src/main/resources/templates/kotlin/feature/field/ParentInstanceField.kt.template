@@ -1,0 +1,1 @@
+override val parent: {{Vela.Base.Root.Package}}.{{Vela.Feature.Parent.Path}}Feature = root.{{Vela.Feature.Parent.Path}}

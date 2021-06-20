@@ -5,7 +5,9 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     jacoco
+
     id("org.jetbrains.dokka")
+    id("de.menkalian.vela.keygen") version "1.2.1"
 }
 
 tasks.test {
@@ -16,6 +18,10 @@ tasks.test {
 version = "1.0.0"
 
 dependencies {
+}
+
+keygen {
+    finalLayerAsString = true
 }
 
 tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {

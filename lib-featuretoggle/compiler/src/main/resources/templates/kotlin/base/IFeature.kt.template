@@ -1,0 +1,3 @@
+package {{Vela.Base.Package}}
+
+interface IFeature: IEnableable, IDependable

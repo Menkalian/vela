@@ -1,0 +1,11 @@
+package {{Vela.Base.Package}}
+
+class Features(val config: FeatureConfig) : IFeatureRoot {
+    constructor(config: FeatureConfig.() -> Unit) : this(FeatureConfig(config))
+
+    companion object {
+        val DEFAULT = Features (FeatureConfig {})
+    }
+
+{{Vela.Feature.Children.All.Code.Fields.Instance}}
+}

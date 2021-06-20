@@ -1,0 +1,51 @@
+val implementation: {{Vela.Feature.Name}}BuilderImplementation
+  get() = internalImplementation
+private var internalImplementation : {{Vela.Feature.Name}}BuilderImplementation = {{Vela.Feature.Name}}BuilderImplementation.getDefault()
+
+inner class {{Vela.Feature.Name}}BuilderImplementation private constructor(val name: String, isDefault: Boolean): IFeature {
+
+    companion object {
+        fun getDefault() = {{Vela.Feature.Children.Implementations.Default}}
+
+{{Vela.Feature.Children.Implementations.Code.Fields.Builder}};
+    }
+
+    override val parent: {{Vela.Feature.Name}}FeatureBuilder = this@{{Vela.Feature.Name}}FeatureBuilder
+    override val root = parent.root
+
+    override val dependencies: List<IDependable> = listOf(
+{{Vela.Implementation.Dependencies.List}}
+    )
+
+    override val dependent: List<IDependable> = listOf(
+{{Vela.Implementation.Dependencies.Dependents.List}}
+    )
+
+    override val isEnabled : Boolean
+       get() = internalEnabled && currentActive
+
+    private var internalEnabled = isDefault
+    internal val currentActive : Boolean
+      get() = this@{{Vela.Feature.Name}}Feature.isEnabled
+
+    override fun enable() : {{Vela.Feature.Name}}BuilderImplementation {
+        parent.enable()
+        internalImplementation.internalEnabled = false
+        internalEnabled = true
+        internalImplementation = this
+    }
+
+    override fun disable() : {{Vela.Feature.Name}}BuilderImplementation {
+        internalEnabled = false
+        {{Vela.Feature.Name}}Implementation.getDefault.enable()
+    }
+
+    fun build() : {{Vela.Base.Root.Package}}.{{Vela.Feature.Path}}Feature.{{Vela.Feature.Name}}Implementation {
+        ensureFeatures(dependencies);
+        return {{Vela.Base.Root.Package}}.{{Vela.Feature.Path}}Feature.{{Vela.Feature.Name}}Implementation.getByName(name)
+    }
+}
+
+fun selectImplementation(impl: {{Vela.Feature.Name}}BuilderImplementation) {
+    impl.enable()
+}

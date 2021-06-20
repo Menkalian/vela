@@ -1,0 +1,9 @@
+package {{Vela.Base.Package}}
+
+interface IDependable {
+    val dependencies: List<IDependable>
+    val dependent: List<IDependable>
+
+    val parent: IDependable?
+    val root: IFeatureRoot
+}

@@ -1,0 +1,1 @@
+{{Vela.Feature.Name}}Implementation.values().forEach { it.currentActive = false }}

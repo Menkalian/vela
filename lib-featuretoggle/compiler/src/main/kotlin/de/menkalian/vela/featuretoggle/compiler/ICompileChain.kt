@@ -13,10 +13,10 @@ interface ICompileChain {
     val transformer: ITreeTransformer
     val backend: IGenerator
 
-    fun compile(targetDir: File) {
+    fun compile(targetDir: File, targetPackage: String = "") {
         val tree = parser.parse()
         transformer.apply(tree)
-        backend.generateOutput(tree, targetDir)
+        backend.generateOutput(tree, targetDir, targetPackage)
     }
 
     companion object {
@@ -41,5 +41,5 @@ interface ICompileChain {
 }
 
 fun main() {
-    ICompileChain.create(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\test\\resources\\test_parse.xml")).compile(File("."))
+    ICompileChain.create(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\test\\resources\\test_parse.xml")).compile(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\main\\kotlin"), "me.kilian.test")
 }
