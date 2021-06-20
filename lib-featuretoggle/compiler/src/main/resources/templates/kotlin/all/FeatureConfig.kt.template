@@ -1,0 +1,9 @@
+package {{Vela.Base.Package}}
+
+open class FeatureConfig(config : FeatureConfig.() -> Unit) : IFeatureRoot {
+{{Vela.Feature.Children.All.Code.Fields.Builder}}
+
+    init {
+        this.config()
+    }
+}
