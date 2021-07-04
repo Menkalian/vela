@@ -1,7 +1,7 @@
 package de.menkalian.vela.template.evaluator.node
 
 import de.menkalian.vela.template.Variables
-import de.menkalian.vela.template.evaluator.node.leaf.VariableAccessNode
+import de.menkalian.vela.template.evaluator.node.unary.VariableAccessNode
 
 object GlobalNodeContext {
     val separators = mutableListOf<String>()
