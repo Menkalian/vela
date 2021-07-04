@@ -47,7 +47,11 @@ object GlobalNodeContext {
                 return key
             }
 
-            return String.format(format, string)
+            val fomatNumberIndicators = listOf("d", "x", "X", "l")
+            return if (fomatNumberIndicators.any { format.endsWith(it) })
+                String.format(format, string.toLong())
+            else
+                String.format(format, string)
         }
     }
 }
