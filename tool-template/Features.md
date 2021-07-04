@@ -14,25 +14,27 @@
  - [x] IsNumericOperatorNode
  - [x] AddSpacerOperatorNode
  - [x] RemoveSpacerOperatorNode
+ - [x] IncrementOperatorNode
+ - [x] DecrementOperatorNode
 
 ## Binary Nodes
- - [ ] WhileLoopNode
- - [ ] SetOperatorNode
- - [ ] AndOperatorNode
- - [ ] OrOperatorNode
- - [ ] XorOperatorNode
- - [ ] IsLessOperatorNode
- - [ ] IsLessEqualOperatorNode
- - [ ] IsEqualOperatorNode
- - [ ] IsGreaterEqualOperatorNode
- - [ ] IsGreaterOperatorNode
- - [ ] ConcatOperatorNode
+ - [x] WhileLoopNode
+ - [x] SetOperatorNode
+ - [x] AndOperatorNode
+ - [x] OrOperatorNode
+ - [x] XorOperatorNode
+ - [x] IsLessOperatorNode
+ - [x] IsLessEqualOperatorNode
+ - [x] IsEqualOperatorNode
+ - [x] IsGreaterEqualOperatorNode
+ - [x] IsGreaterOperatorNode
+ - [x] ConcatOperatorNode
 
 ## Multi Nodes
  - [x] ConcatenationNode
- - [ ] IfElseNode
- - [ ] ForLoopNode
- - [ ] UseOperatorNode
+ - [x] IfElseNode
+ - [x] ForLoopNode
+ - [x] UseOperatorNode
 
 
 # TODO: Parser
