@@ -5,7 +5,9 @@ import de.menkalian.vela.template.evaluator.node.GlobalNodeContext.evaluateName
 import de.menkalian.vela.template.evaluator.node.INode
 
 class RefOperatorNode(override val operand: INode) : IUnaryOperatorNode {
-    override fun getValue(variables: Variables): String = variables[
-            evaluateName(operand.getValue(variables), variables)
-    ] ?: ""
+    private fun Variables.access(name: String) =
+        get(evaluateName(name, this))
+
+    override fun getValue(variables: Variables): String =
+        variables.access(variables.access(operand.getValue(variables)) ?: "") ?: ""
 }
