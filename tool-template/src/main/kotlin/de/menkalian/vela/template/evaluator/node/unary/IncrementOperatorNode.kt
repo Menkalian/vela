@@ -5,6 +5,11 @@ import de.menkalian.vela.template.evaluator.node.GlobalNodeContext.evaluateName
 import de.menkalian.vela.template.evaluator.node.INode
 
 class IncrementOperatorNode(override val operand: INode) : IUnaryOperatorNode {
+    override fun evaluate(variables: Variables, result: StringBuilder) {
+        getValue(variables)
+        // Do not output anything
+    }
+
     override fun getValue(variables: Variables): String {
         val varname = evaluateName(operand.getValue(variables), variables)
 
