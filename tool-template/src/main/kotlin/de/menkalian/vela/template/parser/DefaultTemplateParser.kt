@@ -101,7 +101,10 @@ class DefaultTemplateParser : ITemplateParser {
             var nextEscape = false
             var doConsume = true
             when (c) {
-                in OPERATOR_PREFIX   -> doEscape { insertBlock { parseOperator() } }
+                in OPERATOR_PREFIX   -> doEscape {
+                    insertBlock { parseOperator() }
+                    doConsume = false
+                }
                 in ESCAPE_CHARACTERS -> doEscape { nextEscape = true }
                 in BLOCK_START       -> doEscape {
                     consumeBlock { insertBlock { parseBlock() } }
@@ -285,10 +288,11 @@ class DefaultTemplateParser : ITemplateParser {
 
         addOperator("CLEAR", TEXT) { ClearOperatorNode(it) }
         addOperator("SET", TEXT, TEXT) { op1, op2 -> SetOperatorNode(op1, op2) }
+
         addOperator("DEC", TEXT) { DecrementOperatorNode(it) }
         addOperator("INC", TEXT) { IncrementOperatorNode(it) }
-        addOperator("CONCAT", TEXT, TEXT) { op1, op2 -> ConcatOperatorNode(op1, op2) }
 
+        addOperator("CONCAT", TEXT, TEXT) { op1, op2 -> ConcatOperatorNode(op1, op2) }
         addOperator("STR_START", VARIABLE, NUMERIC) { op1, op2 -> StringStartOperatorNode(op1, op2) }
         addOperator("STR_END", VARIABLE, NUMERIC) { op1, op2 -> StringEndOperatorNode(op1, op2) }
         addOperator("STR_LEN", VARIABLE) { StringLengthOperatorNode(it) }
