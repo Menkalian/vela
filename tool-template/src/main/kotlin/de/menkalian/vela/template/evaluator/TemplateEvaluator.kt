@@ -11,6 +11,8 @@ class TemplateEvaluator(private val rootNode: INode) : ITemplateEvaluator {
         val strBuilder = StringBuilder()
         variables.putAll(startVariables)
 
+        // Load Constants
+        TemplateConstants.evaluate(variables, StringBuilder())
         rootNode.evaluate(variables, strBuilder)
         return strBuilder.toString()
     }
