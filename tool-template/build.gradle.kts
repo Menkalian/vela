@@ -15,4 +15,10 @@ publishing {
     }
 }
 
-dependencies {}
+dependencies {
+}
+
+sourceSets.create("example") {
+    compileClasspath += sourceSets.getByName("main").output
+    runtimeClasspath += sourceSets.getByName("main").output
+}
