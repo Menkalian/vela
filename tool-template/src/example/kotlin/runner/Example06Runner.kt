@@ -3,5 +3,5 @@ package runner
 import printExampleResult
 
 fun main() {
-    printExampleResult("01_Simple_Template.vtp")
+    printExampleResult("06_Conditions.vtp")
 }

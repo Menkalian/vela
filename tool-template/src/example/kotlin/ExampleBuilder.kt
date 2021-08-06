@@ -1,10 +1,8 @@
-import de.menkalian.vela.template.Variables
 import de.menkalian.vela.template.parser.ITemplateParser
 
 class ResourceHelper
 
 fun printExampleResult(path: String) {
-    val variables = Variables()
     val input = ResourceHelper::class.java
         .getResourceAsStream(path)!!
 
@@ -12,9 +10,7 @@ fun printExampleResult(path: String) {
     val evaluated = ITemplateParser
         .getDefaultImplementation()
         .parse(input)
-        .evaluate(variables)
-    printHeader("VARIABLES")
-    println(variables)
+        .evaluate()
     printHeader("RESULT")
     println(evaluated)
 }
