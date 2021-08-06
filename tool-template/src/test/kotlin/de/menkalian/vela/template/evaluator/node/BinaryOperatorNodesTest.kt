@@ -64,13 +64,8 @@ internal class BinaryOperatorNodesTest {
             listOf(
                 SetOperatorNode(TextNode("Test.Value.001"), TextNode("g4299c")),
                 SetOperatorNode(TextNode("Test.Value.002"), TextNode("0RY")),
-                SetOperatorNode(
-                    TextNode("Test.Value.003"), ConcatOperatorNode(
-                        VariableAccessNode("Test.Value.001"),
-                        VariableAccessNode("Test.Value.002")
-                    )
-                ),
-                VariableAccessNode("Test.Value.003")
+                SetOperatorNode(TextNode("Test.Value.003"), VariableAccessNode("Test.Value.001")),
+                ConcatOperatorNode(TextNode("Test.Value.003"), VariableAccessNode("Test.Value.002"))
             )
         )
 
