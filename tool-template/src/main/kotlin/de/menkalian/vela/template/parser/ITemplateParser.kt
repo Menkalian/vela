@@ -7,7 +7,14 @@ import java.io.InputStream
 interface ITemplateParser {
     fun parse(input: String): ITemplateEvaluator
     fun parse(input: InputStream): ITemplateEvaluator = parse(String(input.readAllBytes()))
-    fun parse(input: File): ITemplateEvaluator = parse(input.readText())
+    fun parse(input: File): ITemplateEvaluator {
+        val currentWorkingDir = System.getProperty("user.dir")
+        System.setProperty("user.dir", input.parentFile.absolutePath)
+        val result = parse(input.readText())
+        System.setProperty("user.dir", currentWorkingDir)
+
+        return result
+    }
 
     companion object {
         fun getDefaultImplementation() = getImplementation("vela")

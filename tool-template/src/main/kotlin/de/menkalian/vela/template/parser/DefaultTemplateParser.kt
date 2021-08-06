@@ -37,7 +37,11 @@ import de.menkalian.vela.template.evaluator.node.unary.StringLengthOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.StringLowercaseOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.StringUppercaseOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.VariableAccessNode
-import de.menkalian.vela.template.parser.OperatorParamType.*
+import de.menkalian.vela.template.parser.OperatorParamType.BOOLEAN
+import de.menkalian.vela.template.parser.OperatorParamType.NUMERIC
+import de.menkalian.vela.template.parser.OperatorParamType.TEXT
+import de.menkalian.vela.template.parser.OperatorParamType.VARIABLE
+import java.io.File
 
 class DefaultTemplateParser : ITemplateParser {
     companion object {
@@ -110,6 +114,7 @@ class DefaultTemplateParser : ITemplateParser {
                     consumeBlock { insertBlock { parseBlock() } }
                     doConsume = false
                 }
+                in BLOCK_TERMINATORS -> doEscape {} // Accept Terminators as valid escape symbols
                 else                 -> {
                     if (escaped) println("Unknown escape character '$c'. Ignoring and appending it to the text.")
                     currentText.append(c)
@@ -282,6 +287,14 @@ class DefaultTemplateParser : ITemplateParser {
     }
 
     private fun initOperators() {
+        addOperator("INCLUDE", TEXT) {
+            val includeFile = File(System.getProperty("user.dir") + File.separator + it.getValue(Variables()))
+
+            DefaultTemplateParser()
+                .parse(includeFile)
+                .rootNode
+        }
+
         addOperator("ADD_SPACER", TEXT) { AddSpacerOperatorNode(it) }
         addOperator("REMOVE_SPACER", TEXT) { RemoveSpacerOperatorNode(it) }
         addOperator("USE", TEXT, TEXT, TEXT) { op1, op2, op3 -> UseOperatorNode(op1, op2, op3) }
@@ -313,8 +326,8 @@ class DefaultTemplateParser : ITemplateParser {
         addOperator("IS_GREQ", TEXT, TEXT) { op1, op2 -> IsGreaterEqualOperatorNode(op1, op2) }
         addOperator("IS_GREATER", TEXT, TEXT) { op1, op2 -> IsGreaterOperatorNode(op1, op2) }
 
-        addOperator("IS_BOOL", TEXT) { IsBooleanOperatorNode(it) }
-        addOperator("IS_NUMERIC", TEXT) { IsNumericOperatorNode(it) }
+        addOperator("IS_BOOL", VARIABLE) { IsBooleanOperatorNode(it) }
+        addOperator("IS_NUMERIC", VARIABLE) { IsNumericOperatorNode(it) }
     }
 
     private fun addOperator(keyword: String, type1: OperatorParamType, gen: (INode) -> INode) {
@@ -335,6 +348,7 @@ class DefaultTemplateParser : ITemplateParser {
         }
     }
 
+    @Suppress("SameParameterValue")
     private fun addOperator(
         keyword: String,
         type1: OperatorParamType, type2: OperatorParamType, type3: OperatorParamType,
