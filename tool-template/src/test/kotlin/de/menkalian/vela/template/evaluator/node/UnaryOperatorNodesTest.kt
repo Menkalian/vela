@@ -2,7 +2,6 @@ package de.menkalian.vela.template.evaluator.node
 
 import de.menkalian.vela.template.Variables
 import de.menkalian.vela.template.evaluator.interpretAsBoolean
-import de.menkalian.vela.template.evaluator.node.binary.OrOperatorNode
 import de.menkalian.vela.template.evaluator.node.binary.SetOperatorNode
 import de.menkalian.vela.template.evaluator.node.leaf.TextNode
 import de.menkalian.vela.template.evaluator.node.multi.ConcatenationNode
@@ -16,6 +15,9 @@ import de.menkalian.vela.template.evaluator.node.unary.IsNumericOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.NotOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.RefOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.RemoveSpacerOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.StringLengthOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.StringLowercaseOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.StringUppercaseOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.VariableAccessNode
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -37,7 +39,7 @@ internal class UnaryOperatorNodesTest {
     }
 
     // Operators
-    // Variable Manipulation
+    // Variable manipulation
     @Test
     fun testClearOperatorNode() {
         val testSequence = ConcatenationNode(listOf(
@@ -80,7 +82,7 @@ internal class UnaryOperatorNodesTest {
         Assertions.assertEquals("4", startVars["X"])
     }
 
-    // Spacer Manipulation Operators
+    // Spacer manipulation operators
     @Test
     fun testAddSpacerOperatorNode() {
         val testSequence = ConcatenationNode(listOf(
@@ -120,7 +122,7 @@ internal class UnaryOperatorNodesTest {
         GlobalNodeContext.clear()
     }
 
-    // Meta-Operators
+    // Meta operators
     @Test
     fun testRefOperatorNode() {
         val testSequence = ConcatenationNode(listOf(
@@ -200,7 +202,7 @@ internal class UnaryOperatorNodesTest {
         check("c9da4f7f-1027-4c90-a464-cf359e38714e", false)
     }
 
-    // Logical Operators
+    // Logical operators
     @Test
     fun testNotOperatorNode() {
         val check = { o1: Boolean, res: Boolean ->
@@ -213,5 +215,56 @@ internal class UnaryOperatorNodesTest {
 
         check(false, true)
         check(true, false)
+    }
+
+    // String operators
+    @Test
+    fun testStringLengthOperator() {
+        val check = { o1: String, res: Int ->
+            val testNode = StringLengthOperatorNode(
+                TextNode(o1)
+            )
+
+            Assertions.assertEquals(res, testNode.getValue(Variables()).toInt())
+        }
+
+        check("H3fuu", 5)
+        check("", 0)
+        check("aaaaaaa", 7)
+        check("aaa\u0000aaaa", 8)
+    }
+
+    @Test
+    fun testStringLowercaseOperator() {
+        val check = { o1: String, res: String ->
+            val testNode = StringLowercaseOperatorNode(
+                TextNode(o1)
+            )
+
+            Assertions.assertEquals(res, testNode.getValue(Variables()))
+        }
+
+        check("H3fuu", "h3fuu")
+        check("", "")
+        check("aaaaaaa", "aaaaaaa")
+        check("aaa\u0000aaaa", "aaa\u0000aaaa")
+        check("aaa12AADÄS", "aaa12aadäs")
+    }
+
+    @Test
+    fun testStringUppercaseOperator() {
+        val check = { o1: String, res: String ->
+            val testNode = StringUppercaseOperatorNode(
+                TextNode(o1)
+            )
+
+            Assertions.assertEquals(res, testNode.getValue(Variables()))
+        }
+
+        check("H3fuu", "H3FUU")
+        check("", "")
+        check("aaaaaaa", "AAAAAAA")
+        check("aaa\u0000aaaa", "AAA\u0000AAAA")
+        check("aaa12AADÄS", "AAA12AADÄS")
     }
 }

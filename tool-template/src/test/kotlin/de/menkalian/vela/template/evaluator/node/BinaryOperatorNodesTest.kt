@@ -11,6 +11,8 @@ import de.menkalian.vela.template.evaluator.node.binary.IsLessEqualOperatorNode
 import de.menkalian.vela.template.evaluator.node.binary.IsLessOperatorNode
 import de.menkalian.vela.template.evaluator.node.binary.OrOperatorNode
 import de.menkalian.vela.template.evaluator.node.binary.SetOperatorNode
+import de.menkalian.vela.template.evaluator.node.binary.StringEndOperatorNode
+import de.menkalian.vela.template.evaluator.node.binary.StringStartOperatorNode
 import de.menkalian.vela.template.evaluator.node.binary.WhileLoopNode
 import de.menkalian.vela.template.evaluator.node.binary.XorOperatorNode
 import de.menkalian.vela.template.evaluator.node.leaf.TextNode
@@ -233,5 +235,39 @@ internal class BinaryOperatorNodesTest {
         check("1353oo3", "hLow1mc", true)
         check("hLow1mc", "1353oo3", false)
         check("8DOlz7GY", "8DOlz7GY", false)
+    }
+
+    @Test
+    fun testStringStartOperatorNode() {
+        val check = { string: String, arg: Int, res: String ->
+            val testNode = StringStartOperatorNode(
+                TextNode(string),
+                TextNode(arg.toString())
+            )
+
+            Assertions.assertEquals(res, testNode.getValue(Variables()))
+        }
+
+        check("3vVim2y", 9, "3vVim2y")
+        check("zAsJ8q", 2, "zA")
+        check("zAsJ8q", 5, "zAsJ8")
+        check("zAsJ8q", 0, "")
+    }
+
+    @Test
+    fun testStringEndOperatorNode() {
+        val check = { string: String, arg: Int, res: String ->
+            val testNode = StringEndOperatorNode(
+                TextNode(string),
+                TextNode(arg.toString())
+            )
+
+            Assertions.assertEquals(res, testNode.getValue(Variables()))
+        }
+
+        check("3vVim2y", 9, "3vVim2y")
+        check("zAsJ8q", 2, "8q")
+        check("zAsJ8q", 5, "AsJ8q")
+        check("zAsJ8q", 0, "")
     }
 }

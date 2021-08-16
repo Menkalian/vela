@@ -12,6 +12,7 @@ internal class LeafNodeTest {
             val node = TextNode(text)
             val tmp = StringBuilder()
             node.evaluate(Variables(), tmp)
+            Assertions.assertEquals(text, node.textValue)
             Assertions.assertEquals(text, tmp.toString())
             Assertions.assertEquals(text, node.getValue(Variables()))
         }
