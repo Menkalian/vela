@@ -1,0 +1,33 @@
+# Loops
+
+Similar to conditional execution of branches, there is a possibility to repeat the execution of a certain part of the template.
+There are two types of loops supported: `WHILE` and `FOR`.
+
+## For-Loop
+The following rows are generated using a for loop:
+{FOR {I} IN {1} TO {10} { * `{{I}}`
+}}
+
+Second row:&OFF{
+    &SET{Value.001}{.}
+    &SET{Value.003}{.}
+    &SET{Value.004}{.}
+    &SET{Value.007}{.}
+    &SET{Value.008}{.}
+}
+{FOR {X} IN {1} TO {10} {{IF{&DEFINED{Value.XXX}} { * `{{X}}`
+}}}}
+
+## While-Loop
+The while-loop is executed while its condition is true.
+&OFF{
+   &SET{X}{0}
+   &SET{Value.001}{.}
+   &SET{Value.003}{.}
+   &SET{Value.004}{.}
+   &SET{Value.007}{.}
+   &SET{Value.008}{0}
+}
+{WHILE {&NOT{&IS_EQUAL{{{Value.XXX}}}{0}}} { `{IF {&DEFINED{Value.XXX}} {{{Value.XXX}}} ELSE { }}`, &INC{X}}}
+
+&INCLUDE{verzeichnis.vtp}

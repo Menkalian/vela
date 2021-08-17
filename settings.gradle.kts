@@ -10,10 +10,22 @@ include(
 
 // Tools
 include(
-    "tool-epc"
+    "tool-epc",
+    "tool-template"
 )
 
 // Libraries
 include(
     "lib-transfervalue"
 )
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url = uri("http://server.menkalian.de:8081/artifactory/vela")
+            name = "artifactory-menkalian"
+            isAllowInsecureProtocol = true
+        }
+    }
+}

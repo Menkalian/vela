@@ -1,0 +1,30 @@
+# Inclusion of File
+
+To reuse or separate your code, you can split it into multiple files.
+
+To reuse a file just include it.
+&INCLUDE{03/hint.vtp}
+
+even multiple times
+
+&INCLUDE{03/hint.vtp}
+
+&INCLUDE{03/hint.vtp}
+
+the included template uses all variables present in the current template and IT CAN ALSO MODIFY THE VARIABLES OF THE MAIN SCRIPT! SO BE CAREFUL WITH THAT!
+See for yourself:
+
+&DEFINED{Variable.Extern}
+&INCLUDE{03/SetVariable.vtp}
+&DEFINED{Variable.Extern}
+
+&SET{Variable.Extern}{Internal}
+&DEFINED{Variable.Extern}
+&INCLUDE{03/SetVariable.vtp}
+&DEFINED{Variable.Extern}
+
+You can also use the `OFF`-operator to disable output for various reasons, e.g. when including a file just for definition of variables, or as means of leaving comments at any position.
+&OFF{Include all the stuff}
+&OFF{&INCLUDE{03/SetVariable.vtp}}
+
+&INCLUDE{verzeichnis.vtp}

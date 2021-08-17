@@ -14,7 +14,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
         google()
     }
 
@@ -101,6 +100,7 @@ allprojects {
         tasks.withType(KotlinCompile::class.java) {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
+                this.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
             }
         }
     }

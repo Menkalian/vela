@@ -1,0 +1,10 @@
+# Comparison Operations
+
+These are the comparison operators:
+ * `&IS_LESS{aaaa}{bbbb}`
+ * `&IS_LEEQ{aaaa}{aaab}`
+ * `&IS_EQUAL{aaaa}{aaaa}`
+ * `&IS_GREQ{aaab}{aaaa}`
+ * `&IS_GREATER{bbbb}{aaaa}`
+
+&INCLUDE{verzeichnis.vtp}

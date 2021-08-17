@@ -1,0 +1,44 @@
+# Basis Variable Operations
+
+Vela templates support the use of variables.
+There are some defined constants, e.g. "Engine.Name"=\{{{Engine.Name}}\}.
+
+You may also set your own variables like this: &SET{Your.Variable}{This is your own variable}
+Now you can just insert the value everywhere, just like this: {{Your.Variable}}
+If you try to access a non-existent variable, it will just be blank: {{Not.Existing}}
+
+There are also operators for checking if a variable exists.
+Variable exists: &DEFINED{Your.Variable}
+Delete Variable... &CLEAR{Your.Variable}
+Variable exists: &DEFINED{Your.Variable}
+
+If your variable has a numeric value, you can increase or decrease it. &Set{Numeric.Value}{5}
+{{Numeric.Value}}
+`INCREMENT` &INC{Numeric.Value}
+{{Numeric.Value}}
+`DECREMENT` &DEC{Numeric.Value}
+{{Numeric.Value}}
+
+You can also use the ref operator to access the value of the variable that is saved in another variable (similar to pointers):
+&SET{ptr}{Numeric.Value}
+Value: {{ptr}}
+Referenced: &REF{ptr}
+
+It might also be handy, that you can check if a variable contains a numeric or a boolean value.
+ * `&IS_NUMERIC{Numeric.Value}`
+ * `&IS_BOOL{Const.True}`
+ * `&IS_NUMERIC{Const.Ten}`
+ * `&IS_BOOL{Const.Two}`
+ * `&IS_NUMERIC{Engine.Name}`
+
+There are also operators for manipulating strings:&OFF{&SET{String.Variable}{NOP}}
+ * `CONCAT`: `{{String.Variable}}` \&rarr; ``&CONCAT{String.Variable}{ers}`
+ * `STR_START`: `{{String.Variable}}` \&rarr; `&STR_START{String.Variable}{2}`
+ * `STR_END`: `{{String.Variable}}` \&rarr; `&STR_END{String.Variable}{2}`
+ * `STR_LEN`: `{{String.Variable}}` \&rarr; `&STR_LEN{String.Variable}`
+ * `STR_UPPER`: `{{String.Variable}}` \&rarr; `&STR_UPPER{String.Variable}`
+ * `STR_LOWER`: `{{String.Variable}}` \&rarr; `&STR_LOWER{String.Variable}`
+
+The following examples will show you how to work with these variables.
+
+&INCLUDE{verzeichnis.vtp}

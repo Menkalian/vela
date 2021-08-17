@@ -1,0 +1,11 @@
+# First example of a template
+
+This is a simple first template.
+It was evaluated using {{Engine.Name}} {{Engine.Version}}!
+
+---
+
+Here is an example of a notice:
+{{Engine.Hint}}
+
+&INCLUDE{verzeichnis.vtp}
