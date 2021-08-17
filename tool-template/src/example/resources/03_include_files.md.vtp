@@ -1,3 +1,5 @@
+# Inclusion of File
+
 To reuse or separate your code, you can split it into multiple files.
 
 To reuse a file just include it.
@@ -21,5 +23,8 @@ See for yourself:
 &INCLUDE{03/SetVariable.vtp}
 &DEFINED{Variable.Extern}
 
+You can also use the `OFF`-operator to disable output for various reasons, e.g. when including a file just for definition of variables, or as means of leaving comments at any position.
+&OFF{Include all the stuff}
+&OFF{&INCLUDE{03/SetVariable.vtp}}
 
 &INCLUDE{verzeichnis.vtp}

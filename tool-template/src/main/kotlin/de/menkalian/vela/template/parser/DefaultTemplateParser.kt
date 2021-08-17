@@ -31,6 +31,7 @@ import de.menkalian.vela.template.evaluator.node.unary.IncrementOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsBooleanOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsNumericOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.NotOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.OffOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.RefOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.RemoveSpacerOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.StringLengthOperatorNode
@@ -294,6 +295,7 @@ class DefaultTemplateParser : ITemplateParser {
                 .parse(includeFile)
                 .rootNode
         }
+        addOperator("OFF", TEXT) { OffOperatorNode(it) }
 
         addOperator("ADD_SPACER", TEXT) { AddSpacerOperatorNode(it) }
         addOperator("REMOVE_SPACER", TEXT) { RemoveSpacerOperatorNode(it) }

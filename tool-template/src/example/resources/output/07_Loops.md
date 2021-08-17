@@ -1,3 +1,34 @@
+# Loops
+
+Similar to conditional execution of branches, there is a possibility to repeat the execution of a certain part of the template.
+There are two types of loops supported: `WHILE` and `FOR`.
+
+## For-Loop
+The following rows are generated using a for loop:
+ * `1`
+ * `2`
+ * `3`
+ * `4`
+ * `5`
+ * `6`
+ * `7`
+ * `8`
+ * `9`
+ * `10`
+
+
+Second row:
+ * `1`
+ * `3`
+ * `4`
+ * `7`
+ * `8`
+
+
+## While-Loop
+The while-loop is executed while its condition is true.
+
+ ` `,  `.`,  ` `,  `.`,  `.`,  ` `,  ` `,  `.`, 
 
 
 ---

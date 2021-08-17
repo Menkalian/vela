@@ -1,3 +1,15 @@
+# Automatic replacement of variables
+
+As seen in the previous section, if a variable contains the character `XXX` separated by `.` from the rest of the variable, it is automatically replaced by the current value of `X` formatted as three digit number.
+
+You can modify the available separators by using `ADD_SPACER` or `REMOVE_SPACER`.
+You can also define your own replacement rules by using the `USE`-operator.
+
+It takes three arguments: The expression to be replaced (e.g. "XXX"), the action to perform for replacement (e.g. "" to access the value of X) and the format to use for inserting the replacement (according to format-strings used by `String.format` (Java) or `printf` (C[++]).
+
+Here is an example: 
+`1`,
+`2`
 
 
 ---

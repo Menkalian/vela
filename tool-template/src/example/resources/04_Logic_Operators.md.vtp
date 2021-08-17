@@ -1,2 +1,48 @@
+# Logic operators
+
+There are also a bunch of logic operators. They can be used to combine booleans as known from everywhere else.&OFF{
+    Set some variables:
+    &SET{A}{1} This is true
+    &SET{B}{} This is false
+    &SET{C}{0} This is false
+    &SET{D}{yep} This is true
+}
+These are some usages of the `AND` operator:
+ * `&AND{A}{B}`
+ * `&AND{A}{D}`
+ * `&AND{true}{D}`
+ * `&AND{true}{false}`
+ * `&AND{true}{1}`
+ * `&AND{C}{1}`
+ * `&AND{true}{No.Variable}`
+
+These are the same usages with the `OR` operator:
+  * `&OR{A}{B}`
+  * `&OR{A}{D}`
+  * `&OR{true}{D}`
+  * `&OR{true}{false}`
+  * `&OR{true}{1}`
+  * `&OR{C}{1}`
+  * `&OR{true}{No.Variable}`
+
+There is also a `XOR` operator:
+  * `&XOR{A}{B}`
+  * `&XOR{A}{D}`
+  * `&XOR{true}{D}`
+  * `&XOR{true}{false}`
+  * `&XOR{true}{1}`
+  * `&XOR{C}{1}`
+  * `&XOR{true}{No.Variable}`
+
+And lastly there is a `NOT` operator:
+ * `&NOT{A}`
+ * `&NOT{B}`
+ * `&NOT{C}`
+ * `&NOT{D}`
+ * `&NOT{true}`
+ * `&NOT{false}`
+ * `&NOT{0}`
+ * `&NOT{1}`
+ * `&NOT{No.Variable}`
 
 &INCLUDE{verzeichnis.vtp}

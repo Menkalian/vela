@@ -1,3 +1,13 @@
+# Conditional execution
+
+To give all these operators and variables a proper usage, there are control structures.
+First and foremost this is the `IF/ELSE` structure.
+The `ELSE` is optional an can be used, but does not need to be used.
+
+
+test variable is false
+
+this is always printed (autological)
 
 
 ---

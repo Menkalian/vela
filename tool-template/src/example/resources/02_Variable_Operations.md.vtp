@@ -25,11 +25,19 @@ Value: {{ptr}}
 Referenced: &REF{ptr}
 
 It might also be handy, that you can check if a variable contains a numeric or a boolean value.
-&IS_NUMERIC{Numeric.Value}
-&IS_BOOL{Const.True}
-&IS_NUMERIC{Const.Ten}
-&IS_BOOL{Const.Two}
-&IS_NUMERIC{Engine.Name}
+ * `&IS_NUMERIC{Numeric.Value}`
+ * `&IS_BOOL{Const.True}`
+ * `&IS_NUMERIC{Const.Ten}`
+ * `&IS_BOOL{Const.Two}`
+ * `&IS_NUMERIC{Engine.Name}`
+
+There are also operators for manipulating strings:&OFF{&SET{String.Variable}{NOP}}
+ * `CONCAT`: `{{String.Variable}}` \&rarr; ``&CONCAT{String.Variable}{ers}`
+ * `STR_START`: `{{String.Variable}}` \&rarr; `&STR_START{String.Variable}{2}`
+ * `STR_END`: `{{String.Variable}}` \&rarr; `&STR_END{String.Variable}{2}`
+ * `STR_LEN`: `{{String.Variable}}` \&rarr; `&STR_LEN{String.Variable}`
+ * `STR_UPPER`: `{{String.Variable}}` \&rarr; `&STR_UPPER{String.Variable}`
+ * `STR_LOWER`: `{{String.Variable}}` \&rarr; `&STR_LOWER{String.Variable}`
 
 The following examples will show you how to work with these variables.
 

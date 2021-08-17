@@ -25,11 +25,19 @@ Value: Numeric.Value
 Referenced: 5
 
 It might also be handy, that you can check if a variable contains a numeric or a boolean value.
-true
-true
-true
-false
-false
+ * `true`
+ * `true`
+ * `true`
+ * `false`
+ * `false`
+
+There are also operators for manipulating strings:
+ * `CONCAT`: `NOP` &rarr; ``NOPers`
+ * `STR_START`: `NOPers` &rarr; `NO`
+ * `STR_END`: `NOPers` &rarr; `rs`
+ * `STR_LEN`: `NOPers` &rarr; `6`
+ * `STR_UPPER`: `NOPers` &rarr; `NOPERS`
+ * `STR_LOWER`: `NOPers` &rarr; `nopers`
 
 The following examples will show you how to work with these variables.
 

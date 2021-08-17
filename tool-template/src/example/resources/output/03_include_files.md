@@ -1,22 +1,27 @@
+# Inclusion of File
+
 To reuse or separate your code, you can split it into multiple files.
 
 To reuse a file just include it.
+```
 /******************************************************************************
  *      ##### Created with Vela Engine V1.0.0 #####
  *****************************************************************************/
-
+```
 
 even multiple times
 
+```
 /******************************************************************************
  *      ##### Created with Vela Engine V1.0.0 #####
  *****************************************************************************/
+```
 
-
+```
 /******************************************************************************
  *      ##### Created with Vela Engine V1.0.0 #####
  *****************************************************************************/
-
+```
 
 the included template uses all variables present in the current template and IT CAN ALSO MODIFY THE VARIABLES OF THE MAIN SCRIPT! SO BE CAREFUL WITH THAT!
 See for yourself:
@@ -35,6 +40,9 @@ Internal
 4
 
 true
+
+You can also use the `OFF`-operator to disable output for various reasons, e.g. when including a file just for definition of variables, or as means of leaving comments at any position.
+
 
 
 

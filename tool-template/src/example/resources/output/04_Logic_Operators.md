@@ -1,3 +1,43 @@
+# Logic operators
+
+There are also a bunch of logic operators. They can be used to combine booleans as known from everywhere else.
+These are some usages of the `AND` operator:
+ * `false`
+ * `true`
+ * `true`
+ * `false`
+ * `true`
+ * `false`
+ * `false`
+
+These are the same usages with the `OR` operator:
+  * `true`
+  * `true`
+  * `true`
+  * `true`
+  * `true`
+  * `true`
+  * `true`
+
+There is also a `XOR` operator:
+  * `true`
+  * `false`
+  * `false`
+  * `true`
+  * `false`
+  * `true`
+  * `true`
+
+And lastly there is a `NOT` operator:
+ * `false`
+ * `true`
+ * `true`
+ * `false`
+ * `false`
+ * `true`
+ * `true`
+ * `false`
+ * `true`
 
 
 ---
