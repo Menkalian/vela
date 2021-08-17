@@ -73,7 +73,7 @@ allprojects {
                 fileTree(
                     mapOf(
                         "dir" to it,
-                        "exclude" to "de/menkalian/vela/gradle"
+                        "exclude" to listOf("de/menkalian/vela/gradle", "de/menkalian/vela/example")
                     )
                 )
             }))

@@ -1,3 +1,5 @@
+package de.menkalian.vela.example
+
 import de.menkalian.vela.template.parser.ITemplateParser
 import java.io.File
 import java.io.PrintStream
@@ -7,6 +9,7 @@ class ResourceHelper
 fun printExampleResult(path: String, printOutputToFile: Boolean = false) {
     enableOutput(path, printOutputToFile)
     val input = ResourceHelper::class.java
+        .classLoader
         .getResourceAsStream(path)!!
 
     if (!printOutputToFile)

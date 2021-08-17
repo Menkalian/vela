@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Example06RunnerKt" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="runner.Example06RunnerKt" />
+    <option name="MAIN_CLASS_NAME" value="de.menkalian.vela.example.runner.Example06RunnerKt" />
     <module name="vela.tool-template.example" />
     <shortenClasspath name="NONE" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tool-template/src/example/resources" />
