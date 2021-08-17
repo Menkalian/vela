@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AllExamples" type="CompoundRunConfigurationType">
+    <toRun name="Example01RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example02RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example03RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example04RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example05RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example06RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example07RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example08RunnerKt" type="JetRunConfigurationType" />
+    <toRun name="Example10RunnerKt" type="JetRunConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

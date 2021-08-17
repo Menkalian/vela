@@ -3,5 +3,5 @@ package runner
 import printExampleResult
 
 fun main() {
-    printExampleResult("10_Turing_Simulation.vtp")
+    printExampleResult("10_Turing_Simulation.md.vtp")
 }

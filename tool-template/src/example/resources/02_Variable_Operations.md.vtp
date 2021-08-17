@@ -1,3 +1,5 @@
+# Basis Variable Operations
+
 Vela templates support the use of variables.
 There are some defined constants, e.g. "Engine.Name"=\{{{Engine.Name}}\}.
 
@@ -12,9 +14,9 @@ Variable exists: &DEFINED{Your.Variable}
 
 If your variable has a numeric value, you can increase or decrease it. &Set{Numeric.Value}{5}
 {{Numeric.Value}}
-&INC{Numeric.Value}
+`INCREMENT` &INC{Numeric.Value}
 {{Numeric.Value}}
-&DEC{Numeric.Value}
+`DECREMENT` &DEC{Numeric.Value}
 {{Numeric.Value}}
 
 You can also use the ref operator to access the value of the variable that is saved in another variable (similar to pointers):
@@ -30,3 +32,5 @@ It might also be handy, that you can check if a variable contains a numeric or a
 &IS_NUMERIC{Engine.Name}
 
 The following examples will show you how to work with these variables.
+
+&INCLUDE{verzeichnis.vtp}

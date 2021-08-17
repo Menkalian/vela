@@ -21,3 +21,5 @@ See for yourself:
 &INCLUDE{03/SetVariable.vtp}
 &DEFINED{Variable.Extern}
 
+
+&INCLUDE{verzeichnis.vtp}

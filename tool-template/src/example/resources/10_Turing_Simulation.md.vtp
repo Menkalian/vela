@@ -1,13 +1,14 @@
-# to everyone who reads this: thank you <3. and always count in base nine ;-).
+# Turing simulation
+to everyone who reads this: thank you for being interested in this project <3. and always count your examples in base nine ;-).
 
-# Set the tape (you may alter this)
-&SET{Turing.Tape.Before}{00111}    # Set the tape before the current position
-&SET{Turing.Tape.After}{11111000}  # Set the tape at and after the current position
+# Setting the tape (you may alter this section of the source file)
+&SET{Turing.Tape.Before}{00111}    ## Set the tape before the current position
+&SET{Turing.Tape.After}{11111000}  ## Set the tape at and after the current position
 
-# Activate the output after every step if you want to see it
+## Activate the output after every step if you want to see it
 &SET{Turing.Output.Step}{{{Const.True}}}
 
-# Read the tape into single variables
+## Read the tape into single variables
 &SET{X}{0}
 {FOR {i} IN {0} TO {&STR_LEN{Turing.Tape.Before}} {
     &DEC{X}
@@ -66,8 +67,10 @@
             &DEC{Turing.Tape.Min}
         }}
     }}
-    {FOR {X} IN {Turing.Tape.Min} TO  {Turing.Tape.Max} {{IF {&IS_EQUAL{{{Turing.Position}}}{{{X}}}} {|{{Turing.Tape.XXX.Value}}|} ELSE {{{Turing.Tape.XXX.Value}}}}}}
+`{FOR {X} IN {Turing.Tape.Min} TO  {Turing.Tape.Max} {{IF {&IS_EQUAL{{{Turing.Position}}}{{{X}}}} {|{{Turing.Tape.XXX.Value}}|} ELSE {{{Turing.Tape.XXX.Value}}}}}}`
 }}
 
 Final Tape:
-{FOR {X} IN {Turing.Tape.Min} TO  {Turing.Tape.Max} {{IF {&IS_EQUAL{{{Turing.Position}}}{{{X}}}} {|{{Turing.Tape.XXX.Value}}|} ELSE {{{Turing.Tape.XXX.Value}}}}}}
+`{FOR {X} IN {Turing.Tape.Min} TO  {Turing.Tape.Max} {{IF {&IS_EQUAL{{{Turing.Position}}}{{{X}}}} {|{{Turing.Tape.XXX.Value}}|} ELSE {{{Turing.Tape.XXX.Value}}}}}}`
+
+&INCLUDE{verzeichnis.vtp}
