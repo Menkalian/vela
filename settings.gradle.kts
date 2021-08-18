@@ -22,7 +22,8 @@ include(
 // featuretoggle
 include(
     "lib-featuretoggle",
-    "lib-featuretoggle:compiler"
+    "lib-featuretoggle:compiler",
+    "lib-featuretoggle:plugin"
 )
 
 pluginManagement {

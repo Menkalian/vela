@@ -6,19 +6,6 @@ import {{vela.pkg.current}}.{{vela.feature.children.XXX.name}}.{{vela.feature.ch
 }}
 
 abstract class FeatureConfig \{
-    class DefaultFeatureConfig(val config: DefaultFeatureConfig.() -> Unit) : FeatureConfig() \{
-        override fun configure() \{
-            config()
-        \}
-    \}
-
-    init \{
-        this.initialize()
-        this.configure()
-        this.finishConfiguration()
-        this.lock()
-    \}
-
     {FOR {X} IN {1} TO {vela.feature.children.n} {
     private val {{vela.feature.children.XXX.name}}Internal: {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal = {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal(this, null)
     val {{vela.feature.children.XXX.name}}: {{vela.feature.children.XXX.nameCapitalized}}Feature
@@ -46,5 +33,12 @@ abstract class FeatureConfig \{
             {{vela.feature.children.XXX.name}}Internal.lock()
             }}
         }}
+    \}
+
+    init \{
+        this.initialize()
+        this.configure()
+        this.finishConfiguration()
+        this.lock()
     \}
 \}
