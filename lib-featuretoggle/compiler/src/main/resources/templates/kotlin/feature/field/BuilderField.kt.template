@@ -1,1 +1,0 @@
-val {{Vela.Feature.Name}} = {{Vela.Base.Root.Package}}.{{Vela.Feature.Path}}FeatureBuilder(root)

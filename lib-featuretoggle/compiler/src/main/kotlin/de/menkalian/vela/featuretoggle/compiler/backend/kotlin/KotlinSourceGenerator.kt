@@ -4,8 +4,9 @@ import de.menkalian.vela.featuretoggle.compiler.CompileConfig
 import de.menkalian.vela.featuretoggle.compiler.backend.IGenerator
 import de.menkalian.vela.featuretoggle.compiler.tree.IFeatureTree
 import de.menkalian.vela.featuretoggle.compiler.tree.INode
-import de.menkalian.vela.featuretoggle.compiler.util.TemplateUtil
-import de.menkalian.vela.generated.VelaKey.Vela
+import de.menkalian.vela.generated.velaKey.vela
+import de.menkalian.vela.template.Variables
+import de.menkalian.vela.template.parser.ITemplateParser
 import java.io.File
 
 internal open class KotlinSourceGenerator : IGenerator {
@@ -16,202 +17,145 @@ internal open class KotlinSourceGenerator : IGenerator {
         rootPackage = targetPackage
         generateBaseCode(targetDir, targetPackage)
         generateRootCode(targetDir, targetPackage, tree)
-
-        rootNode.subsetNodes.values.forEach { generateNodeCode(targetDir, targetPackage, it) }
-        rootNode.featureNodes.values.forEach { generateNodeCode(targetDir, targetPackage, it) }
     }
 
-    protected fun generateBaseCode(srcDir: File, pckg: String) {
-        val root = File(srcDir, pckg.replace('.', File.separatorChar))
-        if (root.exists())
-            root.deleteRecursively()
-        root.mkdirs()
-
-        val util = TemplateUtil()
-        util.setReplacement(Vela.Base.Package to pckg)
-        util.setReplacement(Vela.Base.Root.Package to rootPackage)
-        util.setReplacement(Vela.Feature.Mutability.Enabled to CompileConfig.mutabilityEnabled.toString())
-
-        util.generateFile(root, FeatureUtil)
-        util.generateFile(root, IBuilder)
-        util.generateFile(root, IDependable)
-        util.generateFile(root, IEnableable)
-        util.generateFile(root, IFeature)
-        util.generateFile(root, IFeatureRoot)
-    }
-
-    protected fun generateRootCode(srcDir: File, pckg: String, tree: IFeatureTree) {
-        val rootDir = File(srcDir, pckg.replace('.', File.separatorChar))
+    protected fun generateBaseCode(targetDir: File, targetPackage: String) {
+        val rootDir = File(targetDir, targetPackage.replace('.', File.separatorChar))
         if (rootDir.exists().not())
             rootDir.mkdirs()
+
+        val vars = Variables()
+        vars[vela.pkg.root] = targetPackage
+        vars[vela.pkg.current] = targetPackage
+
+        loadKotlinTemplate("FeatureUtil", rootDir, vars)
+        loadKotlinTemplate("IFeature", rootDir, vars)
+        loadKotlinTemplate("IFeatureInternal", rootDir, vars)
+    }
+
+    protected fun generateRootCode(targetDir: File, targetPackage: String, tree: IFeatureTree) {
+        val rootDir = File(targetDir, targetPackage.replace('.', File.separatorChar))
+        if (rootDir.exists().not())
+            rootDir.mkdirs()
+
         rootNode = tree.rootNode
 
-        val util = TemplateUtil()
-        util.setReplacement(Vela.Base.Package to pckg)
-        util.setReplacement(Vela.Base.Root.Package to rootPackage)
-        util.setReplacementsFor(rootNode, ALL)
-        util.setReplacement(Vela.Feature.Mutability.Enabled to CompileConfig.mutabilityEnabled.toString())
+        val vars = Variables()
+        vars[vela.pkg.root] = targetPackage
+        vars[vela.pkg.current] = targetPackage
+        vars[vela.immutable] = CompileConfig.mutabilityEnabled.not().toString()
+        vars[vela.feature.children.n] = "0"
 
-        util.generateFile(rootDir, Features, ALL)
-        util.generateFile(rootDir, FeatureConfig, ALL)
+        vars.addChildren(rootNode.featureNodes.values.toList())
+        vars.addChildren(rootNode.subsetNodes.values.toList())
+
+        loadKotlinTemplate("FeatureConfig", rootDir, vars)
+
+        rootNode.subsetNodes.values.forEach { generateNodeCode(targetDir, targetPackage + "." + it.name, it) }
+        rootNode.featureNodes.values.forEach { generateNodeCode(targetDir, targetPackage + "." + it.name, it) }
     }
 
-    protected fun generateNodeCode(srcDir: File, pckg: String, node: INode.IDependingNode) {
-        val rootDir = File(srcDir, pckg.replace('.', File.separatorChar))
+    protected fun generateNodeCode(targetDir: File, targetPackage: String, node: INode.IDependingNode) {
+        val rootDir = File(targetDir, targetPackage.replace('.', File.separatorChar))
         if (rootDir.exists().not())
             rootDir.mkdirs()
 
-        val util = TemplateUtil()
-        util.setReplacement(Vela.Base.Package to pckg)
-        util.setReplacement(Vela.Base.Root.Package to rootPackage)
-        util.setReplacement(Vela.Feature.Mutability.Enabled to CompileConfig.mutabilityEnabled.toString())
-        util.setReplacementsFor(node, FEAT_FIELD)
+        val vars = Variables()
+        vars[vela.pkg.root] = rootPackage
+        vars[vela.pkg.current] = targetPackage
+        vars[vela.feature.children.n] = "0"
+        vars[vela.feature.implementation.n] = "0"
+        vars[vela.feature.dependent.n] = "0"
+        vars[vela.feature.dependency.n] = "0"
 
-        val builderClassFile = File(rootDir, "${node.name}FeatureBuilder.kt")
-        builderClassFile.writeText(util.loadPath(FeatureBuilderClass, FEATURE, 0))
-        val classFile = File(rootDir, "${node.name}Feature.kt")
-        classFile.writeText(util.loadPath(FeatureClass, FEATURE, 0))
+        vars[vela.feature.name] = node.name
+        vars[vela.feature.nameCapitalized] = node.name.capitalize()
+        vars[vela.feature.isDefault] = node.isDefaultEnabled.toString()
 
         if (node is INode.IDependingNode.IFeatureSetNode) {
-            node.featureNodes.values.forEach { generateNodeCode(srcDir, pckg + "." + node.name, it) }
-            node.subsetNodes.values.forEach { generateNodeCode(srcDir, pckg + "." + node.name, it) }
+            vars.addChildren(node.subsetNodes.values.toList())
+            vars.addChildren(node.featureNodes.values.toList())
+        } else if (node is INode.IDependingNode.IFeatureNode) {
+            vars.addImplementations(node.implNodes.values.toList())
+        }
+        vars.addDependencies(node.dependencyNodes.map { it.target }.filterNotNull().toList())
+        vars.addDependents(findDependentNodes(rootNode, node.absoluteName))
+
+        loadKotlinTemplate("BaseFeature", rootDir, vars, "${node.name.capitalize()}Feature")
+
+        if (node is INode.IDependingNode.IFeatureSetNode) {
+            node.featureNodes.values.forEach { generateNodeCode(targetDir, targetPackage + "." + it.name, it) }
+            node.subsetNodes.values.forEach { generateNodeCode(targetDir, targetPackage + "." + it.name, it) }
         }
     }
 
-    private fun loadFieldTemplate(node: INode.IDependingNode, filename: String, folder: String = BASE): String {
-        val templUtil = TemplateUtil()
-        templUtil.setReplacement(Vela.Feature.Name to node.name)
-        templUtil.setReplacement(Vela.Feature.Path to node.absoluteName)
-        return templUtil.loadPath(filename, folder, 1)
-    }
-
-    private fun findDependentNodes(node: INode.IDependingNode, absoluteName: String): List<INode.IDependingNode> {
+    private fun findDependentNodes(rootNode: INode.IDependingNode, requiredNodePath: String): List<INode.IDependingNode> {
         val toReturn = mutableListOf<INode.IDependingNode>()
-        when (node) {
+        when (rootNode) {
             is INode.IDependingNode.IFeatureSetNode -> {
-                toReturn.addAll(node.featureNodes.flatMap { findDependentNodes(it.value, absoluteName) })
-                toReturn.addAll(node.subsetNodes.flatMap { findDependentNodes(it.value, absoluteName) })
+                toReturn.addAll(rootNode.featureNodes.flatMap { findDependentNodes(it.value, requiredNodePath) })
+                toReturn.addAll(rootNode.subsetNodes.flatMap { findDependentNodes(it.value, requiredNodePath) })
             }
             is INode.IDependingNode.IFeatureNode    -> {
-                toReturn.addAll(node.implNodes.flatMap { findDependentNodes(it.value, absoluteName) })
+                toReturn.addAll(rootNode.implNodes.flatMap { findDependentNodes(it.value, requiredNodePath) })
             }
         }
-        if (node.dependencyNodes.any { it.name == absoluteName })
-            toReturn.add(node)
+        if (rootNode.dependencyNodes.any { it.name == requiredNodePath })
+            toReturn.add(rootNode)
 
         return toReturn
     }
 
-    //region Template Util Extensions
-    private fun TemplateUtil.generateFile(root: File, filename: String, folder: String = BASE) {
-        val fileContent = loadTemplate("kotlin/$folder/$filename")
-        val file = File(root, filename)
-        file.writeText(fileContent)
-    }
+    private fun loadKotlinTemplate(templateName: String, targetDir: File, vars: Variables, overrideFileName: String = templateName) {
+        val outFile = File(targetDir, "$overrideFileName.kt")
+        val input = javaClass
+            .classLoader
+            .getResourceAsStream("vtp/kotlin/$templateName.kt.vtp")
 
-    private fun TemplateUtil.loadPath(filename: String, folder: String = BASE, indent: Int = 1): String = loadTemplate("kotlin/$folder/$filename", indent)
+        if (input != null) {
+            val output = ITemplateParser
+                .getDefaultImplementation()
+                .parse(input)
+                .evaluate(vars)
 
-    private fun TemplateUtil.setReplacementsFor(node: INode.IDependingNode, codePath: String = FEAT_FIELD) {
-        setReplacement(Vela.Feature.Name to node.name)
-        setReplacement(Vela.Feature.Path to node.absoluteName)
-        setReplacement(Vela.Feature.Enabled to node.isDefaultEnabled.toString())
-
-        if (node.parent == null || node.parent == rootNode) {
-            setReplacement(Vela.Feature.Parent.Name to "")
-            setReplacement(Vela.Feature.Parent.Path to "")
-
-            setReplacement(Vela.Feature.Parent.Field.Instance to loadPath(ParentNullFieldTemplate, FEAT_FIELD, 1))
-            setReplacement(Vela.Feature.Parent.Field.Builder to loadPath(ParentNullFieldTemplate, FEAT_FIELD, 1))
-        } else {
-            setReplacement(Vela.Feature.Parent.Name to (node.parent?.name ?: ""))
-            setReplacement(Vela.Feature.Parent.Path to (node.parent?.absoluteName ?: ""))
-
-            setReplacement(Vela.Feature.Parent.Field.Instance to loadPath(ParentInstanceFieldTemplate, FEAT_FIELD, 1))
-            setReplacement(Vela.Feature.Parent.Field.Builder to loadPath(ParentBuilderFieldTemplate, FEAT_FIELD, 1))
-        }
-
-        setReplacement(Vela.Feature.Dependencies.List to node.dependencyNodes.joinToString(",\n") { "        root.${it.name}" })
-
-        val dependentNodes = findDependentNodes(rootNode, node.absoluteName)
-        setReplacement(Vela.Feature.Dependencies.Dependents.List to dependentNodes.joinToString(",\n") { "        root.${it.absoluteName}" })
-
-        when (node) {
-            is INode.IDependingNode.IFeatureSetNode     -> implSetReplacementsFor(node, codePath)
-            is INode.IDependingNode.IFeatureNode        -> implSetReplacementsFor(node, codePath)
-            is INode.IDependingNode.IImplementationNode -> implSetReplacementsFor(node, codePath)
+            outFile.writeText(output)
+        } else if (outFile.exists()) {
+            outFile.delete()
         }
     }
 
-    private fun TemplateUtil.implSetReplacementsFor(set: INode.IDependingNode.IFeatureSetNode, codePath: String = FEAT_FIELD) {
-        // set implementations code blank
-        setReplacement(Vela.Feature.Code.Optional.Builder.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Disable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Enable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Reset.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Implementation to "")
-
-        // Set values for children
-        setReplacement(Vela.Feature.Children.Sets.List to set.subsetNodes.values.joinToString(",\n") { it.name })
-        setReplacement(Vela.Feature.Children.Features.List to set.featureNodes.values.joinToString(",\n") { it.name })
-
-        setReplacement(Vela.Feature.Children.Implementations.Default to "")
-        setReplacement(Vela.Feature.Children.Implementations.List to "")
-
-        val subnodes = mutableListOf<INode.IDependingNode>()
-        subnodes.addAll(set.subsetNodes.values)
-        subnodes.addAll(set.featureNodes.values)
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Instance to subnodes.joinToString("\n") { loadFieldTemplate(it, InstanceFieldTemplate, codePath) })
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Builder to subnodes.joinToString("\n") { loadFieldTemplate(it, BuilderFieldTemplate, codePath) })
+    private fun Variables.addChildren(nodes: List<INode.IDependingNode>) {
+        addCollection(vela.feature.children.toString(), nodes)
     }
 
-    private fun TemplateUtil.implSetReplacementsFor(feat: INode.IDependingNode.IFeatureNode, codePath: String = FEAT_FIELD) {
-        // set implementations code blank
-        setReplacement(Vela.Feature.Code.Optional.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Builder.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Disable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Enable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Reset.Implementation to "")
+    private fun Variables.addImplementations(nodes: List<INode.IDependingNode.IImplementationNode>) {
+        addCollection(vela.feature.implementation.toString(), nodes)
 
-        // Set values for children
-        setReplacement(Vela.Feature.Children.Sets.List to "")
-        setReplacement(Vela.Feature.Children.Features.List to "")
-
-        setReplacement(Vela.Feature.Children.Implementations.Default to feat.implNodes.values.first { it.isDefaultEnabled }.name)
-        setReplacement(Vela.Feature.Children.Implementations.List to feat.implNodes.values.joinToString(",\n") { it.name })
-
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Instance to feat.implNodes.values.joinToString("\n") {
-            loadFieldTemplate(
-                it,
-                InstanceFieldTemplate,
-                codePath
-            )
-        })
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Builder to feat.implNodes.values.joinToString("\n") {
-            loadFieldTemplate(
-                it,
-                BuilderFieldTemplate,
-                codePath
-            )
-        })
+        nodes.forEachIndexed { index, node ->
+            val name = vela.feature.implementation.XXX.toString()
+                .replace("XXX", String.format("%03d", index + 1))
+            addCollection("$name.dependency", node.dependencyNodes.map { it.target }.filterNotNull().toList())
+            addCollection("$name.dependent", findDependentNodes(rootNode, node.absoluteName))
+        }
     }
 
-    private fun TemplateUtil.implSetReplacementsFor(impl: INode.IDependingNode.IImplementationNode, codePath: String = FEAT_FIELD) {
-        // set implementations code blank
-        setReplacement(Vela.Feature.Code.Optional.Builder.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Disable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Enable.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Reset.Implementation to "")
-        setReplacement(Vela.Feature.Code.Optional.Implementation to "")
-
-        // Set values for children
-        setReplacement(Vela.Feature.Children.Sets.List to "")
-        setReplacement(Vela.Feature.Children.Sets.List to "")
-
-        setReplacement(Vela.Feature.Children.Implementations.Default to "")
-        setReplacement(Vela.Feature.Children.Implementations.List to "")
-
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Instance to "")
-        setReplacement(Vela.Feature.Children.All.Code.Fields.Builder to "")
+    private fun Variables.addDependents(nodes: List<INode.IDependingNode>) {
+        addCollection(vela.feature.dependent.toString(), nodes)
     }
-    //endregion Template Util Extensions
+
+    private fun Variables.addDependencies(nodes: List<INode.IDependingNode>) {
+        addCollection(vela.feature.dependency.toString(), nodes)
+    }
+
+    private fun Variables.addCollection(name: String, nodes: List<INode.IDependingNode>) {
+        var currentCount = getOrDefault("$name.n", "0").toInt()
+        nodes.forEach {
+            currentCount++
+            put(String.format("%s.%03d.name", name, currentCount), it.name)
+            put(String.format("%s.%03d.nameCapitalized", name, currentCount), it.name.capitalize())
+            put(String.format("%s.%03d.path", name, currentCount), it.absoluteName)
+            put(String.format("%s.%03d.isDefault", name, currentCount), it.isDefaultEnabled.toString())
+        }
+        put("$name.n", currentCount.toString())
+    }
 }

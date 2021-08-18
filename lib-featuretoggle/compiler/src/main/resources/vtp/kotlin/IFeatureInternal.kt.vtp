@@ -1,0 +1,13 @@
+package {{vela.pkg.current}}
+
+internal interface IFeatureInternal : IFeature \{
+    val dependencies: List<IFeature>
+    val dependent: List<IFeature>
+
+    val parent: IFeature?
+    val root: FeatureConfig
+
+    fun initialize()
+    fun finishConfiguration()
+    fun lock()
+\}

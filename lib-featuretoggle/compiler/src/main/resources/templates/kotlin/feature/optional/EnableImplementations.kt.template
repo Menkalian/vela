@@ -1,6 +1,0 @@
-{{Vela.Feature.Name}}Implementation.values().forEach {
-    it.currentActive = true
-
-    if(it.isEnabled)
-        ensureFeatures(it.dependencies)
-}

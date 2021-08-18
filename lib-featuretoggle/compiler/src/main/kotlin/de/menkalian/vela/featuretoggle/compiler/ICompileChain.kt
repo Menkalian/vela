@@ -41,5 +41,6 @@ interface ICompileChain {
 }
 
 fun main() {
-    ICompileChain.create(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\test\\resources\\test_parse.xml")).compile(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\main\\kotlin"), "me.kilian.test")
+    ICompileChain.create(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\test\\resources\\test_parse.xml"))
+        .compile(File("D:\\Projects\\Kotlin\\vela\\lib-featuretoggle\\compiler\\src\\main\\kotlin"), "me.kilian.test")
 }

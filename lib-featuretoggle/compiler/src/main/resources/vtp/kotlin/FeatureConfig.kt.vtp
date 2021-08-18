@@ -1,0 +1,50 @@
+package {{vela.pkg.current}}
+
+{FOR {X} IN {1} TO {vela.feature.children.n} {
+import {{vela.pkg.current}}.{{vela.feature.children.XXX.name}}.{{vela.feature.children.XXX.nameCapitalized}}Feature
+import {{vela.pkg.current}}.{{vela.feature.children.XXX.name}}.{{vela.feature.children.XXX.nameCapitalized}}Feature.{{vela.feature.children.XXX.nameCapitalized}}FeatureInternal
+}}
+
+abstract class FeatureConfig \{
+    class DefaultFeatureConfig(val config: DefaultFeatureConfig.() -> Unit) : FeatureConfig() \{
+        override fun configure() \{
+            config()
+        \}
+    \}
+
+    init \{
+        this.initialize()
+        this.configure()
+        this.finishConfiguration()
+        this.lock()
+    \}
+
+    {FOR {X} IN {1} TO {vela.feature.children.n} {
+    private val {{vela.feature.children.XXX.name}}Internal: {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal = {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal(this, null)
+    val {{vela.feature.children.XXX.name}}: {{vela.feature.children.XXX.nameCapitalized}}Feature
+        get() = {{vela.feature.children.XXX.name}}Internal
+    }}
+
+    fun initialize() \{
+        // Initialize Children
+        {FOR {X} IN {1} TO {vela.feature.children.n} {
+        {{vela.feature.children.XXX.name}}Internal.initialize()
+        }}
+    \}
+
+    abstract fun configure()
+
+    fun finishConfiguration() \{
+        {FOR {X} IN {1} TO {vela.feature.children.n} {
+        {{vela.feature.children.XXX.name}}Internal.finishConfiguration()
+        }}
+    \}
+
+    fun lock() \{
+        {IF {vela.immutable} {
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.lock()
+            }}
+        }}
+    \}
+\}

@@ -1,8 +1,0 @@
-package {{Vela.Base.Package}}
-
-interface IEnableable {
-    val isEnabled: Boolean
-
-    fun enable() : IEnableable
-    fun disable() : IEnableable
-}

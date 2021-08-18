@@ -1,0 +1,249 @@
+package {{vela.pkg.current}}
+
+import {{vela.pkg.root}}.FeatureConfig
+import {{vela.pkg.root}}.IFeature
+import {{vela.pkg.root}}.IFeatureInternal
+import {{vela.pkg.root}}.ensureDisabled
+import {{vela.pkg.root}}.ensureFeatures
+import {{vela.pkg.root}}.FeaturesImmutableException
+{FOR {X} IN {1} TO {vela.feature.children.n} {
+import {{vela.pkg.current}}.{{vela.feature.children.XXX.name}}.{{vela.feature.children.XXX.nameCapitalized}}Feature
+import {{vela.pkg.current}}.{{vela.feature.children.XXX.name}}.{{vela.feature.children.XXX.nameCapitalized}}Feature.{{vela.feature.children.XXX.nameCapitalized}}FeatureInternal
+}}
+&SET{enable.implementation}{&IS_GREATER{{{vela.feature.implementation.n}}}{0}}
+
+import java.util.concurrent.atomic.AtomicBoolean
+
+abstract class {{vela.feature.nameCapitalized}}Feature : IFeature \{
+    abstract override fun enable(): {{vela.feature.nameCapitalized}}Feature
+    abstract override fun disable(): {{vela.feature.nameCapitalized}}Feature
+    abstract override fun enableRecursive(): {{vela.feature.nameCapitalized}}Feature
+    abstract override fun disableRecursive(): {{vela.feature.nameCapitalized}}Feature
+
+    {FOR {X} IN {1} TO {vela.feature.children.n} {
+    abstract val {{vela.feature.children.XXX.name}}: {{vela.feature.children.XXX.nameCapitalized}}Feature
+    }}
+    {IF {enable.implementation} {
+    interface {{vela.feature.nameCapitalized}}FeatureImplementation : IFeature \{
+        override fun enable(): {{vela.feature.nameCapitalized}}FeatureImplementation
+        override fun disable(): {{vela.feature.nameCapitalized}}FeatureImplementation
+        override fun enableRecursive(): {{vela.feature.nameCapitalized}}FeatureImplementation
+        override fun disableRecursive(): {{vela.feature.nameCapitalized}}FeatureImplementation
+    \}
+
+    abstract val activeImplementation: {{vela.feature.nameCapitalized}}FeatureImplementation
+
+    {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+    abstract val {{vela.feature.implementation.XXX.name}}: {{vela.feature.nameCapitalized}}FeatureImplementation
+    {IF {vela.feature.implementation.XXX.isDefault} {&SET{default.implementation.name}{{{vela.feature.implementation.XXX.name}}}}}
+    }}
+    }}
+
+    class {{vela.feature.nameCapitalized}}FeatureInternal(override val root: FeatureConfig, override val parent: IFeature?) : {{vela.feature.nameCapitalized}}Feature(), IFeatureInternal \{
+        {FOR {X} IN {1} TO {vela.feature.children.n} {
+        private val {{vela.feature.children.XXX.name}}Internal: {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal = {{vela.feature.children.XXX.nameCapitalized}}FeatureInternal(root, this)
+        override val {{vela.feature.children.XXX.name}}: {{vela.feature.children.XXX.nameCapitalized}}Feature
+            get() = {{vela.feature.children.XXX.name}}Internal
+        }}
+
+        {IF {enable.implementation} {
+        init \{
+            {{vela.feature.nameCapitalized}}FeatureImplementationInternal.parent = this
+            {{vela.feature.nameCapitalized}}FeatureImplementationInternal.root = root
+        \}
+
+        {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+        override val {{vela.feature.implementation.XXX.name}}: {{vela.feature.nameCapitalized}}FeatureImplementationInternal = {{vela.feature.nameCapitalized}}FeatureImplementationInternal.{{vela.feature.implementation.XXX.name}}
+        }}
+
+        var activeImplementationInternal: {{vela.feature.nameCapitalized}}FeatureImplementationInternal = {{default.implementation.name}}
+        override val activeImplementation: {{vela.feature.nameCapitalized}}FeatureImplementationInternal
+                    get() = activeImplementationInternal
+        }}
+
+        private val dependenciesInternal: MutableList<IFeature> = mutableListOf()
+        override val dependencies: List<IFeature>
+            get() = dependenciesInternal
+
+        private val dependentInternal: MutableList<IFeature> = mutableListOf()
+        override val dependent: List<IFeature>
+            get() = dependentInternal
+
+        private val internalEnabled: AtomicBoolean = AtomicBoolean({IF {vela.feature.isDefault} {true} ELSE {false}})
+        override val isEnabled: Boolean
+            get() = internalEnabled.get()
+
+        private val internalConfigured: AtomicBoolean = AtomicBoolean(false)
+        private val internalLocked: AtomicBoolean = AtomicBoolean(false)
+
+        override fun initialize() \{
+            // fill dependents
+            {FOR {X} IN {1} TO {vela.feature.dependent.n} {
+            dependentInternal.add(root.{{vela.feature.dependent.XXX.path}})
+            }}
+
+            // fill dependencies
+            {FOR {X} IN {1} TO {vela.feature.dependency.n} {
+            dependenciesInternal.add(root.{{vela.feature.dependency.XXX.path}})
+            }}
+
+            // Initialize Children
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.initialize()
+            }}
+            {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+            {{vela.feature.implementation.XXX.name}}.initialize()
+            }}
+        \}
+
+        override fun finishConfiguration() \{
+            if (isEnabled) \{
+                ensureFeatures(dependencies)
+            \}
+            internalConfigured.set(true)
+
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.finishConfiguration()
+            }}
+            {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+            {{vela.feature.implementation.XXX.name}}.finishConfiguration()
+            }}
+        \}
+
+        override fun lock() \{
+            internalLocked.set(true)
+
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.lock()
+            }}
+            {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+            {{vela.feature.implementation.XXX.name}}.lock()
+            }}
+        \}
+
+        override fun enable(): {{vela.feature.nameCapitalized}}FeatureInternal \{
+            if (internalLocked.get()) \{
+                throw FeaturesImmutableException()
+            \} else \{
+                if (internalConfigured.get())
+                    ensureFeatures(dependencies)
+                internalEnabled.set(true)
+            \}
+            return this
+        \}
+
+        override fun disable(): {{vela.feature.nameCapitalized}}FeatureInternal \{
+            if (internalLocked.get()) \{
+                throw FeaturesImmutableException()
+            \} else \{
+                if (internalConfigured.get())
+                    ensureDisabled(dependent)
+                internalEnabled.set(false)
+            \}
+            return this
+        \}
+
+        override fun enableRecursive(): {{vela.feature.nameCapitalized}}FeatureInternal \{
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.enableRecursive()
+            }}
+
+            return enable()
+        \}
+
+        override fun disableRecursive(): {{vela.feature.nameCapitalized}}FeatureInternal \{
+            {FOR {X} IN {1} TO {vela.feature.children.n} {
+            {{vela.feature.children.XXX.name}}Internal.disableRecursive()
+            }}
+
+            return disable()
+        \}
+
+        {IF {enable.implementation} {
+        enum class {{vela.feature.nameCapitalized}}FeatureImplementationInternal(intEnabled: Boolean) : {{vela.feature.nameCapitalized}}FeatureImplementation, IFeatureInternal \{
+            {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+            {{vela.feature.implementation.XXX.name}}({{vela.feature.implementation.XXX.isDefault}}),
+            }};
+
+            companion object \{
+                lateinit var parent: {{vela.feature.nameCapitalized}}FeatureInternal
+                lateinit var root: FeatureConfig
+            \}
+
+            override val parent: IFeature?
+                get() = Companion.parent
+            override val root: FeatureConfig
+                get() = Companion.root
+
+            private val dependenciesInternal: MutableList<IFeature> = mutableListOf()
+            override val dependencies: List<IFeature>
+                get() = dependenciesInternal
+
+            private val dependentInternal: MutableList<IFeature> = mutableListOf()
+            override val dependent: List<IFeature>
+                get() = dependentInternal
+
+            private val internalEnabled: AtomicBoolean = AtomicBoolean(intEnabled)
+            override val isEnabled: Boolean
+                get() = internalEnabled.get()
+
+            private val internalConfigured: AtomicBoolean = AtomicBoolean(false)
+            private val internalLocked: AtomicBoolean = AtomicBoolean(false)
+
+            override fun initialize() \{
+                when(this) \{
+                    {FOR {X} IN {1} TO {vela.feature.implementation.n} {
+                    {{vela.feature.implementation.XXX.name}} -> \{
+                        // fill dependents
+                        {FOR {Y} IN {1} TO {vela.feature.implementation.XXX.dependent.n} {
+                        dependentInternal.add(root.{{vela.feature.implementation.XXX.dependent.YYY.path}})
+                        }}
+
+                        // fill dependencies
+                        {FOR {Y} IN {1} TO {vela.feature.implementation.XXX.dependency.n} {
+                        dependenciesInternal.add(root.{{vela.feature.implementation.XXX.dependency.YYY.path}})
+                        }}
+                    \}
+                    }}
+                \}
+            \}
+
+            override fun finishConfiguration() \{
+                if (isEnabled) \{
+                    ensureFeatures(dependencies)
+                \}
+                internalConfigured.set(true)
+            \}
+
+            override fun lock() \{
+                internalLocked.set(true)
+            \}
+
+            override fun enable(): {{vela.feature.nameCapitalized}}FeatureImplementationInternal \{
+                if (internalLocked.get()) \{
+                    throw FeaturesImmutableException()
+                \} else \{
+                    if (internalConfigured.get())
+                        ensureFeatures(dependencies)
+                    Companion.parent.activeImplementation.internalEnabled.set(false)
+                    Companion.parent.activeImplementationInternal = this
+                    internalEnabled.set(true)
+                \}
+                return this
+            \}
+
+            override fun disable(): {{vela.feature.nameCapitalized}}FeatureImplementationInternal \{
+                throw UnsupportedOperationException("You may only disable a implementation by activating another")
+            \}
+
+            override fun enableRecursive(): {{vela.feature.nameCapitalized}}FeatureImplementationInternal \{
+                return enable()
+            \}
+
+            override fun disableRecursive(): {{vela.feature.nameCapitalized}}FeatureImplementationInternal \{
+                return disable()
+            \}
+        \}
+        }}
+    \}
+\}

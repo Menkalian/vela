@@ -1,0 +1,10 @@
+package {{vela.pkg.current}}
+
+interface IFeature \{
+    val isEnabled: Boolean
+
+    fun enable() : IFeature
+    fun disable() : IFeature
+    fun enableRecursive() : IFeature
+    fun disableRecursive() : IFeature
+\}

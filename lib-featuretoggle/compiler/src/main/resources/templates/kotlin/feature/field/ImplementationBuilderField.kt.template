@@ -1,1 +1,0 @@
-val {{Vela.Feature.Name}} = {{Vela.Feature.Name}}BuilderImplementation("{{Vela.Feature.Name}}", {{Vela.Feature.Enabled}})

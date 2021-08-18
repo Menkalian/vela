@@ -1,7 +1,0 @@
-package {{Vela.Base.Package}}
-
-interface IBuilder<T> {
-    fun reset(): IBuilder<T>
-
-    fun build(root: Features): T
-}
