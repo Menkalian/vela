@@ -8,18 +8,7 @@ import org.gradle.api.tasks.SourceSetContainer
 
 open class BuildconfigGradlePlugin : Plugin<Project> {
     override fun apply(target: Project) {
-        target.afterEvaluate {
-            val generationTask = target.tasks.create("generateBuildConfig", BuildconfigTask::class.java)
-
-            target.pluginManager.withPlugin("java") {
-                target.sourceSets().getByName("main").java.srcDir(generationTask.outputDir)
-
-                target.tasks.getByName("compileJava").dependsOn(generationTask)
-            }
-            target.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-                target.tasks.getByName("compileKotlin").dependsOn(generationTask)
-            }
-        }
+        target.tasks.create("generateBuildConfig", BuildconfigTask::class.java)
     }
 }
 
