@@ -185,7 +185,7 @@ abstract class {{vela.feature.nameCapitalized}}Feature : IFeature \{
 
             private val internalEnabled: AtomicBoolean = AtomicBoolean(intEnabled)
             override val isEnabled: Boolean
-                get() = internalEnabled.get()
+                get() = internalEnabled.get() && parent?.isEnabled ?: false
 
             private val internalConfigured: AtomicBoolean = AtomicBoolean(false)
             private val internalLocked: AtomicBoolean = AtomicBoolean(false)
