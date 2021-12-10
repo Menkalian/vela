@@ -30,9 +30,8 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            url = uri("http://server.menkalian.de:8081/artifactory/vela")
+            setUrl("https://artifactory.menkalian.de/artifactory/menkalian")
             name = "artifactory-menkalian"
-            isAllowInsecureProtocol = true
         }
     }
 }

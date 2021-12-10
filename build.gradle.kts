@@ -34,9 +34,8 @@ allprojects {
         extensions.getByType(PublishingExtension::class.java).apply {
             repositories {
                 maven {
-                    url = uri("http://server.menkalian.de:8081/artifactory/vela")
+                    setUrl("https://artifactory.menkalian.de/artifactory/vela")
                     name = "artifactory-menkalian"
-                    isAllowInsecureProtocol = true
                     credentials {
                         username = System.getenv("MAVEN_REPO_USER")
                         password = System.getenv("MAVEN_REPO_PASS")
