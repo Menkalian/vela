@@ -6,6 +6,7 @@ stages:
 default:
   image: openjdk:15
   before_script:
+    - printenv
     - chmod +x gradlew
   tags:
     - docker
@@ -41,7 +42,7 @@ test:
 publish:
   stage: deploy
   only:
-    - main
+    - master
   script:
     - ./gradlew publish
   artifacts:
