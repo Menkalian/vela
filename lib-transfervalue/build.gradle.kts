@@ -5,8 +5,6 @@ plugins {
     jacoco
 }
 
-version = "1.0.0"
-
 publishing {
     publications {
         create<MavenPublication>("maven") {

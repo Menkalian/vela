@@ -7,8 +7,6 @@ plugins {
     `maven-publish`
 }
 
-version = "1.1.0"
-
 gradlePlugin {
     plugins {
         create("versioningPlugin") {

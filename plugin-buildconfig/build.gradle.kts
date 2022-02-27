@@ -6,8 +6,6 @@ plugins {
     jacoco
 }
 
-version = "1.0.1"
-
 gradlePlugin {
     plugins {
         create("keygenPlugin") {

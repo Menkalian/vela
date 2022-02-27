@@ -12,8 +12,6 @@ tasks.test {
     testLogging.showStandardStreams = true
 }
 
-version = "1.2.1"
-
 gradlePlugin {
     plugins {
         create("keygenPlugin") {
