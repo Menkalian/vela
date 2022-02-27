@@ -41,4 +41,4 @@ There are also operators for manipulating strings:&OFF{&SET{String.Variable}{NOP
 
 The following examples will show you how to work with these variables.
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}

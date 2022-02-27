@@ -30,4 +30,4 @@ The while-loop is executed while its condition is true.
 }
 {WHILE {&NOT{&IS_EQUAL{{{Value.XXX}}}{0}}} { `{IF {&DEFINED{Value.XXX}} {{{Value.XXX}}} ELSE { }}`, &INC{X}}}
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}

@@ -17,4 +17,4 @@ Here is an example: &OFF{
 `{{POSITION_1_X}}`,
 `{{POSITION_1_Y}}`
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}

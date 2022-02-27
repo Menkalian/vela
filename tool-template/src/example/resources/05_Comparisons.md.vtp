@@ -7,4 +7,4 @@ These are the comparison operators:
  * `&IS_GREQ{aaab}{aaaa}`
  * `&IS_GREATER{bbbb}{aaaa}`
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}

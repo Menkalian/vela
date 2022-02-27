@@ -45,4 +45,4 @@ And lastly there is a `NOT` operator:
  * `&NOT{1}`
  * `&NOT{No.Variable}`
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}
