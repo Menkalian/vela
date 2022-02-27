@@ -42,10 +42,23 @@ test:
 publish:
   stage: deploy
   only:
-    - master
+    - main
+    - tags
   script:
     - ./gradlew publish
   artifacts:
     paths:
       - ./*/build/libs/*.jar
     expire_in: 1 month
+
+pages:
+  stage: deploy
+  only:
+    - main
+    - tags
+  script:
+    - ./gradlew dokkaHtmlMultiModule
+    - cp -r build/dokka/htmlMultiModule public
+  artifacts:
+    paths:
+      - public
