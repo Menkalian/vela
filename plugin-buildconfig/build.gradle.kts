@@ -4,6 +4,7 @@ plugins {
     id("com.gradle.plugin-publish")
     `maven-publish`
     jacoco
+    id("org.jetbrains.dokka")
 }
 
 gradlePlugin {

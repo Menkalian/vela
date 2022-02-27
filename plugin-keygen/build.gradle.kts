@@ -3,6 +3,7 @@
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
+    id("org.jetbrains.dokka")
     id("com.gradle.plugin-publish")
     `maven-publish`
     jacoco
