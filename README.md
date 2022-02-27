@@ -6,7 +6,7 @@ The name *vela* means **sail** and I chose it, because these tool should acceler
 
 ## Using *vela*
 
-To use components from *vela* in your projects you can utilize the prebuilt versions from my [artifactory](https://artifactory.menkalian.de).
+To use components from *vela* in your projects you can get prebuilt artifacts from my [artifactory](https://artifactory.menkalian.de) or build them yourself.
 
 To include any libraries use the following declaration in your `build.gradle[.kts]`:
 
