@@ -1,0 +1,58 @@
+path=build.gradle.kts
+type=TEXT
+content=
+plugins {
+    java
+    kotlin("jvm") version "1.6.10"
+    id("de.menkalian.vela.buildconfig")
+}
+
+group = "de.menkalian.vela"
+version = "69.42.alpha-3"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+}
+
+tasks.test {
+    testLogging.showStandardStreams = true
+    useJUnitPlatform()
+}
+
+buildconfig {
+    targetPackage.set("de.menkalian.vela.test")
+}
+
+---
+path=src/main/java/de/menkalian/vela/test/Main.java
+type=TEXT
+content=
+package de.menkalian.vela.test;
+
+public class Main {
+    public static void main(String[] args) {}
+}
+---
+path=src/test/kotlin/de/menkalian/vela/test/MainTest.kt
+type=TEXT
+content=
+package de.menkalian.vela.test
+
+import de.menkalian.vela.test.BuildConfig
+import org.junit.jupiter.api.Test
+
+class MainTest {
+    @Test
+    fun printVariables() {
+        println("Output 1: " + BuildConfig.group)
+        println("Output 2: " + BuildConfig.module)
+        println("Output 3: " + BuildConfig.version)
+    }
+}
