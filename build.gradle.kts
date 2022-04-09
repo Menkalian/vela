@@ -12,11 +12,11 @@ plugins {
     id("org.jetbrains.dokka") version kotlinVersion
     id("com.gradle.plugin-publish") version gradlePublishVersion apply false
 
-    val usingVelaVersion = "2.0.0"
-    id("de.menkalian.vela.buildconfig") version "1.0.1" apply false
-    id("de.menkalian.vela.featuretoggle") version "1.0.1" apply false
-    id("de.menkalian.vela.keygen") version "1.2.1" apply false
-    id("de.menkalian.vela.versioning") version "1.1.0" apply false
+    val usingVelaVersion = "2.0.0-alpha3"
+    id("de.menkalian.vela.buildconfig") version usingVelaVersion apply false
+    id("de.menkalian.vela.featuretoggle") version usingVelaVersion apply false
+    id("de.menkalian.vela.keygen") version usingVelaVersion apply false
+    id("de.menkalian.vela.versioning") version usingVelaVersion apply false
 }
 
 
