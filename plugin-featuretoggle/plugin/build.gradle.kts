@@ -1,5 +1,7 @@
 @file:Suppress("SpellCheckingInspection")
 
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
@@ -22,6 +24,10 @@ gradlePlugin {
             description = ""
         }
     }
+}
+
+tasks.withType(DokkaTaskPartial::class.java).configureEach {
+    moduleName.set("plugin-featuretoggle")
 }
 
 dependencies {

@@ -1,5 +1,3 @@
-import java.net.URL
-
 plugins {
     java
     kotlin("jvm")
@@ -7,7 +5,7 @@ plugins {
     jacoco
 
     id("org.jetbrains.dokka")
-    id("de.menkalian.vela.keygen") version "1.2.1"
+    id("de.menkalian.vela.keygen")
 }
 
 tasks.test {
@@ -20,6 +18,10 @@ dependencies {
 
 keygen {
     finalLayerAsString = true
+}
+
+tasks.withType(org.jetbrains.dokka.gradle.DokkaTaskPartial::class.java).configureEach {
+    moduleName.set("lib-featuretoggle-compiler")
 }
 
 publishing {
