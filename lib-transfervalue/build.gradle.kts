@@ -1,9 +1,11 @@
 plugins {
     java
-    kotlin("jvm")
-    kotlin("plugin.serialization")
     `maven-publish`
     jacoco
+
+    kotlin("jvm")
+    kotlin("plugin.serialization")
+
     id("org.jetbrains.dokka")
 }
 

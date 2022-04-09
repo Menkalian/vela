@@ -1,12 +1,11 @@
 package de.menkalian.vela
 
-import de.menkalian.vela.TransferableValue.TransferableValueType.BIG_INTEGER
 import de.menkalian.vela.TransferableValue.TransferableValueType.BINARY
+import de.menkalian.vela.TransferableValue.TransferableValueType.BOOLEAN
 import de.menkalian.vela.TransferableValue.TransferableValueType.DOUBLE
 import de.menkalian.vela.TransferableValue.TransferableValueType.INTEGER
 import de.menkalian.vela.TransferableValue.TransferableValueType.LONG
 import de.menkalian.vela.TransferableValue.TransferableValueType.STRING
-import java.math.BigInteger
 import kotlin.math.max
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -17,11 +16,17 @@ import kotlin.math.roundToLong
  *
  * @constructor Creates an instance from the given value. It is **not** recommended using the constructor directly. You should use the various `from` methods instead.
  */
+@Suppress("unused")
 @kotlinx.serialization.Serializable
 data class TransferableValue(val type: TransferableValueType, val value: String) {
     companion object {
         /**
-         * Creates an instance with type `STRING`
+         * Creates an instance with type `TransferableValue.BOOLEAN`
+         */
+        fun from(boolean: Boolean) = TransferableValue(BOOLEAN, boolean.toString())
+
+        /**
+         * Creates an instance with type `TransferableValue.STRING`
          */
         fun from(str: String) = TransferableValue(STRING, str)
 
@@ -46,15 +51,10 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
         fun from(bytes: ByteArray) = TransferableValue(BINARY, bytes.toHexString())
 
         /**
-         * Creates an instance with type `TransferableValue.BIG_INTEGER`
-         */
-        fun from(bigint: BigInteger) = TransferableValue(BIG_INTEGER, bigint.toByteArray().toHexString())
-
-        /**
          * Represents the content of an `ByteArray` as a hexadecimal String
          */
         private fun ByteArray.toHexString(): String {
-            return joinToString("") { String.format("%02X", it) }
+            return joinToString("") { it.toUByte().toString(16) }
         }
 
         /**
@@ -78,18 +78,46 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
     override fun toString() = value
 
     /**
+     * Tries to interpret this value as Boolean and returns it.
+     */
+    fun toBoolean(strict: Boolean = false): Boolean {
+        if (strict) {
+            return when (type) {
+                BOOLEAN -> value.toBooleanStrict()
+                else    -> {
+                    if (value == "1")
+                        true
+                    else if (value == "0")
+                        false
+                    else
+                        throw RuntimeException("No strict conversion to boolean available")
+                }
+            }
+        } else {
+            return when (type) {
+                BOOLEAN -> value.toBoolean()
+                STRING  -> value.toBoolean()
+                BINARY  -> toByteArray().any { it.toInt() != 0 }
+                INTEGER -> toInt() != 0
+                LONG    -> toLong() != 0L
+                DOUBLE  -> toDouble() != 0.0 && !toDouble().isNaN()
+            }
+        }
+    }
+
+    /**
      * Tries to interpret this value as Integer and returns it.
      *
      * @throws UnsupportedOperationException if the value can not be converted to an Integer
      */
     fun toInt(): Int =
         when (type) {
-            BINARY      -> value.substring(max(0, value.length - 8)).toInt(16)
-            INTEGER     -> value.toInt()
-            LONG        -> toLong().toInt()
-            DOUBLE      -> toDouble().roundToInt()
-            BIG_INTEGER -> toBigInteger().toInt()
-            else        -> throw UnsupportedOperationException("Can't interpret $type as Int")
+            BOOLEAN -> if (toBoolean()) 1 else 0
+            STRING  -> value.toInt()
+            BINARY  -> value.substring(max(0, value.length - 8)).toInt(16)
+            INTEGER -> value.toInt()
+            LONG    -> toLong().toInt()
+            DOUBLE  -> toDouble().roundToInt()
         }
 
     /**
@@ -99,12 +127,12 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
      */
     fun toLong(): Long =
         when (type) {
-            BINARY      -> value.substring(max(0, value.length - 16)).toLong(16)
-            INTEGER     -> value.toLong()
-            LONG        -> value.toLong()
-            DOUBLE      -> toDouble().roundToLong()
-            BIG_INTEGER -> toBigInteger().toLong()
-            else        -> throw UnsupportedOperationException("Can't interpret $type as Long")
+            BOOLEAN -> if (toBoolean()) 1 else 0
+            STRING  -> value.toLong()
+            BINARY  -> value.substring(max(0, value.length - 16)).toLong(16)
+            INTEGER -> value.toLong()
+            LONG    -> value.toLong()
+            DOUBLE  -> toDouble().roundToLong()
         }
 
     /**
@@ -114,11 +142,12 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
      */
     fun toDouble(): Double =
         when (type) {
-            INTEGER     -> value.toDouble()
-            LONG        -> toLong().toDouble()
-            DOUBLE      -> value.toDouble()
-            BIG_INTEGER -> toBigInteger().toDouble()
-            else        -> throw UnsupportedOperationException("Can't interpret $type as Double")
+            BOOLEAN -> if (toBoolean()) 1.0 else 0.0
+            STRING  -> value.toDouble()
+            INTEGER -> value.toDouble()
+            DOUBLE  -> value.toDouble()
+            LONG    -> toLong().toDouble()
+            BINARY  -> Double.fromBits(toLong())
         }
 
     /**
@@ -128,44 +157,30 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
      */
     fun toByteArray(): ByteArray =
         when (type) {
-            BINARY      -> value.parseHex()
-            INTEGER     -> (3 downTo 0).map { toInt().shr(8 * it).toByte() }.toByteArray()
-            LONG        -> (7 downTo 0).map { toLong().shr(8 * it).toByte() }.toByteArray()
-            BIG_INTEGER -> value.parseHex()
-            else        -> throw UnsupportedOperationException("Can't interpret $type as binary data")
-        }
-
-    /**
-     * Tries to interpret this value as BigInteger and returns it.
-     *
-     * @throws UnsupportedOperationException if the value can not be converted to a BigInteger
-     */
-    fun toBigInteger(): BigInteger =
-        when (type) {
-            BINARY      -> BigInteger(toByteArray())
-            INTEGER     -> BigInteger.valueOf(toLong())
-            LONG        -> BigInteger.valueOf(toLong())
-            DOUBLE      -> BigInteger.valueOf(toLong())
-            BIG_INTEGER -> BigInteger(toByteArray())
-            else        -> throw UnsupportedOperationException("Can't interpret $type as big Integer")
+            BOOLEAN -> if (toBoolean()) arrayOf(1.toByte()).toByteArray() else arrayOf(0.toByte()).toByteArray()
+            STRING                        -> value.encodeToByteArray()
+            BINARY  -> value.parseHex()
+            INTEGER -> (3 downTo 0).map { toInt().shr(8 * it).toByte() }.toByteArray() // BIG ENDIAN
+            LONG    -> (7 downTo 0).map { toLong().shr(8 * it).toByte() }.toByteArray()
+            DOUBLE  -> (7 downTo 0).map { toDouble().toRawBits().shr(8 * it).toByte() }.toByteArray()
         }
 
     /**
      * Defines all possible types which can be represented in an object
      *
+     * @property BOOLEAN True/False value. Saved by it's string value
      * @property STRING Plain String/Text. The saved representation is identical to the value
      * @property BINARY Raw/Binary data. It is saved as hexadecimal string.
      * @property INTEGER 32-bit Integer. Saved as decimal string.
      * @property LONG 64-bit Integer. Saved as decimal string.
      * @property DOUBLE 64-bit floating point. Saved as decimal string.
-     * @property BIG_INTEGER unlimited size
      */
     enum class TransferableValueType {
+        BOOLEAN,
         STRING,
         BINARY,
         INTEGER,
         LONG,
-        DOUBLE,
-        BIG_INTEGER
+        DOUBLE
     }
 }
