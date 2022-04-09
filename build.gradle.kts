@@ -8,6 +8,7 @@ plugins {
     val gradlePublishVersion = "0.20.0"
 
     kotlin("jvm") version kotlinVersion apply false
+    kotlin("plugin.serialization") version kotlinVersion apply false
     id("org.jetbrains.dokka") version kotlinVersion
     id("com.gradle.plugin-publish") version gradlePublishVersion apply false
 
@@ -79,6 +80,12 @@ allprojects {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
                 this.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
             }
+        }
+    }
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.plugin.serialization") {
+        dependencies {
+            add("implementation", "org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2")
         }
     }
 
