@@ -54,7 +54,7 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
          * Represents the content of an `ByteArray` as a hexadecimal String
          */
         private fun ByteArray.toHexString(): String {
-            return joinToString("") { it.toUByte().toString(16) }
+            return joinToString("") { it.toUByte().toString(16).padStart(2, '0').uppercase() }
         }
 
         /**
