@@ -27,6 +27,7 @@ import de.menkalian.vela.template.evaluator.node.unary.AddSpacerOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.ClearOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.DecrementOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.DefinedOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.IncludeOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IncrementOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsBooleanOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsNumericOperatorNode
@@ -287,13 +288,7 @@ class DefaultTemplateParser : ITemplateParser {
     }
 
     private fun initOperators() {
-        addOperator("INCLUDE", TEXT) {
-            val includeFile = File(System.getProperty("user.dir") + File.separator + it.getValue(Variables()))
-
-            DefaultTemplateParser()
-                .parse(includeFile)
-                .rootNode
-        }
+        addOperator("INCLUDE", TEXT) { IncludeOperatorNode(it) }
         addOperator("OFF", TEXT) { OffOperatorNode(it) }
 
         addOperator("ADD_SPACER", TEXT) { AddSpacerOperatorNode(it) }
