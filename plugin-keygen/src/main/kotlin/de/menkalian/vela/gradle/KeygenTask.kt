@@ -101,10 +101,10 @@ open class KeygenTask : DefaultTask() {
                             ""
                         }
 
-                    logger.lifecycle(keyTree.toString())
-                    logger.lifecycle(parent)
+                    logger.info("Read keys tree: $keyTree")
+                    logger.debug("Parent for tree: $parent")
                     val vars = compileSource(keyTree, parent)
-                    logger.lifecycle(vars.toString())
+                    logger.debug("Template input variables: $vars")
                     val clazz: String
                     try {
                         clazz = keyClassTemplate.evaluate(vars)
@@ -124,6 +124,7 @@ open class KeygenTask : DefaultTask() {
          * Generates basic file
          */
         private fun generateBase() {
+            logger.info("Generating basic classes")
             val pkg = extension.targetPackage.get()
             if (generatedBasePackages.contains(pkg))
                 return
@@ -166,14 +167,11 @@ open class KeygenTask : DefaultTask() {
         }
 
         private fun addKeys(map: MutableMap<String, String>, parent: String, content: JsonNode) {
-            logger.lifecycle("map: $map, parent: $parent, content: $content")
             if (content.isTextual) {
-                logger.lifecycle("text")
                 map["Vela.Keys.$parent.n"] = "1"
                 map["Vela.Keys.$parent.001.Name"] = content.textValue()
                 map["Vela.Keys.$parent.${content.textValue()}.n"] = "0"
             } else if (content.isArray && content is ArrayNode) {
-                logger.lifecycle("array")
                 val arrayNode = content.arrayNode()
                 map["Vela.Keys.$parent.n"] = arrayNode.count().toString()
                 arrayNode.forEachIndexed { idx, node ->
