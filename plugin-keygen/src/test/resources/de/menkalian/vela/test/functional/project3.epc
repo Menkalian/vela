@@ -3,7 +3,7 @@ type=TEXT
 content=
 plugins {
     java
-    kotlin("jvm") version "1.4.30"
+    kotlin("jvm") version "1.6.10"
     id("de.menkalian.vela.keygen")
 }
 
@@ -26,34 +26,30 @@ tasks.test {
 }
 
 keygen {
-    targetPackage="de.menkalian.vela.test"
-
-    furtherConfigs {
-        create("diffSep") {
-            sourceDir = File(projectDir, "src/main/dfs").toURI()
-            targetPackage = "de.menkalian.vela.test.diffsep"
-            separator = "/"
-        }
-        create("recScan") {
-            sourceDir = File(projectDir, "src/main/rsc").toURI()
-            targetPackage = "de.menkalian.vela.test.recscan"
-
-            scanRecursive = true
-        }
-        create("recInd") {
-            sourceDir = File(projectDir, "src/main/rin").toURI()
-            targetPackage = "de.menkalian.vela.test.recind"
-
-            scanRecursive = true
-            prefixRecursive = true
-        }
-        create("dirString") {
-            sourceDir = File(projectDir, "src/main/dst").toURI()
-            targetPackage = "de.menkalian.vela.test.dirstring"
-
-            separator = ":"
-            finalLayerAsString = true
-        }
+    create("default") {
+        targetPackage.set("de.menkalian.vela.test")
+    }
+    create("diffSep") {
+        sourceDir.set(File(projectDir, "src/main/dfs"))
+        targetPackage.set("de.menkalian.vela.test.diffsep")
+        separator.set("/")
+    }
+    create("recScan") {
+        sourceDir.set(File(projectDir, "src/main/rsc"))
+        targetPackage.set("de.menkalian.vela.test.recscan")
+        scanRecursive.set(true)
+    }
+    create("recInd") {
+        sourceDir.set(File(projectDir, "src/main/rin"))
+        targetPackage.set("de.menkalian.vela.test.recind")
+        scanRecursive.set(true)
+        prefixRecursive.set(true)
+    }
+    create("dirString") {
+        sourceDir.set(File(projectDir, "src/main/dst"))
+        targetPackage.set("de.menkalian.vela.test.dirstring")
+        separator.set(":")
+        finalLayerAsString.set(true)
     }
 }
 ---
@@ -63,7 +59,7 @@ content=
 rootProject.name = "test"
 
 ---
-path=src/main/ckf/Vela.ckf
+path=src/main/keygen/Vela.ckf
 type=TEXT
 content=
 Vela
@@ -101,18 +97,18 @@ content=
 Direct
   Value
   Generated
-    String
+    Str
 ---
 path=src/main/java/de/menkalian/vela/test/Main.java
 type=TEXT
 content=
 package de.menkalian.vela.test;
 
-import static de.menkalian.vela.test.VelaKey.Vela;
+import de.menkalian.vela.test.Vela;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Vela.Test.Key.toString());
+        System.out.println(Vela.Test.Key.INSTANCE.get__BASE());
     }
 }
 ---
@@ -122,22 +118,22 @@ content=
 package de.menkalian.vela.test;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
-import static de.menkalian.vela.test.VelaKey.Vela;
-import static de.menkalian.vela.test.diffsep.pathKey.path;
-import static de.menkalian.vela.test.recscan.TestKey.Test;
-import static de.menkalian.vela.test.recind.AurigaKey.Auriga;
-import static de.menkalian.vela.test.dirstring.DirectKey.Direct;
+import de.menkalian.vela.test.Vela;
+import de.menkalian.vela.test.diffsep.path;
+import de.menkalian.vela.test.recind.De;
+import de.menkalian.vela.test.dirstring.Direct;
 
 public class MainTest {
     @Test
     public void printVariables() {
-        System.out.println("Output 1: " + Vela.Test.Unit.toString());
-        System.out.println("Output 2: " + path.to.resource.toString());
-        System.out.println("Output 3: " + Test.Vela.Past.toString());
-        System.out.println("Output 4: " + Auriga.Plugin.Gradle.toString());
-        System.out.println("Output 5: " + Direct.Generated.String);
-        System.out.println("Output 6: " + Direct.Generated.String.getClass().getName());
+        Assertions.assertEquals("Vela.Test.Unit", Vela.Test.Unit.INSTANCE.get__BASE());
+        Assertions.assertEquals("path/to/resource", path.to.resource.INSTANCE.get__BASE());
+        Assertions.assertEquals("Test.Vela.Past", de.menkalian.vela.test.recscan.Test.Vela.Past.INSTANCE.get__BASE());
+        Assertions.assertEquals("De.Menkalian.Auriga.Plugin.Gradle", De.Menkalian.Auriga.Plugin.Gradle.INSTANCE.get__BASE());
+        Assertions.assertEquals("Direct:Generated:Str", Direct.Generated.INSTANCE.getStr());
+        Assertions.assertEquals("String", Direct.Generated.INSTANCE.getStr().getClass().getSimpleName());
     }
 }
 
@@ -148,21 +144,21 @@ content=
 package de.menkalian.vela.test
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions
 
-import de.menkalian.vela.test.VelaKey.Vela
-import de.menkalian.vela.test.diffsep.pathKey.path
-import de.menkalian.vela.test.recscan.TestKey.Test
-import de.menkalian.vela.test.recind.AurigaKey.Auriga
-import de.menkalian.vela.test.dirstring.DirectKey.Direct
+import de.menkalian.vela.test.Vela
+import de.menkalian.vela.test.diffsep.path
+import de.menkalian.vela.test.recind.De
+import de.menkalian.vela.test.dirstring.Direct
 
 class KotlinTest {
     @Test
     fun printVariables() {
-        println("Kt-Output 1: ${Vela.Test.Key}")
-        println("Kt-Output 2: ${path.to.articles}")
-        println("Kt-Output 3: ${Test.Vela.Future}")
-        println("Kt-Output 4: ${Auriga.Plugin.Maven}")
-        println("Kt-Output 5: ${Direct.Value}")
-        println("Kt-Output 6: ${Direct.Value::class.java.name}")
+        Assertions.assertEquals("Vela.Test.Key", Vela.Test.Key.toString())
+        Assertions.assertEquals("path/to/articles", path.to.articles.toString())
+        Assertions.assertEquals("Test.Vela.Future", de.menkalian.vela.test.recscan.Test.Vela.Future.toString())
+        Assertions.assertEquals("De.Menkalian.Auriga.Plugin.Maven", De.Menkalian.Auriga.Plugin.Maven.toString())
+        Assertions.assertEquals("Direct:Value", Direct.Value)
+        Assertions.assertEquals("String", Direct.Value::class.java.simpleName)
     }
 }
