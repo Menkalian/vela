@@ -27,6 +27,7 @@ import de.menkalian.vela.template.evaluator.node.unary.AddSpacerOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.ClearOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.DecrementOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.DefinedOperatorNode
+import de.menkalian.vela.template.evaluator.node.unary.IncludeOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IncrementOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsBooleanOperatorNode
 import de.menkalian.vela.template.evaluator.node.unary.IsNumericOperatorNode
@@ -55,12 +56,12 @@ class DefaultTemplateParser : ITemplateParser {
         private val EMPTY_NODE = TextNode("")
     }
 
-    var buffer: MutableList<Char> = mutableListOf()
-    var operators: MutableMap<String, () -> INode> = mutableMapOf()
+    private var buffer: MutableList<Char> = mutableListOf()
+    private var operators: MutableMap<String, () -> INode> = mutableMapOf()
 
-    var charCount = 0
-    var charInLine = 0
-    var lineCount = 0
+    private var charCount = 0
+    private var charInLine = 0
+    private var lineCount = 0
 
     init {
         initOperators()
@@ -139,8 +140,7 @@ class DefaultTemplateParser : ITemplateParser {
             return toReturn
         }
 
-        val blockKeyword = readNextWord()
-        return when (blockKeyword) {
+        return when (val blockKeyword = readNextWord()) {
             "IF"    -> parseIfBlock()
             "FOR"   -> parseForBlock()
             "WHILE" -> parseWhileBlock()
@@ -192,7 +192,7 @@ class DefaultTemplateParser : ITemplateParser {
 
     private fun parseOperator(): INode {
         assertToken(consumeChar().toString(), "&")
-        val operator = readNextWord().toUpperCase()
+        val operator = readNextWord().uppercase()
         return operators[operator]?.invoke() ?: throw TemplateParserException("Unknown Operator: '$operator'")
     }
 
@@ -288,13 +288,7 @@ class DefaultTemplateParser : ITemplateParser {
     }
 
     private fun initOperators() {
-        addOperator("INCLUDE", TEXT) {
-            val includeFile = File(System.getProperty("user.dir") + File.separator + it.getValue(Variables()))
-
-            DefaultTemplateParser()
-                .parse(includeFile)
-                .rootNode
-        }
+        addOperator("INCLUDE", TEXT) { IncludeOperatorNode(it) }
         addOperator("OFF", TEXT) { OffOperatorNode(it) }
 
         addOperator("ADD_SPACER", TEXT) { AddSpacerOperatorNode(it) }
@@ -333,7 +327,7 @@ class DefaultTemplateParser : ITemplateParser {
     }
 
     private fun addOperator(keyword: String, type1: OperatorParamType, gen: (INode) -> INode) {
-        operators[keyword.toUpperCase()] = {
+        operators[keyword.uppercase()] = {
             var op1: INode = EMPTY_NODE
             consumeBlock { op1 = parseParameter(type1) }
             gen(op1)
@@ -341,7 +335,7 @@ class DefaultTemplateParser : ITemplateParser {
     }
 
     private fun addOperator(keyword: String, type1: OperatorParamType, type2: OperatorParamType, gen: (INode, INode) -> INode) {
-        operators[keyword.toUpperCase()] = {
+        operators[keyword.uppercase()] = {
             var op1: INode = EMPTY_NODE
             var op2: INode = EMPTY_NODE
             consumeBlock { op1 = parseParameter(type1) }

@@ -2,12 +2,11 @@ plugins {
     kotlin("jvm")
     `java-gradle-plugin`
     jacoco
+    id("org.jetbrains.dokka")
 
     id("com.gradle.plugin-publish")
     `maven-publish`
 }
-
-version = "1.1.0"
 
 gradlePlugin {
     plugins {

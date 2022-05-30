@@ -13,7 +13,9 @@ repositories {
 }
 
 keygen {
-    targetPackage="de.menkalian.vela.test"
+    create("default") {
+        targetPackage.set("de.menkalian.vela.test")
+    }
 }
 ---
 path=settings.gradle.kts
@@ -22,7 +24,7 @@ content=
 rootProject.name = "test"
 
 ---
-path=src/main/ckf/Vela.ckf
+path=src/main/keygen/Vela.ckf
 type=TEXT
 content=
 Vela
@@ -35,10 +37,10 @@ type=TEXT
 content=
 package de.menkalian.vela.test;
 
-import static de.menkalian.vela.test.VelaKey.Vela;
+import de.menkalian.vela.test.Vela;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Vela.Test.Key.toString());
+        System.out.println(Vela.Test.Key.__BASE);
     }
 }

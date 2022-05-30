@@ -1,11 +1,13 @@
 plugins {
     java
     kotlin("jvm")
+    id("org.jetbrains.dokka")
+
     `maven-publish`
     jacoco
-}
 
-version = "1.0.0"
+    id("de.menkalian.vela.buildconfig")
+}
 
 publishing {
     publications {

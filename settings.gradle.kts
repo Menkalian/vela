@@ -2,8 +2,10 @@ rootProject.name = "vela"
 
 // Plugins
 include(
-    "plugin-backgrounds",
     "plugin-buildconfig",
+    "plugin-featuretoggle",
+    "plugin-featuretoggle:compiler",
+    "plugin-featuretoggle:plugin",
     "plugin-keygen",
     "plugin-versioning"
 )
@@ -17,13 +19,6 @@ include(
 // Libraries
 include(
     "lib-transfervalue"
-)
-
-// featuretoggle
-include(
-    "lib-featuretoggle",
-    "lib-featuretoggle:compiler",
-    "lib-featuretoggle:plugin"
 )
 
 pluginManagement {

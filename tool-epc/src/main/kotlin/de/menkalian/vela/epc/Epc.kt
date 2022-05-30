@@ -9,7 +9,7 @@ class Epc(private val defaultStoreType: StoreType = StoreType.TEXT,
 ) {
     companion object {
         val DEFAULT_BIN_FILES = listOf("exe", "jar", "zip", "class", "bin")
-        val DEFAULT_TXT_FILES = listOf("txt", "java", "kt", "kts", "gradle", "md", "yml")
+        val DEFAULT_TXT_FILES = listOf("txt", "java", "kt", "kts", "gradle", "md", "yml", "xml", "json")
     }
 
     fun compress(toCompress: File, target: File = File.createTempFile("EPC", "epc")): File {

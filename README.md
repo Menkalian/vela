@@ -1,32 +1,33 @@
-# Vela DEV-tools
+# *vela* - development tools, libraries and plugins
 
-This repository contains various tools (mainly **Gradle-Plugins**) I created for my personal use. If you find any of them useful you are free to use them for yourself (without any warranties from me).
+This repository contains various tools, libraries or plugins. I created them for my personal use. but if you find any of them useful you are free to use them for yourself (without ANY WARRANTIES).
 
-## Using the plugins
+The name *vela* means **sail** and I chose it, because these tool should accelerate your development or project :slight_smile:.
 
-If you just want to use plugins from the *Vela*-project you have to add the following to your `settings.gradle[.kts]`:
+## Using *vela*
 
-```kotlin
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        maven {
-            url = uri("http://server.menkalian.de:8081/artifactory/vela")
-            name = "artifactory-menkalian"
-        }
+To use components from *vela* in your projects you can get prebuilt artifacts from my [artifactory](https://artifactory.menkalian.de) or build them yourself.
+
+To include any libraries use the following declaration in your `build.gradle[.kts]`:
+
+````kotlin
+repositories {
+    maven {
+        name = "artifactory-menkalian"
+        url = uri("https://artifactory.menkalian.de/artifactory/menkalian")
     }
 }
-```
+````
 
-If you want to combine these with any other of my tools (e.g. Auriga) use the combined repository:
+To use the gradle plugins include the following in your `settings.gradle[.kts]`:
 
 ```kotlin
 pluginManagement {
     repositories {
         gradlePluginPortal()
         maven {
-            url = uri("http://server.menkalian.de:8081/artifactory/menkalian")
             name = "artifactory-menkalian"
+            url = uri("https://artifactory.menkalian.de/artifactory/menkalian")
         }
     }
 }
@@ -34,92 +35,22 @@ pluginManagement {
 
 ---
 
-## Using libraries/tools
+## Versions
 
-If you want to use libraries of tools from vela you have to add the repository to your build.gradle[.kts]:
-
-```kotlin
-  repositories {
-    // ... other repos ...
-    maven {
-        url = uri("http://server.menkalian.de:8081/artifactory/vela")
-        name = "artifactory-menkalian"
-    }
-}
-```
-
-If you want to combine these with any other of my tools (e.g. Auriga) use the combined repository:
-
-```kotlin
-    repositories {
-    // ... other repos ...
-    maven {
-        url = uri("http://server.menkalian.de:8081/artifactory/menkalian")
-        name = "artifactory-menkalian"
-    }
-}
-```
+Starting with version `2.0.0` all plugins share the same versioning. Increments in the version are also marked by git tags (`release-2.x.x`). It is recommended to use the latest version for all components.
 
 ---
 
-## Available plugins/tools
+## Available components
 
-### Android-Background-Generator
-
-- **type**: Gradle plugin (ID: `de.menkalian.vela.backgrounds`)
-- **version**: `1.0.0`
-- **description**:
-  Generates animated backgrounds based on your parameters.
-- **platforms**: `android`
-- **details**: [specific README](plugin-backgrounds/README.md)
-
-### BuildConfig-Generator
-
-- **type**: Gradle plugin (ID: `de.menkalian.vela.buildconfig`)
-- **version**: `1.0.0`
-- **description**:
-  Generates a class called BuildConfig (in the package corresponding to the project-group), that holds group, name and version of the project.
-- **platforms**: `java` `kotlin-jvm`<sup>1</sup>
-- **details**: [specific README](plugin-buildconfig/README.md)
-
-### Key-Object-Generator
-
-- **type**: Gradle plugin (ID: `de.menkalian.vela.keygen`)
-- **version**: `1.2.1`
-- **description**:
-  If you Identify some values by a string-key like `Vela.Example.Key`, `Menkalian/Repositories/Vela` or `Staged~Variable~Access`, you may want to generate classes/objects to represent these, to have autocomplete in your IDE and minimize typos. Vela generates those objects for you, while you only have to supply a file in a simple, yaml-like format.
-- **platforms**: `java` `kotlin-jvm`<sup>1</sup> `android`
-- **details**: [specific README](plugin-keygen/README.md)
-
-### Versioning Plugin
-
-- **type**: Gradle plugin (ID: `de.menkalian.vela.versioning`)
-- **version**: `1.1.0`
-- **description**:
-  Exposes a variable called `versioning.buildNo` that contains the amount of times this project was built. You may customize the task used to identify a build by setting `versioning.upgradeTask`. If this is not set, the `build`-Task is used. If that does not exist, every gradle invocation increases the buildnumber.
-- **platforms**: `android`, `java`, `kotlin-jvm`
-- **details**: [specific README](plugin-versioning/README.md)
-
-### Editable-Project-Compactor
-
-- **type**: Tooling-Lib (Artifact: `de.menkalian.vela:tool-epc:$version`)
-- **version**: `1.0.0`
-- **description**:
-  Allows to pack a full directory/project to a single, editable text-file. There is no compression and all Files are readable/editable in the resulting packed File. The main-purpose of this is to be able to test gradle-plugins with test-projects efficiently. For most other purposes a compressed archive-format like `zip, rar, etc.` is probably more suitable
-- **platforms**: `java` `kotlin-jvm`<sup>1</sup> `android`
-- **details**: [specific README](tool-epc/README.md)
-
-### Transferable Values
-
-- **type** Common Library (Artifact: `de.menkalian.vela:lib-transfervalue:$version`)
-- **version**: `1.0.0`
-- **description**:
-  Allows to store all kinds of values as a String. This can be useful for storing things in databases, etc. if you don't know the type of value beforehand.
-- **platforms**: `java` `kotlin-jvm` `android`
-- **details**: [specific README](lib-transfervalue/README.md)
-
-###### Footnotes
-
-<span style="color:gray">
-1: Needs the <code>java</code>-plugin even for a pure kotlin project, since Java is generated
-</span>
+| Name                                                   | Typ             | id/artifact                                    | Platform                      | Beschreibung                                                                                                         |
+|--------------------------------------------------------|-----------------|------------------------------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| [**BuildConfig**](plugin-buildconfig/README.md)        | *gradle plugin* | `de.menkalian.vela.buildconfig`                | `java` `kotlin-jvm`           | Generates a class `BuildConfig` which contains group, name, version and other properties of the project.             |
+| [**Featuretoggle**](plugin-featuretoggle/README.md)    | *gradle plugin* | `de.menkalian.vela.featuretoggle`              | `java` `android` `kotlin-jvm` | Generates Config-Klasses based on a xml-document.                                                                    |
+| [**KeyGenerator**](plugin-keygen/README.md)            | *gradle plugin* | `de.menkalian.vela.keygen`                     | `java` `android` `kotlin-jvm` | Generates String constants for variables like `Vela.Example.Key` or `Menkalian/Repositories/Vela`.                   |
+| [**Versioning**](plugin-versioning/README.md)          | *gradle plugin* | `de.menkalian.vela.versioning`                 | `java` `android` `kotlin-jvm` | Exposes a variable called `versioning.buildNo` which contains the amount of times this project was built.            |
+|                                                        |                 |                                                |                               |                                                                                                                      |
+| [**Transferable values**](lib-transfervalue/README.md) | *library*       | `de.menkalian.vela:lib-transfervalue:$version` | `java` `android` `kotlin-jvm` | Allows variables of different (basic) types to be transferred as the same datatype.                                  |
+|                                                        |                 |                                                |                               |                                                                                                                      |
+| [**Editable Project Compactor**](tool-epc/README.md)   | *tool*          | `de.menkalian.vela:tool-epc:$version`          | `java` `android` `kotlin-jvm` | Library/Tool to bundle/extract directories to/from a simple text format (to enable easy editing and creating diffs). |
+| [**Template**](tool-template/README.md)                | *tool*          | `de.menkalian.vela:tool-template:$version`     | `java` `android` `kotlin-jvm` | (turing-complete) template engine :slight_smile:                                                                     |

@@ -1,0 +1,21 @@
+{IF {&NOT{&AND{Vela.Setting.FinalLayerAsString}{&IS_LEEQ{{{Vela.Keys.BASENAME.n}}}{0}}}} {
+interface {{Vela.Base.Name}} \{
+    public final String __BASE = {{Vela.Base.Name.YYY.Old}}.__BASE + "{{Vela.Separator}}{{Vela.Base.Name}}";
+
+    {FOR {X} IN {1} TO {Vela.Keys.BASENAME.n} {
+        &INC{Y}
+        &SET{Vela.Base.Name.YYY.Old}{{{Vela.Base.Name}}}
+        &SET{Vela.Base.Root.YYY.Old}{{{Vela.Base.Root}}}
+
+        &SET{Vela.Base.Name}{{{Vela.Keys.BASENAME.XXX.Name}}}
+        &SET{Vela.Base.Root}{{{Vela.Base.Root}}.{{Vela.Base.Name}}}
+        &INCLUDE{KeyLevel.vtp}
+
+        &SET{Vela.Base.Name}{{{Vela.Base.Name.YYY.Old}}}
+        &SET{Vela.Base.Root}{{{Vela.Base.Root.YYY.Old}}}
+        &DEC{Y}
+    }}
+\}
+} ELSE {
+    final String {{Vela.Base.Name}} = {{Vela.Base.Name.YYY.Old}}.__BASE + "{{Vela.Separator}}{{Vela.Base.Name}}"
+}}

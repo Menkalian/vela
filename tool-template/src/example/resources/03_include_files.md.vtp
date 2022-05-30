@@ -27,4 +27,4 @@ You can also use the `OFF`-operator to disable output for various reasons, e.g. 
 &OFF{Include all the stuff}
 &OFF{&INCLUDE{03/SetVariable.vtp}}
 
-&INCLUDE{verzeichnis.vtp}
+&INCLUDE{toc.vtp}

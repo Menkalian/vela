@@ -1,12 +1,12 @@
 # First example of a template
 
 This is a simple first template.
-It was evaluated using Vela 1.0.0!
+It was evaluated using Vela 2.0.0!
 
 ---
 
 Here is an example of a notice:
-##### Created with Vela Engine V1.0.0 #####
+##### Created with Vela Engine V2.0.0 #####
 
 
 ---

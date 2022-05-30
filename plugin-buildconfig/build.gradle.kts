@@ -1,16 +1,21 @@
 plugins {
-    kotlin("jvm")
     `java-gradle-plugin`
-    id("com.gradle.plugin-publish")
     `maven-publish`
     jacoco
+
+    kotlin("jvm")
+
+    id("com.gradle.plugin-publish")
+    id("org.jetbrains.dokka")
 }
 
-version = "1.0.1"
+tasks.test {
+    testLogging.showStandardStreams = true
+}
 
 gradlePlugin {
     plugins {
-        create("keygenPlugin") {
+        create("buildconfigPlugin") {
             id = "de.menkalian.vela.buildconfig"
             implementationClass = "de.menkalian.vela.gradle.BuildconfigGradlePlugin"
             displayName = "Build Config Generator Plugin"
@@ -19,4 +24,10 @@ gradlePlugin {
     }
 }
 
-dependencies {}
+dependencies {
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+    implementation("com.android.tools.build:gradle:7.1.1")
+
+    implementation(project(":tool-template"))
+    testImplementation(project(":tool-epc"))
+}

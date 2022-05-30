@@ -1,0 +1,7 @@
+package {{Vela.Package}};
+
+public abstract class BuildConfig \{
+    {FOR {X} IN {1} TO {Vela.Properties.n} {
+    public static String {{Vela.Properties.XXX.Name}} = "{{Vela.Properties.XXX.Value}}";
+    }}
+\}

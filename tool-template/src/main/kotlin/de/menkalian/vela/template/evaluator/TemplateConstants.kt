@@ -1,5 +1,6 @@
 package de.menkalian.vela.template.evaluator
 
+import de.menkalian.vela.BuildConfig
 import de.menkalian.vela.template.evaluator.node.binary.SetOperatorNode
 import de.menkalian.vela.template.evaluator.node.multi.ConcatenationNode
 
@@ -16,8 +17,9 @@ object TemplateConstants : ConcatenationNode(
         SetOperatorNode("Const.Ten", "10"),
 
         // TEXT
-        SetOperatorNode("Engine.Version", "1.0.0"),
-        SetOperatorNode("Engine.Name", "Vela"),
-        SetOperatorNode("Engine.Hint", "##### Created with Vela Engine V1.0.0 #####"),
+        SetOperatorNode("Engine.Version", BuildConfig.version),
+        SetOperatorNode("Engine.Language.Version", "1.0"),
+        SetOperatorNode("Engine.Name", BuildConfig.group),
+        SetOperatorNode("Engine.Hint", "##### Created with Vela Engine (${BuildConfig.group}) V${BuildConfig.version} #####"),
     )
 )

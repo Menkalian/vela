@@ -1,0 +1,37 @@
+path=build.gradle
+type=TEXT
+content=
+plugins {
+    id 'java'
+    id 'de.menkalian.vela.buildconfig'
+}
+
+group = 'de.menkalian.vela.test'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+buildconfig {
+    targetPackage.set('de.menkalian.vela.test')
+}
+---
+path=settings.gradle
+type=TEXT
+content=
+rootProject.name='test'
+
+---
+path=src/main/java/de/menkalian/vela/test/Main.java
+type=TEXT
+content=
+package de.menkalian.vela.test;
+
+import de.menkalian.vela.test.BuildConfig;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println(BuildConfig.group);
+    }
+}

@@ -1,0 +1,23 @@
+package {{Vela.Package}};
+
+&SET{Vela.Base.Root}{{{Vela.Base.Name}}}
+&USE{BASENAME}{{{Vela.Base.Root}}}{%s}
+&SET{Y}{0}
+
+interface {{Vela.Base.Name}} \{
+    public final String __BASE = "{{Vela.Base.Name}}";
+
+    {FOR {X} IN {1} TO {Vela.Keys.BASENAME.n} {
+        &INC{Y}
+        &SET{Vela.Base.Name.YYY.Old}{{{Vela.Base.Name}}}
+        &SET{Vela.Base.Root.YYY.Old}{{{Vela.Base.Root}}}
+
+        &SET{Vela.Base.Name}{{{Vela.Keys.BASENAME.XXX.Name}}}
+        &SET{Vela.Base.Root}{{{Vela.Base.Root}}.{{Vela.Base.Name}}}
+        &INCLUDE{KeyLevel.vtp}
+
+        &SET{Vela.Base.Name}{{{Vela.Base.Name.YYY.Old}}}
+        &SET{Vela.Base.Root}{{{Vela.Base.Root.YYY.Old}}}
+        &DEC{Y}
+    }}
+\}
