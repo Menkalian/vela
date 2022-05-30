@@ -1,0 +1,6 @@
+package {{Vela.Package}};
+
+/**
+ * NOOP for compatibility reasons
+ */
+abstract class BaseKey \{\}

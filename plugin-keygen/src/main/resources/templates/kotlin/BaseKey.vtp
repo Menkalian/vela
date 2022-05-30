@@ -1,0 +1,7 @@
+package {{Vela.Package}}
+
+abstract class BaseKey \{
+    public abstract val __BASE : String
+
+    override fun toString() = __BASE
+\}
