@@ -158,7 +158,7 @@ data class TransferableValue(val type: TransferableValueType, val value: String)
     fun toByteArray(): ByteArray =
         when (type) {
             BOOLEAN -> if (toBoolean()) arrayOf(1.toByte()).toByteArray() else arrayOf(0.toByte()).toByteArray()
-            STRING                        -> value.encodeToByteArray()
+            STRING  -> value.encodeToByteArray()
             BINARY  -> value.parseHex()
             INTEGER -> (3 downTo 0).map { toInt().shr(8 * it).toByte() }.toByteArray() // BIG ENDIAN
             LONG    -> (7 downTo 0).map { toLong().shr(8 * it).toByte() }.toByteArray()
