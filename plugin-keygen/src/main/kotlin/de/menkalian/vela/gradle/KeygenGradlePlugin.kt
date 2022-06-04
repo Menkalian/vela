@@ -73,14 +73,24 @@ open class KeygenGradlePlugin : Plugin<Project> {
                 }.toTypedArray()
 
             target.pluginManager.withPlugin("java") {
-                target.sourceSets()
-                    .getByName("main").java
-                    .srcDirs(*sourceDirectories)
+                target.afterEvaluate {
+                    // Only register without multiplatform
+                    if (target.pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform").not()) {
+                        target.sourceSets()
+                            .getByName("main").java
+                            .srcDirs(*sourceDirectories)
+                    }
+                }
             }
             target.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-                target.sourceSets()
-                    .getByName("main").java
-                    .srcDirs(*sourceDirectories)
+                target.afterEvaluate {
+                    // Only register without multiplatform
+                    if (target.pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform").not()) {
+                        target.sourceSets()
+                            .getByName("main").java
+                            .srcDirs(*sourceDirectories)
+                    }
+                }
             }
             target.pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
                 target.kotlinCommonCodeSourceSet()?.kotlin
