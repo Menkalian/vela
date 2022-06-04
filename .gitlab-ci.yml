@@ -42,7 +42,6 @@ test:
 publish:
   stage: deploy
   only:
-    - main
     - tags
   script:
     - ./gradlew publish
@@ -54,7 +53,6 @@ publish:
 pages:
   stage: deploy
   only:
-    - main
     - tags
   script:
     - ./gradlew dokkaHtmlMultiModule
