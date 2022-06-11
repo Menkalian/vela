@@ -53,4 +53,4 @@ To use this way you have to create a file called `versioning.properties` in the 
 
 ### When to increase build-number
 
-Firstly you should set the `versioning.upgradeTask` property. If you have situations where you want to prevent the build-number from advancing (e.g. in a CI-pipeline) you may define `VELA_NO_UPGRADE` as an environmental variable. Then the build-number will never be increased.
+Firstly you should set the `versioning.upgradeTask` property. If you have situations where you want to prevent the build-number from advancing (e.g. in a testing CI-pipeline) you may define `VELA_NO_UPGRADE` as an environmental variable. Then the build-number will never be increased.

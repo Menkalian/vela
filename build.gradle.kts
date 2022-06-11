@@ -26,10 +26,15 @@ val junitVersion = "5.8.2"
 
 fun parseVelaVersion(baseVersion: String = velaBaseVersion): String {
     // Expecting tag like `release-2.3.1-alpha4`
-    val buildTag = System
-        .getenv("CI_COMMIT_TAG")
-        ?.substring("release-".length)
-    val commitSha = System.getenv("CI_COMMIT_SHA") ?: "dev"
+    val buildTag: String?
+    if (System.getenv("GITHUB_REF_TYPE") == "tag")
+        buildTag = System
+            .getenv("GITHUB_REF_NAME")
+            ?.substring("release-".length)
+    else
+        buildTag = null
+
+    val commitSha = System.getenv("GITHUB_SHA") ?: "dev"
 
     return buildTag ?: "$baseVersion-$commitSha"
 }
@@ -102,7 +107,8 @@ allprojects {
                         remoteLineSuffix.set("#L")
                     }
                 }
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
         }
     }
 
