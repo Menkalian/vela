@@ -18,6 +18,7 @@ include(
 
 // Libraries
 include(
+    "lib-log",
     "lib-transfervalue"
 )
 
