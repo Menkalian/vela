@@ -5,7 +5,7 @@ import de.menkalian.vela.loglib.logger.formatter.tags.QuotedStringLogTag
 import de.menkalian.vela.loglib.logger.formatter.tags.StackTraceLogTag
 import java.util.Locale
 
-internal class Formatter {
+class Formatter {
     private val customTags = LoggerFactory.getFactory().configuration.customLogTags + listOf(
         QuotedStringLogTag(),
         StackTraceLogTag(),
