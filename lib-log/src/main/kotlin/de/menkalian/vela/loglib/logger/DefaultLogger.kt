@@ -65,9 +65,9 @@ internal class DefaultLogger(
 
     private fun determineOrigin(): String {
         val caller = Thread.currentThread().stackTrace
+            .drop(3)
             .first {
-                it.className.startsWith(Thread::class.qualifiedName!!).not()
-                        && it.className.startsWith(DefaultLogger::class.qualifiedName!!).not()
+                        it.className.startsWith(DefaultLogger::class.qualifiedName!!).not()
                         && it.className.startsWith(Logger::class.qualifiedName!!).not()
             }
         return "${caller.className}(${caller.fileName})#${caller.methodName}:${caller.lineNumber}"
