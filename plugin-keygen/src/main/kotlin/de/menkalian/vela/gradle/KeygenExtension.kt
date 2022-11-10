@@ -2,6 +2,9 @@
 
 package de.menkalian.vela.gradle
 
+import de.menkalian.vela.gradle.KeygenExtension.Generator.DEFAULT
+import de.menkalian.vela.gradle.KeygenExtension.Generator.JAVA
+import de.menkalian.vela.gradle.KeygenExtension.Generator.KOTLIN
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import java.io.File
@@ -76,9 +79,10 @@ abstract class KeygenExtension @Inject internal constructor(project: Project, va
      * @property KOTLIN Generate Kotlin Sources
      * @property DEFAULT Use the type which best matches the current project
      */
-    enum class Generator {
+    enum class Generator(val base: Boolean = false, val singleFile: Boolean = false) {
         JAVA,
-        KOTLIN,
+        KOTLIN(base = true),
+        CPP(singleFile = true),
         DEFAULT;
 
         companion object {

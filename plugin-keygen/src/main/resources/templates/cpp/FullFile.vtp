@@ -1,0 +1,17 @@
+#ifndef VELAGEN_VARIABLES_H
+#define VELAGEN_VARIABLES_H
+
+#include<string>
+
+#ifndef VARTYPE
+#define VARTYPE static const std::string
+#endif
+
+{FOR {X} IN {1} TO {Vela.Package.Level.n} {
+namespace {{Vela.Package.Level.XXX.Name}} \{
+}}
+{{Vela.Text.Full}}
+{FOR {X} IN {1} TO {Vela.Package.Level.n} {
+\}
+}}
+#endif

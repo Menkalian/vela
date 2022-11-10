@@ -1,0 +1,34 @@
+path=build.gradle
+type=TEXT
+content=
+plugins {
+    id 'de.menkalian.vela.keygen'
+}
+
+group = 'de.menkalian.vela.test'
+
+repositories {
+    mavenCentral()
+}
+
+keygen {
+    create('default') {
+        targetPackage.set('de.menkalian.vela.test')
+        generator.set(de.menkalian.vela.gradle.KeygenExtension.Generator.CPP)
+    }
+}
+
+---
+path=settings.gradle
+type=TEXT
+content=
+rootProject.name='test'
+
+---
+path=src/main/keygen/Vela.ckf
+type=TEXT
+content=
+Vela
+  Test
+    Key
+    Unit

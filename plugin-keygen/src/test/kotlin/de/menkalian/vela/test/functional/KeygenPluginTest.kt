@@ -68,6 +68,24 @@ class KeygenPluginTest {
         }
     }
 
+    @Test
+    fun testSimpleProjectBuildingWithCppKeys() {
+        val extractedProject = extractTestProject("project4")
+        assertDoesNotThrow {
+            try {
+                GradleRunner.create()
+                    .withProjectDir(extractedProject)
+                    .withArguments("generateKeyObjects")
+                    .withPluginClasspath()
+                    .forwardOutput()
+                    .build()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+                throw ex
+            }
+        }
+    }
+
     private fun extractTestProject(name: String): File {
         val sourceFile = File(targetDir, "test.epc")
         targetDir.mkdirs()

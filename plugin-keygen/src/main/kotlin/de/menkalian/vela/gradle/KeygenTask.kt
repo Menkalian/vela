@@ -29,8 +29,12 @@ open class KeygenTask : DefaultTask() {
         getKeygenExtension()
             .asMap
             .forEach { (name, config) ->
-                logger.info("Generating $name: $config")
-                KeygenTaskExecution(config).generateSources()
+                try {
+                    logger.info("Generating $name: $config")
+                    KeygenTaskExecution(config).generateSources()
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                }
             }
     }
 
@@ -63,6 +67,7 @@ open class KeygenTask : DefaultTask() {
 
         private val targetDir: File
             get() = when (generator) {
+                KeygenExtension.Generator.CPP -> File(extension.targetDir.get().path + "/include")
                 KeygenExtension.Generator.JAVA   -> File(extension.targetDir.get().path + "/java")
                 KeygenExtension.Generator.KOTLIN -> File(extension.targetDir.get().path + "/kotlin")
                 else                             -> throw Exception("Invalid Generator Configuration")
@@ -75,7 +80,9 @@ open class KeygenTask : DefaultTask() {
             // Extract KeyLevel.vtp, since it is included in other templates
             extractTemplate("KeyLevel")
 
-            generateBase()
+            if (generator.base) {
+                generateBase()
+            }
             val srcDir = extension.sourceDir.get()
             generateFilesForSource(srcDir)
 
@@ -84,6 +91,7 @@ open class KeygenTask : DefaultTask() {
         }
 
         private fun generateFilesForSource(src: File) {
+            val texts = mutableListOf<String>()
             src.listFiles()?.forEach {
                 if (it.isDirectory) {
                     if (extension.scanRecursive.get())
@@ -113,10 +121,32 @@ open class KeygenTask : DefaultTask() {
                         throw RuntimeException(ex)
                     }
 
-                    val clazzFile = File(getClassFile(targetDir.absolutePath + "/" + pkgDir + "/${vars["Vela.Base.Name"]}"))
-                    clazzFile.parentFile.mkdirs()
-                    clazzFile.writeText(clazz)
+                    if (generator.singleFile) {
+                        texts.add(clazz)
+                    } else {
+                        val clazzFile = File(getClassFile(targetDir.absolutePath + "/" + pkgDir + "/${vars["Vela.Base.Name"]}"))
+                        clazzFile.parentFile.mkdirs()
+                        clazzFile.writeText(clazz)
+                    }
                 }
+            }
+
+            if (generator.singleFile) {
+                val amalgamateFile = File(getClassFile(targetDir.absolutePath + "/Variables"))
+                val amalgamateTemplate = loadTemplate("FullFile")
+
+                val vars = hashMapOf<String, String>()
+                val targetPackage = extension.targetPackage.get()
+                vars["Vela.Package"] = targetPackage
+                targetPackage.split(".").apply {
+                    vars["Vela.Package.Level.n"] = size.toString()
+                }.forEachIndexed { idx, level ->
+                    vars["Vela.Package.Level.${(idx + 1).toString().padStart(3, '0')}.Name"] = level
+                }
+                vars["Vela.Text.Full"] = texts.joinToString("\n")
+
+                amalgamateFile.parentFile.mkdirs()
+                amalgamateFile.writeText(amalgamateTemplate.evaluate(vars))
             }
         }
 
@@ -142,7 +172,13 @@ open class KeygenTask : DefaultTask() {
 
         private fun compileSource(content: JsonNode, parent: String): HashMap<String, String> {
             val toReturn = hashMapOf<String, String>()
-            toReturn["Vela.Package"] = extension.targetPackage.get()
+            val targetPackage = extension.targetPackage.get()
+            toReturn["Vela.Package"] = targetPackage
+            targetPackage.split(".").apply {
+                toReturn["Vela.Package.Level.n"] = size.toString()
+            }.forEachIndexed { idx, level ->
+                toReturn["Vela.Package.Level.${(idx + 1).toString().padStart(3, '0')}.Name"] = level
+            }
             toReturn["Vela.Separator"] = extension.separator.get()
             toReturn["Vela.Setting.FinalLayerAsString"] = extension.finalLayerAsString.get().toString()
 
@@ -215,6 +251,7 @@ open class KeygenTask : DefaultTask() {
          */
         private fun getClassFile(filename: String): String {
             return when (generator) {
+                KeygenExtension.Generator.CPP    -> "$filename.hpp"
                 KeygenExtension.Generator.JAVA   -> "$filename.java"
                 KeygenExtension.Generator.KOTLIN -> "$filename.kt"
                 else                             -> throw Exception("Invalid Generator Configuration")
@@ -226,6 +263,7 @@ open class KeygenTask : DefaultTask() {
          */
         private fun getTemplatePath(templateName: String): String {
             return when (generator) {
+                KeygenExtension.Generator.CPP    -> "templates/cpp/$templateName.vtp"
                 KeygenExtension.Generator.JAVA   -> "templates/java/$templateName.vtp"
                 KeygenExtension.Generator.KOTLIN -> "templates/kotlin/$templateName.vtp"
                 else                             -> throw Exception("Invalid Generator Configuration")
