@@ -17,5 +17,5 @@ interface {{Vela.Base.Name}} \{
     }}
 \}
 } ELSE {
-    final String {{Vela.Base.Name}} = {{Vela.Base.Name.YYY.Old}}.__BASE + "{{Vela.Separator}}{{Vela.Base.Name}}"
+    public final String {{Vela.Base.Name}} = {{Vela.Base.Name.YYY.Old}}.__BASE + "{{Vela.Separator}}{{Vela.Base.Name}}";
 }}
