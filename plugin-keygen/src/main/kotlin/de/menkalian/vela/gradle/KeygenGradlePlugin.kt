@@ -4,9 +4,7 @@ package de.menkalian.vela.gradle
 
 import com.android.build.api.dsl.AndroidSourceSet
 import com.android.build.api.dsl.CommonExtension
-import org.gradle.api.NamedDomainObjectContainer
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.*
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.configurationcache.extensions.capitalized
@@ -45,10 +43,10 @@ open class KeygenGradlePlugin : Plugin<Project> {
 
             // Configure compileTasks to run after the generation
             target.pluginManager.withPlugin("java") {
-                target.tasks.getByName("compileJava").dependsOn(keygenTask)
+                target.tasks.findByName("compileJava")?.dependsOn(keygenTask)
             }
             target.pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-                target.tasks.getByName("compileKotlin").dependsOn(keygenTask)
+                target.tasks.findByName("compileKotlin")?.dependsOn(keygenTask)
             }
             target.pluginManager.withPlugin("org.jetbrains.kotlin.multiplatform") {
                 target.tasks.withType(KotlinCompile::class.java)
@@ -58,7 +56,7 @@ open class KeygenGradlePlugin : Plugin<Project> {
             }
             target.pluginManager.withPlugin("com.android.base") {
                 target.androidBuildTypeNames().forEach {
-                    target.tasks.getByName("compile${it.capitalized()}Java").dependsOn(keygenTask)
+                    target.tasks.findByName("compile${it.capitalized()}Java")?.dependsOn(keygenTask)
                 }
             }
 
@@ -77,8 +75,8 @@ open class KeygenGradlePlugin : Plugin<Project> {
                     // Only register without multiplatform
                     if (target.pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform").not()) {
                         target.sourceSets()
-                            .getByName("main").java
-                            .srcDirs(*sourceDirectories)
+                            .findByName("main")?.java
+                            ?.srcDirs(*sourceDirectories)
                     }
                 }
             }
@@ -87,8 +85,8 @@ open class KeygenGradlePlugin : Plugin<Project> {
                     // Only register without multiplatform
                     if (target.pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform").not()) {
                         target.sourceSets()
-                            .getByName("main").java
-                            .srcDirs(*sourceDirectories)
+                            .findByName("main")?.java
+                            ?.srcDirs(*sourceDirectories)
                     }
                 }
             }
@@ -98,8 +96,8 @@ open class KeygenGradlePlugin : Plugin<Project> {
             }
 
             target.pluginManager.withPlugin("com.android.base") {
-                target.androidSourceSets().getByName("main")
-                    .java.srcDirs(*sourceDirectories)
+                target.androidSourceSets().findByName("main")
+                    ?.java?.srcDirs(*sourceDirectories)
             }
         }
     }
