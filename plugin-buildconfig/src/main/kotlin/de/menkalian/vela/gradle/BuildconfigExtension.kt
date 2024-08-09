@@ -1,8 +1,6 @@
 package de.menkalian.vela.gradle
 
-import de.menkalian.vela.gradle.BuildconfigExtension.Generator.DEFAULT
-import de.menkalian.vela.gradle.BuildconfigExtension.Generator.JAVA
-import de.menkalian.vela.gradle.BuildconfigExtension.Generator.KOTLIN
+import de.menkalian.vela.gradle.BuildconfigExtension.Generator.*
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
 import java.io.File
@@ -15,7 +13,7 @@ abstract class BuildconfigExtension(project: Project) {
         /**
          * Constant Name which is used to register (and find) the extension
          */
-        const val EXTENSION_NAME = "buildconfig"
+        const val EXTENSION_NAME = "velaBuildconfig"
     }
 
     /**

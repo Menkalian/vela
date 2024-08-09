@@ -20,7 +20,7 @@ plugins {
 }
 
 
-val velaBaseVersion = "2.0.0"
+val velaBaseVersion = "2.1.0"
 val velaVersion = parseVelaVersion(velaBaseVersion)
 val junitVersion = "5.8.2"
 
